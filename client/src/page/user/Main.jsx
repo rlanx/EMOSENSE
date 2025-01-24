@@ -38,6 +38,11 @@ function Main() {
         <h1 className="text-[26px] text-center">
           แหล่งความรู้และข่าวสารเกี่ยวกับโรคซึมเศร้า
         </h1>
+        <div className="w-full flex items-center justify-end border-b-[2px] lg:mt-[-10px] lg:pb-[5px]">
+          <div className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-white hover:text-sea-blue">
+            <p>ดูความรู้และข่าวสารทั้งหมด</p> <FaArrowRightLong />
+          </div>
+        </div>
         {/* card container */}
         <div className="grid grid-cols-4 mt-[20px] gap-5">
           {limitedPost.map((post) => (
@@ -49,11 +54,6 @@ function Main() {
               date={post.date}
             />
           ))}
-        </div>
-        <div className="w-full flex items-center justify-end border-b-[2px] lg:mt-[20px] lg:pb-[5px]">
-          <div className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-white hover:text-sea-blue">
-            <p>ดูความรู้และข่าวสารทั้งหมด</p> <FaArrowRightLong />
-          </div>
         </div>
       </div>
       {/* งานวิจัย */}
