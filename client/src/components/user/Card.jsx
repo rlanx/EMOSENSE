@@ -3,7 +3,7 @@ import { FaUserPen, FaRegCalendar } from "react-icons/fa6";
 
 function Card({ title, desc, author, date }) {
   return (
-    <div className="rounded-xl overflow-hidden">
+    <div className="rounded-xl overflow-hidden shadow-md cursor-pointer">
       {/* image */}
       <div className="h-[250px]">
         <img

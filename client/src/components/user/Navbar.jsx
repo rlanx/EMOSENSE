@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Links, useLocation } from "react-router-dom";
 import menuList from "../../utils/navbar";
 
 function Navbar() {
@@ -48,10 +48,15 @@ function Navbar() {
       </div>
       {/* Action Button */}
       <div className="flex gap-4">
-        <button className="">เข้าสู่ระบบ</button>
-        <button className="bg-sea-blue text-white lg:w-[100px] lg:h-[40px] lg:rounded-lg hover:bg-[#47b9b7]">
+        <Link to={"/login"} className="flex items-center justify-center">
+          เข้าสู่ระบบ
+        </Link>
+        <Link
+          to={"/register"}
+          className="flex items-center justify-center bg-sea-blue text-white lg:w-[100px] lg:h-[40px] lg:rounded-lg hover:bg-[#47b9b7]"
+        >
           ลงทะเบียน
-        </button>
+        </Link>
       </div>
     </div>
   );

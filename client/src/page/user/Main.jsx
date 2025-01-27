@@ -3,6 +3,7 @@ import Navbar from "../../components/user/Navbar";
 import knowledgeData from "../../utils/mock_data";
 import { FaArrowRightLong } from "react-icons/fa6";
 import Card from "../../components/user/Card";
+import Footer from "../../components/user/Footer";
 
 function Main() {
   const limitedPost = knowledgeData.slice(0, 4);
@@ -11,7 +12,7 @@ function Main() {
       <Navbar />
       {/* Main Container */}
       <div className="h-[75vh] w-full flex flex-col gap-4 items-center justify-center">
-        <p className="text-center text-grey lg:text-[30px] font-semibold">
+        <p className="text-center text-sea-blue lg:text-[30px] font-semibold">
           กรอกข้อความที่แสดงถึงความรู้สึกหรือความคิดที่คุณหรือคนใกล้ตัวของคุณอาจกำลังเผชิญอยู่
           <br />
           เพื่อวิเคราะห์แนวโน้มการเป็นโรคซึมเศร้า
@@ -35,13 +36,13 @@ function Main() {
       </div>
       {/* ข้อมูล ข่าวสาร */}
       <div className="bg-sea-blue w-full lg:h-[600px] text-white lg:px-[300px] lg:py-[35px]">
-        <h1 className="text-[26px] text-center">
-          แหล่งความรู้และข่าวสารเกี่ยวกับโรคซึมเศร้า
+        <h1 className="text-[26px] text-center font-medium">
+          ความรู้ทั่วไปและข่าวสารเกี่ยวกับโรคซึมเศร้า
         </h1>
         <div className="w-full flex items-center justify-end border-b-[2px] lg:mt-[-10px] lg:pb-[5px]">
-          <div className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-white hover:text-sea-blue">
+          <button className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-white hover:text-sea-blue">
             <p>ดูความรู้และข่าวสารทั้งหมด</p> <FaArrowRightLong />
-          </div>
+          </button>
         </div>
         {/* card container */}
         <div className="grid grid-cols-4 mt-[20px] gap-5">
@@ -57,7 +58,30 @@ function Main() {
         </div>
       </div>
       {/* งานวิจัย */}
-      <div></div>
+      <div className="bg-white w-full lg:h-[600px] text-sea-blue lg:px-[300px] lg:py-[35px]">
+        <h1 className="text-[26px] text-center font-medium">
+          บทความงานวิจัยเกี่ยวกับโรคซึมเศร้า
+        </h1>
+        <div className="w-full flex items-center justify-end border-b-[2px] border-sea-blue lg:mt-[-10px] lg:pb-[5px]">
+          <button className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-sea-blue hover:text-white">
+            <p>ดูความรู้และข่าวสารทั้งหมด</p> <FaArrowRightLong />
+          </button>
+        </div>
+        {/* card container */}
+        <div className="grid grid-cols-4 mt-[20px] gap-5">
+          {limitedPost.map((post) => (
+            <Card
+              key={post.id}
+              title={post.title}
+              desc={post.description}
+              author={post.author}
+              date={post.date}
+            />
+          ))}
+        </div>
+      </div>
+      {/* footer */}
+      <Footer />
     </div>
   );
 }
