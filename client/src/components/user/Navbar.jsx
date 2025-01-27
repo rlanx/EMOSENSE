@@ -48,7 +48,10 @@ function Navbar() {
       </div>
       {/* Action Button */}
       <div className="flex gap-4">
-        <Link to={"/login"} className="flex items-center justify-center">
+        <Link
+          to={"/login"}
+          className="flex items-center justify-center lg:w-[100px] lg:h-[40px] lg:rounded-lg"
+        >
           เข้าสู่ระบบ
         </Link>
         <Link
