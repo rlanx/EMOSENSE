@@ -1,9 +1,10 @@
 import React from "react";
 import { FaUserPen, FaRegCalendar } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 function Card({ title, desc, author, date }) {
   return (
-    <div className="rounded-xl overflow-hidden shadow-md cursor-pointer">
+    <Link className="rounded-xl overflow-hidden shadow-md">
       {/* image */}
       <div className="h-[250px]">
         <img
@@ -32,7 +33,7 @@ function Card({ title, desc, author, date }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
