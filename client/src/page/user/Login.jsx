@@ -7,10 +7,10 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 function Login() {
   return (
     <div className="h-screen w-full text-grey bg-gradient-to-b from-sea-blue to-green-pastel flex flex-col items-center justify-center gap-7">
-      <div className="bg-white p-12 rounded-xl flex flex-col gap-7 shadow-lg">
+      <div className="bg-white w-[485px] p-12 rounded-xl flex flex-col gap-7 shadow-lg">
         <div>
           <p className="text-[28px] font-semibold">
-            เข้าสู่ระบบ EMOSENSE ของคุณ
+            เข้าสู่บัญชี EMOSENSE ของคุณ
           </p>
         </div>
         <div className="space-y-4">
