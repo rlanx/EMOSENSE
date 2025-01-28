@@ -4,6 +4,7 @@ import knowledgeData from "../../utils/mock_data";
 import { FaArrowRightLong } from "react-icons/fa6";
 import Card from "../../components/user/Card";
 import Footer from "../../components/user/Footer";
+import { Link } from "react-router-dom";
 
 function Main() {
   const limitedPost = knowledgeData.slice(0, 4);
@@ -17,7 +18,7 @@ function Main() {
           <br />
           เพื่อวิเคราะห์แนวโน้มการเป็นโรคซึมเศร้า
         </p>
-        <p className="text-center text-grey ">
+        <p className="text-center text-grey">
           เว็บไซต์นี้ออกแบบมาเพื่อช่วยให้ผู้ใช้สามารถตรวจสอบแนวโน้มการเป็นโรคซึมเศร้าจากข้อความที่กรอกเข้าไป
           <br />
           โดยระบบจะวิเคราะห์ข้อความที่ผู้ใช้หรือคนใกล้ตัวโพสต์บนโซเชียลมีเดีย
@@ -35,49 +36,59 @@ function Main() {
         </div>
       </div>
       {/* ข้อมูล ข่าวสาร */}
-      <div className="bg-sea-blue w-full lg:h-[600px] text-white lg:px-[300px] lg:py-[35px]">
-        <h1 className="text-[26px] text-center font-medium">
-          ความรู้ทั่วไปและข่าวสารเกี่ยวกับโรคซึมเศร้า
-        </h1>
-        <div className="w-full flex items-center justify-end border-b-[2px] lg:mt-[-10px] lg:pb-[5px]">
-          <button className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-white hover:text-sea-blue">
-            <p>ดูความรู้และข่าวสารทั้งหมด</p> <FaArrowRightLong />
-          </button>
-        </div>
-        {/* card container */}
-        <div className="grid grid-cols-4 mt-[20px] gap-5">
-          {limitedPost.map((post) => (
-            <Card
-              key={post.id}
-              title={post.title}
-              desc={post.description}
-              author={post.author}
-              date={post.date}
-            />
-          ))}
+      <div className="bg-sea-blue w-full lg:h-[600px] text-white lg:py-[35px]">
+        <div className="w-[1280px] mx-auto">
+          <h1 className="text-[26px] text-center font-medium">
+            ความรู้ทั่วไปและข่าวสารเกี่ยวกับโรคซึมเศร้า
+          </h1>
+          <div className="w-full flex items-center justify-end border-b-[2px] lg:mt-[-10px] lg:pb-[5px]">
+            <Link
+              to={"/knowledge"}
+              className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-white hover:text-sea-blue"
+            >
+              <p>ดูความรู้และข่าวสารทั้งหมด</p> <FaArrowRightLong />
+            </Link>
+          </div>
+          {/* card container */}
+          <div className="grid grid-cols-4 mt-[20px] gap-5">
+            {limitedPost.map((post) => (
+              <Card
+                key={post.id}
+                title={post.title}
+                desc={post.description}
+                author={post.author}
+                date={post.date}
+              />
+            ))}
+          </div>
         </div>
       </div>
       {/* งานวิจัย */}
-      <div className="bg-white w-full lg:h-[600px] text-sea-blue lg:px-[300px] lg:py-[35px]">
-        <h1 className="text-[26px] text-center font-medium">
-          บทความงานวิจัยเกี่ยวกับโรคซึมเศร้า
-        </h1>
-        <div className="w-full flex items-center justify-end border-b-[2px] border-sea-blue lg:mt-[-10px] lg:pb-[5px]">
-          <button className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-sea-blue hover:text-white">
-            <p>ดูความรู้และข่าวสารทั้งหมด</p> <FaArrowRightLong />
-          </button>
-        </div>
-        {/* card container */}
-        <div className="grid grid-cols-4 mt-[20px] gap-5">
-          {limitedPost.map((post) => (
-            <Card
-              key={post.id}
-              title={post.title}
-              desc={post.description}
-              author={post.author}
-              date={post.date}
-            />
-          ))}
+      <div className="bg-white w-full lg:h-[600px] text-sea-blue lg:py-[35px]">
+        <div className="w-[1280px] mx-auto">
+          <h1 className="text-[26px] text-center font-medium">
+            บทความงานวิจัยเกี่ยวกับโรคซึมเศร้า
+          </h1>
+          <div className="w-full flex items-center justify-end border-b-[2px] border-sea-blue lg:mt-[-10px] lg:pb-[5px]">
+            <Link
+              to={"/research"}
+              className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-sea-blue hover:text-white"
+            >
+              <p>ดูบทความงานวิจัยทั้งหมด</p> <FaArrowRightLong />
+            </Link>
+          </div>
+          {/* card container */}
+          <div className="grid grid-cols-4 mt-[20px] gap-5">
+            {limitedPost.map((post) => (
+              <Card
+                key={post.id}
+                title={post.title}
+                desc={post.description}
+                author={post.author}
+                date={post.date}
+              />
+            ))}
+          </div>
         </div>
       </div>
       {/* footer */}

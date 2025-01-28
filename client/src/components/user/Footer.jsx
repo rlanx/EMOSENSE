@@ -3,9 +3,9 @@ import footerLinks from "../../utils/footer";
 
 function Footer() {
   return (
-    <div className="bg-sea-blue w-full lg:h-[350px] text-white  lg:py-[35px]">
+    <div className="bg-sea-blue w-full lg:h-[350px] text-white lg:py-[35px]">
       {/* container */}
-      <div className="grid lg:px-[300px] lg:grid-cols-4 gap-8">
+      <div className="grid w-[1280px] mx-auto lg:grid-cols-4 gap-8">
         <div>
           <div className="text-[28px] font-semibold">
             EMO<span className="text-[#285353]">SENSE</span>
@@ -24,7 +24,9 @@ function Footer() {
             <ul className="space-y-2">
               {section.links.map((link, ind) => (
                 <li key={ind}>
-                  <button>{link}</button>
+                  <button>
+                    <span className="truncate">{link}</span>
+                  </button>
                 </li>
               ))}
             </ul>
