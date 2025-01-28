@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import TextInp from "../../components/user/TextInp";
+import UserInp from "../../components/user/UserInp";
 import { Link } from "react-router-dom";
 import { LuUser, LuLock } from "react-icons/lu";
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -31,7 +31,7 @@ function Register() {
         </div>
         <div className="space-y-4 flex flex-col items-center">
           {/* username */}
-          <TextInp
+          <UserInp
             Icon={LuUser}
             type="text"
             placeholder="ชื่อผู้ใช้"
@@ -39,14 +39,14 @@ function Register() {
             onChange={(e) => setUsername(e.target.value)}
           />
           {/* password */}
-          <TextInp
+          <UserInp
             Icon={LuLock}
             type="password"
             placeholder="รหัสผ่าน"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <TextInp Icon={LuLock} type="password" placeholder="ยืนยันรหัสผ่าน" />
+          <UserInp Icon={LuLock} type="password" placeholder="ยืนยันรหัสผ่าน" />
           <button className="w-full h-12 bg-primary text-white rounded-lg">
             สมัครสมาชิก
           </button>

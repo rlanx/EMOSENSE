@@ -7,7 +7,7 @@ const menuList = [
   {
     menu_id: 2,
     menu_name: "ความรู้ทั่วไป / ข่าวสาร",
-    menu_path: "/news",
+    menu_path: "/knowledge",
   },
   {
     menu_id: 3,

@@ -1,5 +1,5 @@
 import React from "react";
-import TextInp from "../../components/user/TextInp";
+import UserInp from "../../components/user/UserInp";
 import { Link } from "react-router-dom";
 import { LuUser, LuLock } from "react-icons/lu";
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -15,9 +15,9 @@ function Login() {
         </div>
         <div className="space-y-4">
           {/* username */}
-          <TextInp Icon={LuUser} type="text" placeholder="ชื่อผู้ใช้" />
+          <UserInp Icon={LuUser} type="text" placeholder="ชื่อผู้ใช้" />
           {/* password */}
-          <TextInp Icon={LuLock} type="password" placeholder="รหัสผ่าน" />
+          <UserInp Icon={LuLock} type="password" placeholder="รหัสผ่าน" />
           <button className="w-full h-12 bg-primary text-white rounded-lg">
             เข้าสู่ระบบ
           </button>
