@@ -37,7 +37,7 @@ function Knowledge() {
     <div>
       <Navbar />
       {/* main container */}
-      <div className="lg:w-[1280px] mx-auto">
+      <div className="lg:w-[1280px] mx-auto flex gap-10">
         {/* sub-container */}
         <div className="w-[70%] mt-5 mb-20">
           {/* search */}
@@ -96,6 +96,15 @@ function Knowledge() {
             totalPages={totalPages}
             setCurrentPage={setCurrentPage}
           />
+        </div>
+
+        {/* side container */}
+        <div className="w-[30%]">
+          <div className=" sticky top-[70px] ">
+            <div className="text-lg font-semibold border-b-[1px] lg:pt-7 lg:pb-1 ">
+              หัวข้อที่แนะนำ
+            </div>
+          </div>
         </div>
       </div>
       <Footer />
