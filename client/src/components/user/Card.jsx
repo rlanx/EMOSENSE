@@ -1,5 +1,5 @@
 import React from "react";
-import { FaUserPen, FaRegCalendar } from "react-icons/fa6";
+import { LuUserPen, LuCalendar } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
 function Card({ title, desc, author, date }) {
@@ -23,12 +23,12 @@ function Card({ title, desc, author, date }) {
         <div className="flex text-light-grey justify-between">
           {/* author */}
           <div className="flex items-center gap-1 w-[50%]">
-            <FaUserPen size={18} className="basis-1/4" />
+            <LuUserPen size={20} className="mr-1" />
             <p className="truncate basis-3/4">{author}</p>
           </div>
           {/* date */}
           <div className="flex items-center gap-2">
-            <FaRegCalendar size={18} />
+            <LuCalendar size={20} />
             <p>{date}</p>
           </div>
         </div>
