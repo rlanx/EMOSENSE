@@ -5,6 +5,7 @@ import knowledgeData from "../../utils/mock_data";
 import HCard from "../../components/user/HCard";
 import Footer from "../../components/user/Footer";
 import Pagination from "../../components/user/Pagination";
+import NotFoundCard from "../../components/user/NotFoundCard";
 
 function Research() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -86,7 +87,7 @@ function Research() {
                 ))}
               </div>
             ) : (
-              <></>
+              <NotFoundCard />
             )}
           </div>
 
