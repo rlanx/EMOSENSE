@@ -7,6 +7,7 @@ import Main from "./page/user/Main";
 import Login from "./page/user/Login";
 import Register from "./page/user/Register";
 import Knowledge from "./page/user/Knowledge";
+import Research from "./page/user/Research";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -18,6 +19,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/knowledge" element={<Knowledge />} />
+        <Route path="/research" element={<Research />} />
       </Routes>
     </BrowserRouter>
   );
