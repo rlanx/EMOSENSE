@@ -75,7 +75,7 @@ function Research() {
           {/* research container */}
           <div className="">
             {currentPost.length > 0 ? (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col">
                 {currentPost.map((post) => (
                   <HCard key={post.id} data={post} />
                 ))}
