@@ -53,13 +53,7 @@ function Main() {
           {/* card container */}
           <div className="grid grid-cols-4 mt-[20px] gap-5">
             {limitedPost.map((post) => (
-              <Card
-                key={post.id}
-                title={post.title}
-                desc={post.description}
-                author={post.author}
-                date={post.date}
-              />
+              <Card key={post.id} data={post} />
             ))}
           </div>
         </div>
@@ -81,13 +75,7 @@ function Main() {
           {/* card container */}
           <div className="grid grid-cols-4 mt-[20px] gap-5">
             {limitedPost.map((post) => (
-              <Card
-                key={post.id}
-                title={post.title}
-                desc={post.description}
-                author={post.author}
-                date={post.date}
-              />
+              <Card key={post.id} data={post} />
             ))}
           </div>
         </div>

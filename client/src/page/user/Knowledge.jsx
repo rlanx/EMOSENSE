@@ -77,13 +77,7 @@ function Knowledge() {
             {currentPost.length > 0 ? (
               <div className="flex flex-col gap-4">
                 {currentPost.map((post) => (
-                  <HCard
-                    key={post.id}
-                    title={post.title}
-                    desc={post.description}
-                    author={post.author}
-                    date={post.date}
-                  />
+                  <HCard key={post.id} data={post} />
                 ))}
               </div>
             ) : (
