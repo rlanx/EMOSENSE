@@ -4,10 +4,7 @@ import { Link } from "react-router-dom";
 
 function Card({ data }) {
   return (
-    <Link
-      to={`/knowledge/${data.id}`}
-      className="rounded-xl overflow-hidden shadow-md"
-    >
+    <Link to={`/knowledge/ex`} className="rounded-xl overflow-hidden shadow-md">
       {/* image */}
       <div className="h-[250px]">
         <img

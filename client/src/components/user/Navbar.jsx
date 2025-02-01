@@ -1,10 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, Links, useLocation } from "react-router-dom";
 import menuList from "../../utils/navbar";
+import { User, History, Settings, LogOut } from "lucide-react";
 
 function Navbar() {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null); // ใช้ useRef เก็บอ้างอิง dropdown
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
@@ -47,21 +73,65 @@ function Navbar() {
             })}
           </div>
         </div>
+
         {/* Action Button */}
-        <div className="flex gap-4">
-          <Link
-            to={"/login"}
-            className="flex items-center justify-center lg:w-[100px] lg:h-[40px] lg:rounded-lg"
-          >
-            เข้าสู่ระบบ
-          </Link>
-          <Link
-            to={"/register"}
-            className="flex items-center justify-center bg-sea-blue text-white lg:w-[100px] lg:h-[40px] lg:rounded-lg hover:bg-[#47b9b7]"
-          >
-            ลงทะเบียน
-          </Link>
-        </div>
+        {isLoggedIn ? (
+          <div className="relative" ref={dropdownRef}>
+            {/* user icon */}
+            <div
+              onClick={toggleDropdown}
+              className=" size-[40px] flex items-center justify-center bg-[#47b9b7bd] rounded-full text-white cursor-pointer"
+            >
+              <User />
+            </div>
+
+            {/* dropdown menu */}
+            <div
+              className={`absolute lg:w-[230px] px-5 py-4 right-0 mt-5  rounded-lg bg-white border-[1px] shadow-md  z-10 transition-all duration-300 ease-out ${
+                dropdownOpen
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 -translate-y-4 pointer-events-none"
+              }`}
+            >
+              <ul>
+                <li className="text-center pb-2 mb-1 border-b-[1px]">
+                  user12345
+                </li>
+                <Link>
+                  <li className="flex items-center py-2  rounded-lg hover:bg-gray-200 ">
+                    <History size={22} className="basis-1/4" />
+                    ประวัติการวิเคราะห์
+                  </li>
+                </Link>
+                <Link>
+                  <li className="flex items-center py-2  rounded-lg hover:bg-gray-200">
+                    <Settings size={22} className="basis-1/4" />
+                    ตั้งค่าบัญชี
+                  </li>
+                </Link>
+                <button className="w-full flex items-center py-2 text-white bg-error rounded-lg">
+                  <LogOut size={22} className="basis-1/4" />
+                  ออกจากระบบ
+                </button>
+              </ul>
+            </div>
+          </div>
+        ) : (
+          <div className="flex gap-4">
+            <Link
+              to={"/login"}
+              className="flex items-center justify-center lg:w-[100px] lg:h-[40px] lg:rounded-lg"
+            >
+              เข้าสู่ระบบ
+            </Link>
+            <Link
+              to={"/register"}
+              className="flex items-center justify-center bg-sea-blue text-white lg:w-[100px] lg:h-[40px] lg:rounded-lg hover:bg-[#47b9b7]"
+            >
+              ลงทะเบียน
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
