@@ -44,20 +44,27 @@ export default function Account() {
     <div>
       <Navbar />
       {/* main container */}
-      <div className="lg:w-[1280px] mx-auto flex gap-10 justify-center mt-5 mb-10">
+      <div className="lg:w-[1280px] mx-auto flex flex-col gap-5 justify-center items-center mt-5 mb-10">
+        {/* title */}
+        <p className="w-[150px] text-center text-2xl font-semibold border-b-[3px] border-primary pb-2">
+          ตั้งค่าบัญชี
+        </p>
         {/* image & edit profile form */}
-        <div className="lg:min-w-[400px] lg:max-w-[400px] flex flex-col items-center gap-5 p-10 border-[1px] shadow-md rounded-3xl">
-          <p className="text-xl text-center font-semibold">user12345</p>
-          <div className="bg-[#f5f5f5] rounded-full overflow-hidden size-[300px] flex items-center justify-center">
-            <User size={50} strokeWidth={1} />
+        <div className="lg:max-w-[620px] flex gap-10 p-10 border-[1px] shadow-md rounded-3xl">
+          {/* info container */}
+          <div className="flex flex-col items-center gap-5">
+            <p className="text-xl text-center font-semibold">user12345</p>
+            <div className="bg-[#f5f5f5] rounded-full overflow-hidden size-[200px] flex items-center justify-center">
+              <User size={50} strokeWidth={1} />
+            </div>
+            <button className="relative group w-fit bg-light-blue text-sea-blue">
+              อัปโหลดรูปภาพ
+              <div
+                className="absolute left-0 bottom-[-6px] w-full h-[2px] bg-sea-blue
+                        transition-transform origin-center scale-x-0 group-hover:scale-x-100"
+              ></div>
+            </button>
           </div>
-          <button className="relative group w-fit bg-light-blue text-sea-blue">
-            อัปโหลดรูปภาพ
-            <div
-              className="absolute left-0 bottom-[-6px] w-full h-[2px] bg-sea-blue
-                      transition-transform origin-center scale-x-0 group-hover:scale-x-100"
-            ></div>
-          </button>
 
           {/* input container */}
           <div className="flex flex-col gap-3 items-end text-grey">
