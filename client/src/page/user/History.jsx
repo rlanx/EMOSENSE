@@ -61,7 +61,9 @@ export default function History() {
                     }`}
                   >
                     <div className="basis-3/12 py-3 px-4">{post.date}</div>
-                    <div className="basis-6/12 py-3 px-4">{post.text}</div>
+                    <div className="basis-6/12 py-3 px-4 whitespace-nowrap truncate">
+                      {post.text}
+                    </div>
                     <div className="basis-3/12 py-3 px-4 flex gap-4">
                       <div className="basis-1/2 text-center rounded-md py-1 bg-accent text-white">
                         {post.depression_percentage}%
