@@ -101,7 +101,7 @@ function Navbar() {
                 <li className="text-center pb-2 mb-1 border-b-[1px]">
                   user12345
                 </li>
-                <Link>
+                <Link to={"/history"}>
                   <li className="flex items-center py-2  rounded-lg hover:bg-gray-200 ">
                     <History size={22} className="basis-1/4" />
                     ประวัติการวิเคราะห์

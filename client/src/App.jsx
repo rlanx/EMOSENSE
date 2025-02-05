@@ -10,6 +10,7 @@ import Knowledge from "./page/user/Knowledge";
 import Research from "./page/user/Research";
 import KnowledgeDetail from "./page/user/KnowledgeDetail";
 import Account from "./page/user/Account";
+import History from "./page/user/History";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -25,6 +26,7 @@ function App() {
         <Route path="/knowledge/ex" element={<KnowledgeDetail />} />
         <Route path="/research" element={<Research />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </BrowserRouter>
   );
