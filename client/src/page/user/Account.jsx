@@ -46,7 +46,7 @@ export default function Account() {
       {/* main container */}
       <div className="lg:w-[1280px] mx-auto flex flex-col gap-5 justify-center items-center mt-5 mb-10">
         {/* title */}
-        <p className="w-[150px] text-center text-2xl font-semibold border-b-[3px] border-primary pb-2">
+        <p className="px-5 text-center text-2xl font-semibold border-b-[3px] border-primary pb-2">
           ตั้งค่าบัญชี
         </p>
         {/* image & edit profile form */}
