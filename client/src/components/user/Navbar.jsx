@@ -6,12 +6,16 @@ import { User, History, Settings, LogOut } from "lucide-react";
 function Navbar() {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null); // ใช้ useRef เก็บอ้างอิง dropdown
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
   };
 
   useEffect(() => {
@@ -40,7 +44,7 @@ function Navbar() {
 
   return (
     <div
-      className={`sticky top-0 left-0 w-full bg-white text-grey flex items-center justify-center lg:h-[70px] ${
+      className={`z-20 sticky top-0 left-0 w-full bg-white text-grey flex items-center justify-center lg:h-[70px] ${
         isScrolled ? "border-b-[1px]" : "bg-transparent"
       }`}
     >
@@ -103,13 +107,16 @@ function Navbar() {
                     ประวัติการวิเคราะห์
                   </li>
                 </Link>
-                <Link>
+                <Link to={"/account"}>
                   <li className="flex items-center py-2  rounded-lg hover:bg-gray-200">
                     <Settings size={22} className="basis-1/4" />
                     ตั้งค่าบัญชี
                   </li>
                 </Link>
-                <button className="w-full flex items-center py-2 text-white bg-error rounded-lg">
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center py-2 text-white bg-error rounded-lg"
+                >
                   <LogOut size={22} className="basis-1/4" />
                   ออกจากระบบ
                 </button>

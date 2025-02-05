@@ -9,6 +9,7 @@ import Register from "./page/user/Register";
 import Knowledge from "./page/user/Knowledge";
 import Research from "./page/user/Research";
 import KnowledgeDetail from "./page/user/KnowledgeDetail";
+import Account from "./page/user/Account";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,12 +17,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* user */}
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/knowledge" element={<Knowledge />} />
         <Route path="/knowledge/ex" element={<KnowledgeDetail />} />
         <Route path="/research" element={<Research />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
     </BrowserRouter>
   );
