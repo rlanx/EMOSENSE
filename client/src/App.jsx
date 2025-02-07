@@ -11,6 +11,7 @@ import Research from "./page/user/Research";
 import KnowledgeDetail from "./page/user/KnowledgeDetail";
 import Account from "./page/user/Account";
 import History from "./page/user/History";
+import Dashboard from "./page/admin/Dashboard";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -27,6 +28,9 @@ function App() {
         <Route path="/research" element={<Research />} />
         <Route path="/account" element={<Account />} />
         <Route path="/history" element={<History />} />
+
+        {/* admin */}
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );
