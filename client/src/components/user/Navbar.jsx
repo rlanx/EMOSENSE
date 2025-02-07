@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, Links, useLocation } from "react-router-dom";
 import menuList from "../../utils/navbar";
-import { User, History, Settings, LogOut } from "lucide-react";
+import { User, History, Settings, LogOut, UserCog } from "lucide-react";
 
 function Navbar() {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null); // ใช้ useRef เก็บอ้างอิง dropdown
 
@@ -41,6 +42,25 @@ function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // เมนู Dropdown สำหรับผู้ใช้ทั่วไป
+  const dropdownMenu = [
+    {
+      name: "ประวัติการวิเคราะห์",
+      path: "/history",
+      icon: <History size={22} />,
+    },
+    { name: "ตั้งค่าบัญชี", path: "/account", icon: <Settings size={22} /> },
+  ];
+
+  // เมนูสำหรับ Admin เท่านั้น
+  if (isAdmin) {
+    dropdownMenu.unshift({
+      name: "Admin Panel",
+      path: "/dashboard",
+      icon: <UserCog size={22} />,
+    });
+  }
 
   return (
     <div
@@ -101,18 +121,18 @@ function Navbar() {
                 <li className="text-center pb-2 mb-1 border-b-[1px]">
                   user12345
                 </li>
-                <Link to={"/history"}>
-                  <li className="flex items-center py-2  rounded-lg hover:bg-gray-200 ">
-                    <History size={22} className="basis-1/4" />
-                    ประวัติการวิเคราะห์
-                  </li>
-                </Link>
-                <Link to={"/account"}>
-                  <li className="flex items-center py-2  rounded-lg hover:bg-gray-200">
-                    <Settings size={22} className="basis-1/4" />
-                    ตั้งค่าบัญชี
-                  </li>
-                </Link>
+
+                {dropdownMenu.map((item, index) => (
+                  <Link key={index} to={item.path}>
+                    <li className="flex items-center py-2 rounded-lg hover:bg-gray-100">
+                      <span className="basis-1/4 flex justify-center">
+                        {item.icon}
+                      </span>
+                      {item.name}
+                    </li>
+                  </Link>
+                ))}
+                {/* log-out button */}
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center py-2 text-white bg-error rounded-lg"
