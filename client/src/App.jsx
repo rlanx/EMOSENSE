@@ -12,6 +12,9 @@ import KnowledgeDetail from "./page/user/KnowledgeDetail";
 import Account from "./page/user/Account";
 import History from "./page/user/History";
 import Dashboard from "./page/admin/Dashboard";
+import ManageUsers from "./page/admin/ManageUsers";
+import ManageKnowledge from "./page/admin/ManageKnowledge";
+import ManageResearch from "./page/admin/ManageResearch";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -26,11 +29,14 @@ function App() {
         <Route path="/knowledge" element={<Knowledge />} />
         <Route path="/knowledge/ex" element={<KnowledgeDetail />} />
         <Route path="/research" element={<Research />} />
-        <Route path="/account" element={<Account />} />
+        <Route path="/my-account" element={<Account />} />
         <Route path="/history" element={<History />} />
 
         {/* admin */}
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/users" element={<ManageUsers />} />
+        <Route path="/manage-knowledge" element={<ManageKnowledge />} />
+        <Route path="/manage-research" element={<ManageResearch />} />
       </Routes>
     </BrowserRouter>
   );

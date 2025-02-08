@@ -44,8 +44,8 @@ export default function History() {
         <div className="w-full ">
           {/* table head */}
           <div className="w-full flex bg-primary rounded-t-2xl text-white">
-            <div className="basis-3/12 py-3 px-4">เวลา</div>
-            <div className="basis-6/12 py-3 px-4">ข้อความ</div>
+            <div className="basis-2/12 py-3 px-4">เวลา</div>
+            <div className="basis-7/12 py-3 px-4">ข้อความ</div>
             <div className="basis-3/12 py-3 px-4">ผลลัพธ์</div>
           </div>
 
@@ -60,8 +60,8 @@ export default function History() {
                       index % 2 === 0 ? "bg-white" : "bg-gray-100"
                     }`}
                   >
-                    <div className="basis-3/12 py-3 px-4">{post.date}</div>
-                    <div className="basis-6/12 py-3 px-4 whitespace-nowrap truncate">
+                    <div className="basis-2/12 py-3 px-4">{post.date}</div>
+                    <div className="basis-7/12 py-3 px-4 whitespace-nowrap truncate">
                       {post.text}
                     </div>
                     <div className="basis-3/12 py-3 px-4 flex gap-4">
