@@ -50,7 +50,7 @@ function Navbar() {
       path: "/history",
       icon: <History size={22} />,
     },
-    { name: "ตั้งค่าบัญชี", path: "/account", icon: <Settings size={22} /> },
+    { name: "ตั้งค่าบัญชี", path: "/my-account", icon: <Settings size={22} /> },
   ];
 
   // เมนูสำหรับ Admin เท่านั้น
@@ -147,15 +147,15 @@ function Navbar() {
           <div className="flex gap-4">
             <Link
               to={"/login"}
-              className="flex items-center justify-center lg:w-[100px] lg:h-[40px] lg:rounded-lg"
+              className="flex items-center justify-center lg:px-4 lg:h-[40px] lg:rounded-lg"
             >
               เข้าสู่ระบบ
             </Link>
             <Link
               to={"/register"}
-              className="flex items-center justify-center bg-sea-blue text-white lg:w-[100px] lg:h-[40px] lg:rounded-lg hover:bg-[#47b9b7]"
+              className="flex items-center justify-center bg-sea-blue text-white lg:px-4 lg:h-[40px] lg:rounded-lg hover:bg-[#47b9b7]"
             >
-              ลงทะเบียน
+              สมัครสมาชิก
             </Link>
           </div>
         )}
