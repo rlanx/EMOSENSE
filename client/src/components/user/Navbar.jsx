@@ -68,7 +68,7 @@ function Navbar() {
         isScrolled ? "border-b-[1px]" : "bg-transparent"
       }`}
     >
-      <div className="w-[1280px] flex items-center justify-between">
+      <div className="w-full px-7 flex items-center justify-between">
         {/* LOGO */}
         <div className="flex items-center lg:gap-7">
           <Link to={"/"} className="text-[28px] font-semibold">
