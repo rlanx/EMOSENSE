@@ -3,6 +3,7 @@ import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import Pagination from "../../components/user/Pagination";
 import { History, UserPen, UserX, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 
 //data
 import usersData from "../../utils/mock_users";
@@ -23,12 +24,14 @@ export default function ManageUsers() {
       icon: <History size={22} />,
       action: "viewHistory",
       tooltip: "ดูประวัติ",
+      path: "/users/history",
       color: "bg-gray-400",
     },
     {
       icon: <UserPen size={22} />,
       action: "editUser",
       tooltip: "แก้ไขผู้ใช้",
+      path: "/users/edit-user",
       color: "bg-accent",
     },
     {
@@ -57,8 +60,8 @@ export default function ManageUsers() {
           {/* table */}
           <div className="w-full ">
             {/* table head */}
-            <div className="w-full flex bg-primary rounded-t-2xl text-white ">
-              <div className="basis-2/12 py-3 px-4">ID</div>
+            <div className="w-full flex bg-primary rounded-t-lg text-white ">
+              <div className="basis-1/12 py-3 px-4">ID</div>
               <div className="basis-3/12 py-3 px-4">ชื่อผู้ใช้</div>
               <div className="basis-3/12 py-3 px-4">รหัสผ่าน</div>
               <div className="basis-3/12 py-3 px-4">role</div>
@@ -77,7 +80,7 @@ export default function ManageUsers() {
                         index % 2 === 0 ? "bg-white" : "bg-gray-100"
                       }`}
                     >
-                      <div className="basis-2/12 py-3 px-4">{user.id}</div>
+                      <div className="basis-1/12 py-3 px-4">{user.id}</div>
                       <div className="basis-3/12 py-3 px-4 whitespace-nowrap truncate">
                         {user.username}
                       </div>
@@ -94,12 +97,13 @@ export default function ManageUsers() {
                       {/* action button */}
                       <div className="basis-2/12 py-3 px-4 flex gap-2 ">
                         {actionButtons.map((btn, index) => (
-                          <button
-                            key={index}
-                            className={`${btn.color} p-2 rounded-md text-white `}
-                          >
-                            {btn.icon}
-                          </button>
+                          <Link to={btn.path} key={index}>
+                            <button
+                              className={`${btn.color} p-2 rounded-md text-white `}
+                            >
+                              {btn.icon}
+                            </button>
+                          </Link>
                         ))}
                       </div>
                     </div>
