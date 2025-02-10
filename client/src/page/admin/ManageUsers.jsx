@@ -4,6 +4,7 @@ import Sidebar from "../../components/admin/Sidebar";
 import Pagination from "../../components/user/Pagination";
 import { History, UserPen, UserX, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 //data
 import usersData from "../../utils/mock_users";
@@ -18,6 +19,24 @@ export default function ManageUsers() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentRecord = usersData.slice(startIndex, endIndex);
+
+  const handleDeleteUser = (userId) => {
+    Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "การลบผู้ใช้จะไม่สามารถย้อนกลับได้!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#FF6F61",
+      cancelButtonColor: "#5BC0BE",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(`Deleted user with ID: ${userId}`);
+        Swal.fire("ลบสำเร็จ!", "ผู้ใช้ถูกลบเรียบร้อยแล้ว", "success");
+      }
+    });
+  };
 
   const actionButtons = [
     {
@@ -98,15 +117,25 @@ export default function ManageUsers() {
 
                       {/* action button */}
                       <div className="basis-2/12 py-3 px-4 flex gap-2 ">
-                        {actionButtons.map((btn, index) => (
-                          <Link to={btn.path} key={index}>
+                        {actionButtons.map((btn, index) =>
+                          btn.action === "deleteUser" ? (
                             <button
-                              className={`${btn.color} p-2 rounded-md text-white `}
+                              key={index}
+                              className={`${btn.color} p-2 rounded-md text-white`}
+                              onClick={() => handleDeleteUser(user.id)}
                             >
                               {btn.icon}
                             </button>
-                          </Link>
-                        ))}
+                          ) : (
+                            <Link to={btn.path} key={index}>
+                              <button
+                                className={`${btn.color} p-2 rounded-md text-white`}
+                              >
+                                {btn.icon}
+                              </button>
+                            </Link>
+                          )
+                        )}
                       </div>
                     </div>
                   ))}
