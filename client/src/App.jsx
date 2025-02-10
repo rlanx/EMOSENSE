@@ -17,6 +17,7 @@ import ManageKnowledge from "./page/admin/ManageKnowledge";
 import ManageResearch from "./page/admin/ManageResearch";
 import UserHistory from "./page/admin/UserHistory";
 import EditUser from "./page/admin/EditUser";
+import AddUser from "./page/admin/AddUser";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -39,7 +40,8 @@ function App() {
 
         <Route path="/users" element={<ManageUsers />} />
         <Route path="/users/history" element={<UserHistory />} />
-        <Route path="/users/edit-user" element={<EditUser />} />
+        <Route path="/users/add" element={<AddUser />} />
+        <Route path="/users/edit" element={<EditUser />} />
 
         <Route path="/manage-knowledge" element={<ManageKnowledge />} />
         <Route path="/manage-research" element={<ManageResearch />} />
