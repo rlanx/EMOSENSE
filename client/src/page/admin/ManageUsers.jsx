@@ -31,7 +31,7 @@ export default function ManageUsers() {
       icon: <UserPen size={22} />,
       action: "editUser",
       tooltip: "แก้ไขผู้ใช้",
-      path: "/users/edit-user",
+      path: "/users/edit",
       color: "bg-accent",
     },
     {
@@ -52,10 +52,12 @@ export default function ManageUsers() {
           <p className="text-3xl text-grey font-semibold">จัดการผู้ใช้</p>
 
           {/* add user */}
-          <button className="lg:w-[110px] bg-primary text-white flex py-3 px-3 rounded-lg">
-            <Plus className="basis-1/4" />
-            <p className="basis-3/4">เพิ่มผู้ใช้</p>
-          </button>
+          <Link to={"/users/add"}>
+            <button className="lg:w-[145px] bg-primary text-white flex py-3 px-3 rounded-lg">
+              <Plus className="basis-1/4" />
+              <p className="basis-3/4">เพิ่มผู้ใช้</p>
+            </button>
+          </Link>
 
           {/* table */}
           <div className="w-full ">
