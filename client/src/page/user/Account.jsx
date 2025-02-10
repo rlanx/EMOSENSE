@@ -49,7 +49,7 @@ export default function Account() {
         <p className="px-5 text-center text-2xl font-semibold border-b-[3px] border-primary pb-2">
           ตั้งค่าบัญชี
         </p>
-        {/* image & edit profile form */}
+        {/* form */}
         <div className="lg:max-w-[620px] flex gap-10 p-10 border-[1px] shadow-md rounded-3xl">
           {/* info container */}
           <div className="flex flex-col items-center gap-5">
@@ -116,7 +116,7 @@ export default function Account() {
             </div>
 
             <button
-              className={`flex items-center gap-2 h-11 px-5 bg-primary rounded-lg text-white ${
+              className={`flex items-center gap-2 h-11 px-5 rounded-lg text-white ${
                 validatePassword(newPassword) && newPassword === confirmPassword
                   ? "bg-primary cursor-pointer"
                   : "bg-gray-400 cursor-not-allowed"
