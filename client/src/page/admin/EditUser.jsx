@@ -4,11 +4,13 @@ import UserInp from "../../components/user/UserInp";
 import { LuUser, LuLock } from "react-icons/lu";
 import { User, Pencil } from "lucide-react";
 import Sidebar from "../../components/admin/Sidebar";
+import RoleSelector from "../../components/admin/RoleSelector";
 
 export default function EditUser() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [selectedRole, setSelectedRole] = useState("user");
 
   // ฟังก์ชันตรวจสอบรหัสผ่านให้อยู่ในระดับกลาง
   const validatePassword = (password) => {
@@ -97,6 +99,15 @@ export default function EditUser() {
                   placeholder="ยืนยันรหัสผ่านใหม่"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+
+              {/* role */}
+              <div className="w-full">
+                <RoleSelector
+                  roles={["user", "admin"]}
+                  selectedRole={selectedRole}
+                  onChange={setSelectedRole}
                 />
               </div>
 
