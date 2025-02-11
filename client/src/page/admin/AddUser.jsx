@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import UserInp from "../../components/user/UserInp";
 import { LuUser, LuLock } from "react-icons/lu";
 import { User, Pencil } from "lucide-react";
+import RoleSelector from "../../components/admin/RoleSelector";
 
 export default function AddUser() {
+  const [selectedRole, setSelectedRole] = useState("user");
+
   return (
     <div>
       <Navbar />
@@ -19,9 +22,24 @@ export default function AddUser() {
 
           <div className="w-[450px] space-y-4">
             {/* username */}
-            <UserInp Icon={LuUser} type="text" placeholder="ชื่อผู้ใช้" />
+            <div className="space-y-1">
+              <label>ชื่อผู้ใช้</label>
+              <UserInp Icon={LuUser} type="text" placeholder="ชื่อผู้ใช้" />
+            </div>
+
             {/* password */}
-            <UserInp Icon={LuLock} type="password" placeholder="รหัสผ่าน" />
+            <div className="space-y-1">
+              <label>รหัสผ่าน</label>
+              <UserInp Icon={LuLock} type="password" placeholder="รหัสผ่าน" />
+            </div>
+
+            {/* role */}
+            <RoleSelector
+              roles={["user", "admin"]}
+              selectedRole={selectedRole}
+              onChange={setSelectedRole}
+            />
+
             <button className="w-full h-12 bg-primary text-white rounded-lg">
               เพิ่มผู้ใช้
             </button>
