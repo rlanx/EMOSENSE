@@ -23,7 +23,7 @@ export default function UserHistory() {
         {/* content container */}
         <div className="ml-[250px] flex flex-1 flex-col gap-4 p-6 ">
           {/* title */}
-          <p className="w-fit pr-5 text-center text-2xl font-semibold border-b-[3px] border-primary pb-1">
+          <p className="w-fit pr-3 text-center text-2xl font-semibold border-b-[3px] border-primary pb-1">
             ประวัติการวิเคราะห์ของ user1234
           </p>
 
