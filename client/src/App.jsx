@@ -8,7 +8,7 @@ import Login from "./page/user/Login";
 import Register from "./page/user/Register";
 import News from "./page/user/News";
 import Research from "./page/user/Research";
-import NewsDetail from "./page/user/NewsDetail";
+import PostDetail from "./page/user/PostDetail";
 import Account from "./page/user/Account";
 import History from "./page/user/History";
 import Dashboard from "./page/admin/Dashboard";
@@ -18,6 +18,10 @@ import ManageResearch from "./page/admin/ManageResearch";
 import UserHistory from "./page/admin/UserHistory";
 import EditUser from "./page/admin/EditUser";
 import AddUser from "./page/admin/AddUser";
+import AddNews from "./page/admin/AddNews";
+import EditNews from "./page/admin/EditNews";
+import AddResearch from "./page/admin/AddResearch";
+import EditResearch from "./page/admin/EditResearch";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -30,7 +34,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/news" element={<News />} />
-        <Route path="/news/ex" element={<NewsDetail />} />
+        <Route path="/news/ex" element={<PostDetail />} />
         <Route path="/research" element={<Research />} />
         <Route path="/my-account" element={<Account />} />
         <Route path="/history" element={<History />} />
@@ -44,7 +48,12 @@ function App() {
         <Route path="/users/edit" element={<EditUser />} />
 
         <Route path="/manage-news" element={<ManageNews />} />
+        <Route path="/manage-news/add" element={<AddNews />} />
+        <Route path="/manage-news/edit" element={<EditNews />} />
+
         <Route path="/manage-research" element={<ManageResearch />} />
+        <Route path="/manage-research/add" element={<AddResearch />} />
+        <Route path="/manage-research/edit" element={<EditResearch />} />
       </Routes>
     </BrowserRouter>
   );
