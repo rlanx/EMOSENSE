@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/Navbar";
 import UserInp from "../../components/user/UserInp";
 import { LuUser, LuLock } from "react-icons/lu";
-import { User, Pencil } from "lucide-react";
+import { User, Pencil, Save } from "lucide-react";
 import Sidebar from "../../components/admin/Sidebar";
 import RoleSelector from "../../components/admin/RoleSelector";
 
@@ -48,13 +48,13 @@ export default function EditUser() {
         <Sidebar />
         <div className="ml-[250px] flex flex-1 flex-col gap-5 p-6 items-center">
           {/* title */}
-          <p className="w-fit px-5 text-center text-2xl font-semibold border-b-[3px] border-primary pb-1">
+          <p className="w-fit px-3 text-center text-2xl font-semibold border-b-[3px] border-primary pb-1">
             แก้ไขข้อมูลผู้ใช้ user1234
           </p>
 
           <div className="w-[450px]">
             {/* input container */}
-            <div className="flex flex-col gap-3 items-end text-grey">
+            <div className="flex flex-col gap-4 items-end text-grey">
               {/* username */}
               <div className="w-full space-y-1">
                 <label>ชื่อผู้ใช้</label>
@@ -112,7 +112,7 @@ export default function EditUser() {
               </div>
 
               <button
-                className={`flex items-center gap-2 h-11 px-5 rounded-lg text-white ${
+                className={`flex items-center gap-2 h-12 px-5 rounded-lg text-white ${
                   validatePassword(newPassword) &&
                   newPassword === confirmPassword
                     ? "bg-primary cursor-pointer"
@@ -124,7 +124,7 @@ export default function EditUser() {
                   newPassword !== confirmPassword
                 }
               >
-                <Pencil size={18} />
+                <Save size={20} />
                 บันทึก
               </button>
             </div>

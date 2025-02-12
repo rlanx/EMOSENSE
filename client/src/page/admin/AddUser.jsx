@@ -16,7 +16,7 @@ export default function AddUser() {
         <Sidebar />
         <div className="ml-[250px] flex flex-1 flex-col gap-5 p-6 items-center">
           {/* title */}
-          <p className="w-fit px-5 text-center text-2xl font-semibold border-b-[3px] border-primary pb-1">
+          <p className="w-fit px-3 text-center text-2xl font-semibold border-b-[3px] border-primary pb-1">
             เพิ่มผู้ใช้
           </p>
 
