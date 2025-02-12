@@ -14,7 +14,7 @@ export default function Sidebar() {
     { name: "จัดการผู้ใช้", path: "/users", icon: <Users size={22} /> },
     {
       name: "จัดการข่าวสาร",
-      path: "/manage-knowledge",
+      path: "/manage-news",
       icon: <Newspaper size={22} />,
     },
     {

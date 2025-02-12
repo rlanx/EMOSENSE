@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function HCard({ data }) {
   return (
     <Link
-      to={`/knowledge/ex`}
+      to={`/news/ex`}
       className="w-full min-h-[160px] flex items-center justify-between py-8 border-b-[1px] "
     >
       {/* info container */}

@@ -6,14 +6,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Main from "./page/user/Main";
 import Login from "./page/user/Login";
 import Register from "./page/user/Register";
-import Knowledge from "./page/user/Knowledge";
+import News from "./page/user/News";
 import Research from "./page/user/Research";
-import KnowledgeDetail from "./page/user/KnowledgeDetail";
+import NewsDetail from "./page/user/NewsDetail";
 import Account from "./page/user/Account";
 import History from "./page/user/History";
 import Dashboard from "./page/admin/Dashboard";
 import ManageUsers from "./page/admin/ManageUsers";
-import ManageKnowledge from "./page/admin/ManageKnowledge";
+import ManageNews from "./page/admin/ManageNews";
 import ManageResearch from "./page/admin/ManageResearch";
 import UserHistory from "./page/admin/UserHistory";
 import EditUser from "./page/admin/EditUser";
@@ -29,8 +29,8 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/knowledge" element={<Knowledge />} />
-        <Route path="/knowledge/ex" element={<KnowledgeDetail />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/news/ex" element={<NewsDetail />} />
         <Route path="/research" element={<Research />} />
         <Route path="/my-account" element={<Account />} />
         <Route path="/history" element={<History />} />
@@ -43,7 +43,7 @@ function App() {
         <Route path="/users/add" element={<AddUser />} />
         <Route path="/users/edit" element={<EditUser />} />
 
-        <Route path="/manage-knowledge" element={<ManageKnowledge />} />
+        <Route path="/manage-news" element={<ManageNews />} />
         <Route path="/manage-research" element={<ManageResearch />} />
       </Routes>
     </BrowserRouter>
