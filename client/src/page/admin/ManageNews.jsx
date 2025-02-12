@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import Pagination from "../../components/user/Pagination";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Eye } from "lucide-react";
+import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 //data
 import knowledgeData from "../../utils/mock_data";
@@ -18,10 +20,35 @@ export default function ManageKnowledge() {
   const endIndex = startIndex + itemsPerPage;
   const currentRecord = knowledgeData.slice(startIndex, endIndex);
 
+  const handleDeletePost = (newsId) => {
+    Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "การลบโพสต์จะไม่สามารถย้อนกลับได้!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#FF6F61",
+      cancelButtonColor: "#5BC0BE",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(`Deleted post with ID: ${newsId}`);
+        Swal.fire("ลบสำเร็จ!", "โพสต์ถูกลบเรียบร้อยแล้ว", "success");
+      }
+    });
+  };
+
   const actionButtons = [
+    {
+      icon: <Eye size={22} />,
+      action: "previewPost",
+      path: "/news/ex",
+      color: "bg-gray-400",
+    },
     {
       icon: <Pencil size={22} />,
       action: "editPost",
+      path: "/manage-news/edit",
       color: "bg-accent",
     },
     {
@@ -42,11 +69,13 @@ export default function ManageKnowledge() {
             จัดการความรู้ทั่วไป / ข่าวสาร
           </p>
 
-          {/* add user */}
-          <button className="lg:w-[145px] bg-primary text-white flex py-3 px-3 rounded-lg">
-            <Plus className="basis-1/4" />
-            <p className="basis-3/4">เพิ่มข่าวสาร</p>
-          </button>
+          {/* add news */}
+          <Link to={"/manage-news/add"}>
+            <button className="lg:w-[145px] bg-primary text-white flex py-3 px-3 rounded-lg">
+              <Plus className="basis-1/4" />
+              <p className="basis-3/4">เพิ่มข่าวสาร</p>
+            </button>
+          </Link>
 
           {/* table */}
           <div className="w-full ">
@@ -83,14 +112,25 @@ export default function ManageKnowledge() {
 
                       {/* action button */}
                       <div className="basis-2/12 py-3 px-4 flex gap-2">
-                        {actionButtons.map((btn, index) => (
-                          <button
-                            key={index}
-                            className={`${btn.color} p-2 rounded-md text-white `}
-                          >
-                            {btn.icon}
-                          </button>
-                        ))}
+                        {actionButtons.map((btn, index) =>
+                          btn.action === "deletePost" ? (
+                            <button
+                              key={index}
+                              className={`${btn.color} p-2 rounded-md text-white`}
+                              onClick={() => handleDeletePost(post.id)}
+                            >
+                              {btn.icon}
+                            </button>
+                          ) : (
+                            <Link to={btn.path} key={index}>
+                              <button
+                                className={`${btn.color} p-2 rounded-md text-white`}
+                              >
+                                {btn.icon}
+                              </button>
+                            </Link>
+                          )
+                        )}
                       </div>
                     </div>
                   ))}

@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import Pagination from "../../components/user/Pagination";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, Eye } from "lucide-react";
+import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 //data
 import knowledgeData from "../../utils/mock_data";
@@ -18,10 +20,35 @@ export default function ManageResearch() {
   const endIndex = startIndex + itemsPerPage;
   const currentRecord = knowledgeData.slice(startIndex, endIndex);
 
+  const handleDeletePost = (researchId) => {
+    Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "การลบโพสต์จะไม่สามารถย้อนกลับได้!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#FF6F61",
+      cancelButtonColor: "#5BC0BE",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(`Deleted post with ID: ${researchId}`);
+        Swal.fire("ลบสำเร็จ!", "โพสต์ถูกลบเรียบร้อยแล้ว", "success");
+      }
+    });
+  };
+
   const actionButtons = [
+    {
+      icon: <Eye size={22} />,
+      action: "previewPost",
+      path: "/news/ex",
+      color: "bg-gray-400",
+    },
     {
       icon: <Pencil size={22} />,
       action: "editPost",
+      path: "/manage-research/edit",
       color: "bg-accent",
     },
     {
@@ -40,11 +67,13 @@ export default function ManageResearch() {
         <div className="ml-[250px] flex flex-1 flex-col gap-3 p-6">
           <p className="text-3xl text-grey font-semibold">จัดการงานวิจัย</p>
 
-          {/* add user */}
-          <button className="lg:w-[145px] bg-primary text-white flex py-3 px-3 rounded-lg">
-            <Plus className="basis-1/4" />
-            <p className="basis-3/4">เพิ่มงานวิจัย</p>
-          </button>
+          {/* add research */}
+          <Link to={"/manage-research/add"}>
+            <button className="lg:w-[145px] bg-primary text-white flex py-3 px-3 rounded-lg">
+              <Plus className="basis-1/4" />
+              <p className="basis-3/4">เพิ่มงานวิจัย</p>
+            </button>
+          </Link>
 
           {/* table */}
           <div className="w-full ">
@@ -81,14 +110,25 @@ export default function ManageResearch() {
 
                       {/* action button */}
                       <div className="basis-2/12 py-3 px-4 flex gap-2">
-                        {actionButtons.map((btn, index) => (
-                          <button
-                            key={index}
-                            className={`${btn.color} p-2 rounded-md text-white `}
-                          >
-                            {btn.icon}
-                          </button>
-                        ))}
+                        {actionButtons.map((btn, index) =>
+                          btn.action === "deletePost" ? (
+                            <button
+                              key={index}
+                              className={`${btn.color} p-2 rounded-md text-white`}
+                              onClick={() => handleDeletePost(post.id)}
+                            >
+                              {btn.icon}
+                            </button>
+                          ) : (
+                            <Link to={btn.path} key={index}>
+                              <button
+                                className={`${btn.color} p-2 rounded-md text-white`}
+                              >
+                                {btn.icon}
+                              </button>
+                            </Link>
+                          )
+                        )}
                       </div>
                     </div>
                   ))}
