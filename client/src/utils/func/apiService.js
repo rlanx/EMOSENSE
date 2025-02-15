@@ -1,5 +1,5 @@
 import axios from "axios";
-import { registerUserAPI, loginUserAPI } from "../ApiRoute"; // นำเข้า API URL
+import { registerUserAPI, loginUserAPI } from "../ApiRoute";
 
 // ฟังก์ชันสมัครสมาชิก
 export const registerUser = async (username, password) => {
@@ -12,13 +12,23 @@ export const registerUser = async (username, password) => {
   }
 };
 
-// ฟังก์ชันเข้าสู่ระบบ (เพิ่มเข้ามาเผื่อใช้ใน Login)
+// ตั้งค่า axios ให้ส่ง Cookie ทุกครั้งที่เรียก API
+const apiClient = axios.create({
+  withCredentials: true, // ส่ง Cookie ไปกับทุก Request
+});
+
+// ฟังก์ชันเข้าสู่ระบบ
 export const loginUser = async (username, password) => {
   try {
-    const response = await axios.post(loginUserAPI, { username, password });
+    const response = await apiClient.post(loginUserAPI, { username, password });
     return response.data;
   } catch (error) {
     console.error("Login Error:", error);
-    return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
+
+    if (error.response && error.response.status === 400) {
+      return { error: error.response.data.message }; // ส่งข้อความ Error จาก Backend
+    }
+
+    return { error: "เกิดข้อผิดพลาด ไม่สามารถเข้าสู่ระบบได้" };
   }
 };

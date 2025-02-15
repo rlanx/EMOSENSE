@@ -55,9 +55,39 @@ module.exports.loginUser = async (req, res) => {
       { expiresIn: "1h" }
     );
 
+    // ส่ง Token ผ่าน Cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, // เปลี่ยนเป็น `true` ถ้าใช้ HTTPS
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000, // หมดอายุใน 1 ชั่วโมง
+    });
+
     res.json({ message: "เข้าสู่ระบบสำเร็จ", token, role: user.role });
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการเข้าสู่ระบบ" });
   }
+};
+
+// ดึงข้อมูล User จาก Cookie
+module.exports.getUserProfile = (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ username: decoded.username, role: decoded.role });
+  } catch (error) {
+    console.error("Token Verification Error:", error);
+    res.status(401).json({ message: "Invalid token" });
+  }
+};
+
+// ออกจากระบบ
+module.exports.logoutUser = (req, res) => {
+  res.clearCookie("token");
+  res.json({ message: "ออกจากระบบสำเร็จ" });
 };

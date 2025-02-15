@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link, Links, useLocation } from "react-router-dom";
+import { Link, Links, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import menuList from "../../utils/json/navbar";
 import { User, History, Settings, LogOut, UserCog } from "lucide-react";
-import { jwtDecode } from "jwt-decode";
+import { getUserAPI, logoutUserAPI } from "../../utils/ApiRoute";
+import Swal from "sweetalert2";
 
 function Navbar() {
   const location = useLocation();
@@ -13,24 +15,57 @@ function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null); // ใช้ useRef เก็บอ้างอิง dropdown
 
+  const navigate = useNavigate();
+
+  // ดึงข้อมูล user
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
+    axios
+      .get(getUserAPI, { withCredentials: true })
+      .then((res) => {
         setIsLoggedIn(true);
-        setUsername(decoded.username);
-        setIsAdmin(decoded.role === "admin"); // ตรวจสอบ role
-      } catch (error) {
-        console.error("Invalid token:", error);
-      }
-    }
+        setUsername(res.data.username);
+        setIsAdmin(res.data.role === "admin");
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+        setIsAdmin(false);
+        setUsername("");
+      });
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    setIsAdmin(false);
+  // logout function
+  const handleLogout = async () => {
+    Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "คุณต้องการออกจากระบบ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#FF6F61",
+      cancelButtonColor: "#5BC0BE",
+      confirmButtonText: "ออกจากระบบ",
+      cancelButtonText: "ยกเลิก",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.post(logoutUserAPI, {}, { withCredentials: true });
+          setIsLoggedIn(false);
+          setIsAdmin(false);
+          setUsername("");
+
+          Swal.fire({
+            title: "ออกจากระบบสำเร็จ!",
+            text: "คุณออกจากระบบเรียบร้อยแล้ว",
+            icon: "success",
+            confirmButtonColor: "#5BC0BE",
+          }).then(() => {
+            navigate("/"); // กลับไปหน้าแรกหลังจากออกจากระบบ
+          });
+        } catch (error) {
+          console.error("Logout Error:", error);
+          Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถออกจากระบบได้", "error");
+        }
+      }
+    });
   };
 
   const toggleDropdown = () => {
@@ -137,7 +172,7 @@ function Navbar() {
             >
               <ul>
                 <li className="text-center pb-2 mb-1 border-b-[1px]">
-                  user12345
+                  {username}
                 </li>
 
                 {dropdownMenu.map((item, index) => (

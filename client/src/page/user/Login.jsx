@@ -18,19 +18,15 @@ function Login() {
       return;
     }
 
-    toast.promise(
-      loginUser(username, password), // เรียก API Login
-      {
-        loading: "กำลังเข้าสู่ระบบ...",
-        success: (res) => {
-          localStorage.setItem("token", res.token); // บันทึก Token ใน LocalStorage
-          localStorage.setItem("role", res.role); // บันทึก Role
-          setTimeout(() => navigate("/"), 2000); // กลับไปหน้าแรก
-          return "เข้าสู่ระบบสำเร็จ!";
-        },
-        error: (err) => `${err.message || "เกิดข้อผิดพลาด"}`,
-      }
-    );
+    const response = await loginUser(username, password); // รอ API ตอบกลับ
+
+    if (response.error) {
+      toast.error(response.error); // แสดง Error ถ้า Login ไม่สำเร็จ
+      return;
+    }
+
+    toast.success("เข้าสู่ระบบสำเร็จ!");
+    setTimeout(() => navigate("/"), 2000); // เปลี่ยนหน้าเมื่อสำเร็จ
   };
   return (
     <div className="h-screen w-full text-grey bg-gradient-to-b from-sea-blue to-green-pastel flex flex-col items-center justify-center gap-7">
