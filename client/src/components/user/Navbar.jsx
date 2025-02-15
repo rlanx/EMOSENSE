@@ -1,22 +1,40 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, Links, useLocation } from "react-router-dom";
-import menuList from "../../utils/navbar";
+import menuList from "../../utils/json/navbar";
 import { User, History, Settings, LogOut, UserCog } from "lucide-react";
+import { jwtDecode } from "jwt-decode";
 
 function Navbar() {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [username, setUsername] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null); // ใช้ useRef เก็บอ้างอิง dropdown
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setIsLoggedIn(true);
+        setUsername(decoded.username);
+        setIsAdmin(decoded.role === "admin"); // ตรวจสอบ role
+      } catch (error) {
+        console.error("Invalid token:", error);
+      }
+    }
+  }, []);
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
+    setIsAdmin(false);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   useEffect(() => {

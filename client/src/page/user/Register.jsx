@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import UserInp from "../../components/user/UserInp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LuUser, LuLock } from "react-icons/lu";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { registerUser } from "../../utils/func/apiService";
+import { Toaster, toast } from "react-hot-toast";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   // ฟังก์ชันสุ่ม username และ password พร้อมกัน
   const generateCredentials = () => {
@@ -19,10 +23,37 @@ function Register() {
 
     setUsername(randomUsername);
     setPassword(randomPassword);
+    setConfirmPassword(randomPassword);
+  };
+
+  // ฟังก์ชันสมัครสมาชิก
+  const handleRegister = async () => {
+    if (!username || !password || !confirmPassword) {
+      toast.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
+      return;
+    }
+
+    toast
+      .promise(registerUser(username, password), {
+        loading: "กำลังสมัครสมาชิก...",
+        success: "สมัครสมาชิกสำเร็จ!",
+        error: (err) => `${err.message || "เกิดข้อผิดพลาด"}`,
+      })
+      .then(() => {
+        setTimeout(() => navigate("/login"), 2000); // เปลี่ยนไปหน้า Login หลังจาก 2 วินาที
+      });
   };
 
   return (
     <div className="h-screen w-full text-grey bg-gradient-to-b from-sea-blue to-green-pastel flex flex-col items-center justify-center gap-7">
+      {/* alert */}
+      <Toaster position="top-center" reverseOrder={false} />
+
       <div className="bg-white w-[485px] p-12 rounded-xl flex flex-col gap-7 shadow-lg">
         <div>
           <p className="text-[28px] font-semibold">
@@ -46,8 +77,17 @@ function Register() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <UserInp Icon={LuLock} type="password" placeholder="ยืนยันรหัสผ่าน" />
-          <button className="w-full h-12 bg-primary text-white rounded-lg">
+          <UserInp
+            Icon={LuLock}
+            type="password"
+            placeholder="ยืนยันรหัสผ่าน"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <button
+            onClick={handleRegister}
+            className="w-full h-12 bg-primary text-white rounded-lg"
+          >
             สมัครสมาชิก
           </button>
           {/* ปุ่มสุ่ม username และ password */}

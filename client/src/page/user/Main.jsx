@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../../components/user/Navbar";
-import knowledgeData from "../../utils/mock_data";
+import knowledgeData from "../../utils/json/mock_data";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { LuUserPen } from "react-icons/lu";
 import Card from "../../components/user/Card";
