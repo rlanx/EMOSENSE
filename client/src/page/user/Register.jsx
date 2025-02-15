@@ -12,18 +12,52 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
+  // ฟังก์ชันตรวจสอบรหัสผ่านให้มีความปลอดภัยระดับกลาง
+  const validatePassword = (password) => {
+    const minLength = password.length >= 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*_]/.test(password);
+
+    return (
+      minLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar
+    );
+  };
+
   // ฟังก์ชันสุ่ม username และ password พร้อมกัน
   const generateCredentials = () => {
+    const generateRandomPassword = () => {
+      const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+      const numbers = "0123456789";
+      const specialChars = "!@#$%^&*_";
+      const allChars = upperCase + lowerCase + numbers + specialChars;
+
+      let password = "";
+      password += upperCase[Math.floor(Math.random() * upperCase.length)];
+      password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
+      password += numbers[Math.floor(Math.random() * numbers.length)];
+      password += specialChars[Math.floor(Math.random() * specialChars.length)];
+
+      // เติมรหัสผ่านให้ครบ 10 ตัว
+      for (let i = 4; i < 10; i++) {
+        password += allChars[Math.floor(Math.random() * allChars.length)];
+      }
+
+      // สุ่มเรียงลำดับตัวอักษรใหม่ เพื่อให้ไม่อยู่ในลำดับเดิม
+      return password
+        .split("")
+        .sort(() => Math.random() - 0.5)
+        .join("");
+    };
+
     const randomUsername = `user${Math.floor(Math.random() * 100000)}`;
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
-    const randomPassword = Array.from({ length: 10 }, () =>
-      characters.charAt(Math.floor(Math.random() * characters.length))
-    ).join("");
+    const securePassword = generateRandomPassword();
 
     setUsername(randomUsername);
-    setPassword(randomPassword);
-    setConfirmPassword(randomPassword);
+    setPassword(securePassword);
+    setConfirmPassword(securePassword);
   };
 
   // ฟังก์ชันสมัครสมาชิก
@@ -35,6 +69,13 @@ function Register() {
 
     if (password !== confirmPassword) {
       toast.error("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      toast.error(
+        "รหัสผ่านต้องความยาวอย่างน้อย 8 ตัว และประกอบด้วยตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ"
+      );
       return;
     }
 
@@ -70,13 +111,21 @@ function Register() {
             onChange={(e) => setUsername(e.target.value)}
           />
           {/* password */}
-          <UserInp
-            Icon={LuLock}
-            type="password"
-            placeholder="รหัสผ่าน"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="w-full">
+            <UserInp
+              Icon={LuLock}
+              type="password"
+              placeholder="รหัสผ่าน"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <p className="opacity-80 text-sm mt-2 px-1">
+              รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัว และต้องมีตัวพิมพ์ใหญ่,
+              <br />
+              ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ
+            </p>
+          </div>
+
           <UserInp
             Icon={LuLock}
             type="password"
