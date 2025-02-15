@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../../components/user/Navbar";
 import { LuSearch } from "react-icons/lu";
-import knowledgeData from "../../utils/mock_data";
+import knowledgeData from "../../utils/json/mock_data";
 import HCard from "../../components/user/HCard";
 import Footer from "../../components/user/Footer";
 import Pagination from "../../components/user/Pagination";

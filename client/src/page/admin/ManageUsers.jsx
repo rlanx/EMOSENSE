@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 //data
-import usersData from "../../utils/mock_users";
+import usersData from "../../utils/json/mock_users";
 
 export default function ManageUsers() {
   const [currentPage, setCurrentPage] = useState(1);

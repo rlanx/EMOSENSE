@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 
 //data
-import knowledgeData from "../../utils/mock_data";
+import knowledgeData from "../../utils/json/mock_data";
 
 export default function ManageResearch() {
   const [currentPage, setCurrentPage] = useState(1);

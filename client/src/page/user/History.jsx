@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../../components/user/Navbar";
 
 // mock-data
-import AnalysisReport from "../../utils/mock_analysis_report";
+import AnalysisReport from "../../utils/json/mock_analysis_report";
 import Pagination from "../../components/user/Pagination";
 import Footer from "../../components/user/Footer";
 

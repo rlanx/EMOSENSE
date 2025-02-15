@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/user/Navbar";
 import axios from "axios";
 import { UserPen, Calendar } from "lucide-react";
-import knowledgeData from "../../utils/mock_data";
+import knowledgeData from "../../utils/json/mock_data";
 import Footer from "../../components/user/Footer";
 
 export default function KnowledgeDetail() {

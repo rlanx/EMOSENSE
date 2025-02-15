@@ -1,5 +1,5 @@
 import React from "react";
-import footerLinks from "../../utils/footer";
+import footerLinks from "../../utils/json/footer";
 
 function Footer() {
   return (

@@ -3,7 +3,7 @@ import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import Pagination from "../../components/user/Pagination";
 
-import AnalysisReport from "../../utils/mock_analysis_report";
+import AnalysisReport from "../../utils/json/mock_analysis_report";
 
 export default function UserHistory() {
   const [currentPage, setCurrentPage] = useState(1);
