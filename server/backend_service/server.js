@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 // สร้าง Express app ก่อนใช้ Middleware
@@ -15,6 +16,8 @@ app.use(
     credentials: true,
   })
 );
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 
 // ในำเข้า Routes หลังจากสร้าง `app`

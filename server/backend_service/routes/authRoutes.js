@@ -4,7 +4,11 @@ const {
   loginUser,
   getUserProfile,
   logoutUser,
+  updateUser,
 } = require("../controllers/authController");
+
+const upload = require("../middlewares/upload"); // นำเข้า Middleware
+
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 
@@ -19,5 +23,8 @@ router.get("/me", getUserProfile);
 
 // ออกจากระบบ
 router.post("/logout", logoutUser);
+
+// อัปเดตข้อมูลผู้ใช้ (ชื่อ, รหัสผ่าน, รูปโปรไฟล์)
+router.put("/update", upload.single("profileImage"), updateUser);
 
 module.exports = router;

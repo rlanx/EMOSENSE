@@ -4,11 +4,30 @@ import UserInp from "../../components/user/UserInp";
 import { LuUser, LuLock } from "react-icons/lu";
 import { User, Pencil } from "lucide-react";
 import Footer from "../../components/user/Footer";
+import { Toaster, toast } from "react-hot-toast";
+import { getUser, updateUser } from "../../utils/func/apiService";
+import { host } from "../../utils/ApiRoute";
+import Swal from "sweetalert2";
 
 export default function Account() {
+  const [username, setUsername] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+
+  // ดึงข้อมูลผู้ใช้
+  useEffect(() => {
+    getUser().then((data) => {
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        setUsername(data.username);
+        setPreviewImage(data.profileImage ? `${host}${data.profileImage}` : "");
+      }
+    });
+  }, []);
 
   // ฟังก์ชันตรวจสอบรหัสผ่านให้อยู่ในระดับกลาง
   const validatePassword = (password) => {
@@ -23,26 +42,68 @@ export default function Account() {
     );
   };
 
-  // เมื่อกดบันทึก
-  const handleSave = () => {
-    if (!validatePassword(newPassword)) {
-      setError(
-        "รหัสผ่านต้องมีความยาว 8 ตัวขึ้นไป และต้องมี\nตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ"
+  // อัปโหลดรูปภาพ
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(file);
+      setPreviewImage(URL.createObjectURL(file)); // แสดงตัวอย่างภาพที่อัปโหลด
+    }
+  };
+
+  // บันทึกการเปลี่ยนแปลง
+  const handleSave = async () => {
+    if (newPassword && !validatePassword(newPassword)) {
+      toast.error(
+        "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัว และต้องมีตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ"
       );
       return;
     }
     if (newPassword !== confirmPassword) {
-      setError("รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน");
+      toast.error("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน");
       return;
     }
 
-    setError("");
-    alert("บันทึกข้อมูลสำเร็จ!");
+    // ใช้ SweetAlert เพื่อยืนยันก่อนอัปเดต
+    Swal.fire({
+      title: "ยืนยันการแก้ไข?",
+      text: "คุณต้องการบันทึกข้อมูลหรือไม่?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#FF6F61",
+      cancelButtonColor: "#5BC0BE",
+      confirmButtonText: "บันทึก",
+      cancelButtonText: "ยกเลิก",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const formData = new FormData();
+        formData.append("newUsername", username);
+        formData.append("newPassword", newPassword);
+        formData.append("confirmPassword", confirmPassword);
+        if (profileImage) {
+          formData.append("profileImage", profileImage);
+        }
+
+        toast.promise(updateUser(formData), {
+          loading: "กำลังบันทึกข้อมูล...",
+          success: (response) => {
+            setPreviewImage(
+              response.profileImage ? `${host}${response.profileImage}` : ""
+            ); // รีเฟรชรูปภาพหลังอัปเดต
+            setNewPassword("");
+            setConfirmPassword("");
+            return "อัปเดตข้อมูลสำเร็จ!";
+          },
+          error: (err) => `${err.message || "เกิดข้อผิดพลาด"}`,
+        });
+      }
+    });
   };
 
   return (
     <div>
       <Navbar />
+      <Toaster position="top-center" reverseOrder={false} />
       {/* main container */}
       <div className="lg:w-[1280px] mx-auto flex flex-col gap-5 justify-center items-center mt-5 mb-10">
         {/* title */}
@@ -52,18 +113,36 @@ export default function Account() {
         {/* form */}
         <div className="lg:max-w-[620px] flex gap-10 p-10 border-[1px] shadow-md rounded-3xl">
           {/* info container */}
-          <div className="flex flex-col items-center gap-5">
-            <p className="text-xl text-center font-semibold">user12345</p>
+          <div className="flex flex-col items-center  gap-5">
+            <p className="text-xl text-center font-semibold">แก้ไขรูปโปรไฟล์</p>
             <div className="bg-[#f5f5f5] rounded-full overflow-hidden size-[200px] flex items-center justify-center">
-              <User size={50} strokeWidth={1} />
+              {previewImage ? (
+                <img
+                  src={previewImage}
+                  alt="Profile"
+                  className="size-full object-cover object-top"
+                />
+              ) : (
+                <User size={50} strokeWidth={1} className="text-gray-500" />
+              )}
             </div>
-            <button className="relative group w-fit bg-light-blue text-sea-blue">
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              id="upload"
+              onChange={handleFileChange}
+            />
+            <label
+              htmlFor="upload"
+              className="relative group w-fit bg-light-blue text-sea-blue cursor-pointer"
+            >
               อัปโหลดรูปภาพ
               <div
                 className="absolute left-0 bottom-[-6px] w-full h-[2px] bg-sea-blue
                         transition-transform origin-center scale-x-0 group-hover:scale-x-100"
               ></div>
-            </button>
+            </label>
           </div>
 
           {/* input container */}
@@ -71,14 +150,25 @@ export default function Account() {
             {/* username */}
             <div className="w-full space-y-1">
               <label>ชื่อผู้ใช้</label>
-              <UserInp Icon={LuUser} type="text" placeholder="ชื่อผู้ใช้" />
+              <UserInp
+                Icon={LuUser}
+                type="text"
+                placeholder="ชื่อผู้ใช้"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </div>
 
             {/* password */}
-            <div className="w-full space-y-1">
+            {/* <div className="w-full space-y-1">
               <label>รหัสผ่าน</label>
-              <UserInp Icon={LuLock} type="password" placeholder="รหัสผ่าน" />
-            </div>
+              <UserInp
+                Icon={LuLock}
+                type="password"
+                placeholder="รหัสผ่าน"
+                value={password}
+              />
+            </div> */}
 
             {/* new password */}
             <div className="w-full space-y-1">
@@ -116,16 +206,8 @@ export default function Account() {
             </div>
 
             <button
-              className={`flex items-center gap-2 h-11 px-5 rounded-lg text-white ${
-                validatePassword(newPassword) && newPassword === confirmPassword
-                  ? "bg-primary cursor-pointer"
-                  : "bg-gray-400 cursor-not-allowed"
-              } `}
+              className={`flex items-center gap-2 h-11 px-5 rounded-lg text-white bg-primary  `}
               onClick={handleSave}
-              disabled={
-                !validatePassword(newPassword) ||
-                newPassword !== confirmPassword
-              }
             >
               <Pencil size={18} />
               บันทึก
