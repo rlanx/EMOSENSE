@@ -1,55 +1,10 @@
 const bcrypt = require("bcryptjs");
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
-
-// ฟังก์ชันเพิ่มผู้ใช้ใหม่ (Admin เท่านั้น)
-module.exports.addUser = async (req, res) => {
-  try {
-    const { username, password, role } = req.body;
-
-    // ตรวจสอบสิทธิ์ Admin
-    if (req.user.role !== "admin") {
-      return res.status(403).json({ message: "คุณไม่มีสิทธิ์เพิ่มผู้ใช้" });
-    }
-
-    // ตรวจสอบว่าชื่อผู้ใช้ซ้ำหรือไม่
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: "ชื่อผู้ใช้ถูกใช้ไปแล้ว" });
-    }
-
-    // เข้ารหัสรหัสผ่าน
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // เพิ่มผู้ใช้ใหม่
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-      role: role || "user",
-    });
-
-    await newUser.save();
-
-    res.status(201).json({ message: "เพิ่มผู้ใช้สำเร็จ!" });
-  } catch (error) {
-    console.error("Add User Error:", error);
-    res.status(500).json({ message: "เกิดข้อผิดพลาดในการเพิ่มผู้ใช้" });
-  }
-};
+const User = require("../models/User");
 
 // ดึงข้อมูล User จาก Cookie
 module.exports.getUserProfile = async (req, res) => {
   try {
-    // const token = req.cookies.token;
-    // if (!token) {
-    //   return res.status(401).json({ message: "Unauthorized" });
-    // }
-
-    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // const user = await User.findOne({ user_id: decoded.user_id });
-
     const user = await User.findOne({ user_id: req.user.user_id }).select(
       "-password"
     );
@@ -61,26 +16,11 @@ module.exports.getUserProfile = async (req, res) => {
     res.json({
       username: user.username,
       role: user.role,
-      profileImage: user.profileImage, // ส่ง `profileImage` กลับไป
+      profileImage: user.profileImage || null, // ✅ ส่ง `profileImage` กลับไป
     });
   } catch (error) {
     console.error("Token Verification Error:", error);
     res.status(401).json({ message: "Invalid token" });
-  }
-};
-
-// ฟังก์ชันดึงรายการผู้ใช้ทั้งหมด (Admin เท่านั้น)
-module.exports.getAllUsers = async (req, res) => {
-  try {
-    if (req.user.role !== "admin") {
-      return res.status(403).json({ message: "คุณไม่มีสิทธิ์ดูรายชื่อผู้ใช้" });
-    }
-
-    const users = await User.find().select("-password");
-    res.json(users);
-  } catch (error) {
-    console.error("Get Users Error:", error);
-    res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้" });
   }
 };
 
@@ -101,16 +41,15 @@ const validatePassword = (password) => {
 module.exports.updateUser = async (req, res) => {
   try {
     const { newUsername, newPassword, confirmPassword } = req.body;
-    const user = await User.findOne({ user_id: req.user.user_id });
-    // const token = req.cookies.token;
+    const token = req.cookies.token;
 
-    // if (!token) {
-    //   return res.status(401).json({ message: "Unauthorized" });
-    // }
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-    // // ตรวจสอบ JWT Token
-    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // const user = await User.findOne({ user_id: decoded.user_id });
+    // ตรวจสอบ JWT Token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findOne({ user_id: decoded.user_id });
 
     if (!user) {
       return res.status(404).json({ message: "ไม่พบผู้ใช้" });
@@ -156,5 +95,15 @@ module.exports.updateUser = async (req, res) => {
   } catch (error) {
     console.error("Update User Error:", error);
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการอัปเดตข้อมูลผู้ใช้" });
+  }
+};
+
+module.exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, "-password"); // ดึงข้อมูลทั้งหมด ยกเว้นรหัสผ่าน
+    res.json(users);
+  } catch (error) {
+    console.error("Get Users Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้" });
   }
 };

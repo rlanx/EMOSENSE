@@ -37,8 +37,8 @@ if (!MONGO_URI) {
 
 mongoose
   .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("✅ MongoDB Connected"))
+  .then(() => {
+    console.log("✅ MongoDB Connected");
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  })
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
-
-// เริ่มต้น Server
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
