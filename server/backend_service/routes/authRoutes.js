@@ -6,6 +6,7 @@ const {
   logoutUser,
   updateUser,
   checkUsername,
+  getAllUsers,
 } = require("../controllers/authController");
 
 const upload = require("../middlewares/upload"); // นำเข้า Middleware
@@ -29,5 +30,7 @@ router.post("/logout", logoutUser);
 router.put("/update", upload.single("profileImage"), updateUser);
 
 router.post("/check-username", checkUsername);
+
+router.get("/users", getAllUsers);
 
 module.exports = router;

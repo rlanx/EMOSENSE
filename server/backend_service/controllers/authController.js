@@ -192,3 +192,13 @@ module.exports.checkUsername = async (req, res) => {
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการตรวจสอบชื่อผู้ใช้" });
   }
 };
+
+module.exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, "-password"); // ดึงข้อมูลทั้งหมด ยกเว้นรหัสผ่าน
+    res.json(users);
+  } catch (error) {
+    console.error("Get Users Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้" });
+  }
+};

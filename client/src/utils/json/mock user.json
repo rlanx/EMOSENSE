@@ -1,0 +1,162 @@
+[
+  {
+    "user_id": 1,
+    "username": "admin001",
+    "password": "$2a$10$encryptedpassword1",
+    "profileImage": "/uploads/users_image/admin001.jpg",
+    "role": "admin",
+    "createdAt": "2024-02-10T08:00:00Z"
+  },
+  {
+    "user_id": 2,
+    "username": "user001",
+    "password": "$2a$10$encryptedpassword2",
+    "profileImage": "",
+    "role": "user",
+    "createdAt": "2024-02-11T08:00:00Z"
+  },
+  {
+    "user_id": 3,
+    "username": "admin002",
+    "password": "$2a$10$encryptedpassword3",
+    "profileImage": "/uploads/users_image/admin002.png",
+    "role": "admin",
+    "createdAt": "2024-02-12T08:00:00Z"
+  },
+  {
+    "user_id": 4,
+    "username": "user002",
+    "password": "$2a$10$encryptedpassword4",
+    "profileImage": "",
+    "role": "user",
+    "createdAt": "2024-02-13T08:00:00Z"
+  },
+  {
+    "user_id": 5,
+    "username": "user003",
+    "password": "$2a$10$encryptedpassword5",
+    "profileImage": "/uploads/users_image/user003.jpg",
+    "role": "user",
+    "createdAt": "2024-02-14T08:00:00Z"
+  },
+  {
+    "user_id": 6,
+    "username": "admin003",
+    "password": "$2a$10$encryptedpassword6",
+    "profileImage": "",
+    "role": "admin",
+    "createdAt": "2024-02-15T08:00:00Z"
+  },
+  {
+    "user_id": 7,
+    "username": "user004",
+    "password": "$2a$10$encryptedpassword7",
+    "profileImage": "",
+    "role": "user",
+    "createdAt": "2024-02-16T08:00:00Z"
+  },
+  {
+    "user_id": 8,
+    "username": "user005",
+    "password": "$2a$10$encryptedpassword8",
+    "profileImage": "/uploads/users_image/user005.png",
+    "role": "user",
+    "createdAt": "2024-02-17T08:00:00Z"
+  },
+  {
+    "user_id": 9,
+    "username": "admin004",
+    "password": "$2a$10$encryptedpassword9",
+    "profileImage": "",
+    "role": "admin",
+    "createdAt": "2024-02-18T08:00:00Z"
+  },
+  {
+    "user_id": 10,
+    "username": "user006",
+    "password": "$2a$10$encryptedpassword10",
+    "profileImage": "",
+    "role": "user",
+    "createdAt": "2024-02-19T08:00:00Z"
+  },
+  {
+    "user_id": 11,
+    "username": "user007",
+    "password": "$2a$10$encryptedpassword11",
+    "profileImage": "/uploads/users_image/user007.jpg",
+    "role": "user",
+    "createdAt": "2024-02-20T08:00:00Z"
+  },
+  {
+    "user_id": 12,
+    "username": "admin005",
+    "password": "$2a$10$encryptedpassword12",
+    "profileImage": "",
+    "role": "admin",
+    "createdAt": "2024-02-21T08:00:00Z"
+  },
+  {
+    "user_id": 13,
+    "username": "user008",
+    "password": "$2a$10$encryptedpassword13",
+    "profileImage": "",
+    "role": "user",
+    "createdAt": "2024-02-22T08:00:00Z"
+  },
+  {
+    "user_id": 14,
+    "username": "user009",
+    "password": "$2a$10$encryptedpassword14",
+    "profileImage": "/uploads/users_image/user009.png",
+    "role": "user",
+    "createdAt": "2024-02-23T08:00:00Z"
+  },
+  {
+    "user_id": 15,
+    "username": "admin006",
+    "password": "$2a$10$encryptedpassword15",
+    "profileImage": "",
+    "role": "admin",
+    "createdAt": "2024-02-24T08:00:00Z"
+  },
+  {
+    "user_id": 16,
+    "username": "user010",
+    "password": "$2a$10$encryptedpassword16",
+    "profileImage": "",
+    "role": "user",
+    "createdAt": "2024-02-25T08:00:00Z"
+  },
+  {
+    "user_id": 17,
+    "username": "user011",
+    "password": "$2a$10$encryptedpassword17",
+    "profileImage": "/uploads/users_image/user011.jpg",
+    "role": "user",
+    "createdAt": "2024-02-26T08:00:00Z"
+  },
+  {
+    "user_id": 18,
+    "username": "admin007",
+    "password": "$2a$10$encryptedpassword18",
+    "profileImage": "",
+    "role": "admin",
+    "createdAt": "2024-02-27T08:00:00Z"
+  },
+  {
+    "user_id": 19,
+    "username": "user012",
+    "password": "$2a$10$encryptedpassword19",
+    "profileImage": "",
+    "role": "user",
+    "createdAt": "2024-02-28T08:00:00Z"
+  },
+  {
+    "user_id": 20,
+    "username": "user013",
+    "password": "$2a$10$encryptedpassword20",
+    "profileImage": "/uploads/users_image/user013.png",
+    "role": "user",
+    "createdAt": "2024-02-29T08:00:00Z"
+  }
+]
