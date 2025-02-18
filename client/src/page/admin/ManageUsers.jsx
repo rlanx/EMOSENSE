@@ -1,24 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import Pagination from "../../components/user/Pagination";
 import { History, UserPen, UserX, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { getUsers } from "../../utils/func/apiService";
 
 //data
 import usersData from "../../utils/json/mock_users";
 
 export default function ManageUsers() {
+  const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 10; // จำนวนบทความต่อหน้า
-  const totalPages = Math.ceil(usersData.length / itemsPerPage);
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+
+  // ดึงข้อมูลผู้ใช้เ
+  useEffect(() => {
+    getUsers().then((data) => {
+      if (data.error) {
+        Swal.fire("เกิดข้อผิดพลาด!", data.error, "error");
+      } else {
+        setUsers(data);
+      }
+    });
+  }, []);
 
   // คำนวณช่วงของข้อมูลที่ต้องแสดงในหน้านี้
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentRecord = usersData.slice(startIndex, endIndex);
+  const currentRecord = users.slice(startIndex, endIndex);
 
   const handleDeleteUser = (userId) => {
     Swal.fire({
@@ -84,7 +97,6 @@ export default function ManageUsers() {
             <div className="w-full flex bg-primary rounded-t-lg text-white ">
               <div className="basis-1/12 py-3 px-4">ID</div>
               <div className="basis-3/12 py-3 px-4">ชื่อผู้ใช้</div>
-              <div className="basis-3/12 py-3 px-4">รหัสผ่าน</div>
               <div className="basis-3/12 py-3 px-4">role</div>
               <div className="basis-3/12 py-3 px-4">สมัครสมาชิกเมื่อ</div>
               <div className="basis-2/12 py-3 px-4">ตัวเลือก</div>
@@ -101,18 +113,15 @@ export default function ManageUsers() {
                         index % 2 === 0 ? "bg-white" : "bg-gray-100"
                       }`}
                     >
-                      <div className="basis-1/12 py-3 px-4">{user.id}</div>
+                      <div className="basis-1/12 py-3 px-4">{user.user_id}</div>
                       <div className="basis-3/12 py-3 px-4 whitespace-nowrap truncate">
                         {user.username}
-                      </div>
-                      <div className="basis-3/12 py-3 px-4 whitespace-nowrap truncate">
-                        {user.password}
                       </div>
                       <div className="basis-3/12 py-3 px-4 whitespace-nowrap truncate">
                         {user.role}
                       </div>
                       <div className="basis-3/12 py-3 px-4 whitespace-nowrap truncate">
-                        {user.create_at}
+                        {user.createdAt}
                       </div>
 
                       {/* action button */}

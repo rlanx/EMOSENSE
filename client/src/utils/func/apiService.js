@@ -5,6 +5,7 @@ import {
   getUserAPI,
   updateUserAPI,
   checkUsernameAPI,
+  getAllUsersAPI,
 } from "../ApiRoute";
 
 // ฟังก์ชันสมัครสมาชิก
@@ -78,6 +79,17 @@ export const checkUsername = async (username) => {
     return response.data;
   } catch (error) {
     console.error("Check Username Error:", error);
+    return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
+  }
+};
+
+//ดึงข้อมูลผู้ใช้ทั้งหมด
+export const getUsers = async () => {
+  try {
+    const response = await axios.get(getAllUsersAPI, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    console.error("Get Users Error:", error);
     return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
   }
 };
