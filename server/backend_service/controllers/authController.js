@@ -175,3 +175,20 @@ module.exports.updateUser = async (req, res) => {
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการอัปเดตข้อมูลผู้ใช้" });
   }
 };
+
+// ตรวจสอบว่าชื่อผู้ใช้ซ้ำหรือไม่ (ใช้สำหรับเช็คก่อนสมัคร)
+module.exports.checkUsername = async (req, res) => {
+  try {
+    const { username } = req.body;
+    const existingUser = await User.findOne({ username });
+
+    if (existingUser) {
+      return res.status(400).json({ message: "ชื่อผู้ใช้นี้ถูกใช้ไปแล้ว" });
+    }
+
+    res.json({ message: "สามารถใช้ชื่อนี้ได้" });
+  } catch (error) {
+    console.error("Check Username Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการตรวจสอบชื่อผู้ใช้" });
+  }
+};
