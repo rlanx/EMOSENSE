@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -23,39 +23,46 @@ import EditNews from "./page/admin/EditNews";
 import AddResearch from "./page/admin/AddResearch";
 import EditResearch from "./page/admin/EditResearch";
 
+import ProtectedRoute from "./components/admin/ProtectedRoute";
+import { UserProvider } from "./context/UserContext";
+
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* user */}
-        <Route path="/" element={<Main />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/news/ex" element={<PostDetail />} />
-        <Route path="/research" element={<Research />} />
-        <Route path="/my-account" element={<Account />} />
-        <Route path="/history" element={<History />} />
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* user */}
+          <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/news/ex" element={<PostDetail />} />
+          <Route path="/research" element={<Research />} />
+          <Route path="/my-account" element={<Account />} />
+          <Route path="/history" element={<History />} />
 
-        {/* admin */}
-        <Route path="/dashboard" element={<Dashboard />} />
+          {/* admin */}
+          <Route element={<ProtectedRoute requiredRole="admin" />}>
+            <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route path="/users" element={<ManageUsers />} />
-        <Route path="/users/history" element={<UserHistory />} />
-        <Route path="/users/add" element={<AddUser />} />
-        <Route path="/users/edit" element={<EditUser />} />
+            <Route path="/users" element={<ManageUsers />} />
+            <Route path="/users/history" element={<UserHistory />} />
+            <Route path="/users/add" element={<AddUser />} />
+            <Route path="/users/edit" element={<EditUser />} />
 
-        <Route path="/manage-news" element={<ManageNews />} />
-        <Route path="/manage-news/add" element={<AddNews />} />
-        <Route path="/manage-news/edit" element={<EditNews />} />
+            <Route path="/manage-news" element={<ManageNews />} />
+            <Route path="/manage-news/add" element={<AddNews />} />
+            <Route path="/manage-news/edit" element={<EditNews />} />
 
-        <Route path="/manage-research" element={<ManageResearch />} />
-        <Route path="/manage-research/add" element={<AddResearch />} />
-        <Route path="/manage-research/edit" element={<EditResearch />} />
-      </Routes>
-    </BrowserRouter>
+            <Route path="/manage-research" element={<ManageResearch />} />
+            <Route path="/manage-research/add" element={<AddResearch />} />
+            <Route path="/manage-research/edit" element={<EditResearch />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 }
 

@@ -5,33 +5,40 @@ import menuList from "../../utils/json/navbar";
 import { User, History, Settings, LogOut, UserCog } from "lucide-react";
 import { getUserAPI, logoutUserAPI } from "../../utils/ApiRoute";
 import Swal from "sweetalert2";
+import { useUser } from "../../context/UserContext";
+import { host } from "../../utils/ApiRoute";
 
 function Navbar() {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [username, setUsername] = useState("");
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isAdmin, setIsAdmin] = useState(false);
+  // const [username, setUsername] = useState("");
+  const { user, setUser } = useUser(); // ใช้ข้อมูล user จาก Context
+  const isLoggedIn = !!user; // ถ้ามี user แสดงว่า login แล้ว
+  const isAdmin = user?.role === "admin"; // เช็คว่าเป็น admin หรือไม่
+  const username = user?.username || ""; // ดึงชื่อผู้ใช้
+  const profileImage = user?.profileImage ? `${host}${user.profileImage}` : "";
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null); // ใช้ useRef เก็บอ้างอิง dropdown
 
   const navigate = useNavigate();
 
   // ดึงข้อมูล user
-  useEffect(() => {
-    axios
-      .get(getUserAPI, { withCredentials: true })
-      .then((res) => {
-        setIsLoggedIn(true);
-        setUsername(res.data.username);
-        setIsAdmin(res.data.role === "admin");
-      })
-      .catch(() => {
-        setIsLoggedIn(false);
-        setIsAdmin(false);
-        setUsername("");
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(getUserAPI, { withCredentials: true })
+  //     .then((res) => {
+  //       setIsLoggedIn(true);
+  //       setUsername(res.data.username);
+  //       setIsAdmin(res.data.role === "admin");
+  //     })
+  //     .catch(() => {
+  //       setIsLoggedIn(false);
+  //       setIsAdmin(false);
+  //       setUsername("");
+  //     });
+  // }, []);
 
   // logout function
   const handleLogout = async () => {
@@ -48,9 +55,10 @@ function Navbar() {
       if (result.isConfirmed) {
         try {
           await axios.post(logoutUserAPI, {}, { withCredentials: true });
-          setIsLoggedIn(false);
-          setIsAdmin(false);
-          setUsername("");
+          setUser(null); // ลบ user จาก Context
+          // setIsLoggedIn(false);
+          // setIsAdmin(false);
+          // setUsername("");
 
           Swal.fire({
             title: "ออกจากระบบสำเร็จ!",
@@ -152,14 +160,22 @@ function Navbar() {
         </div>
 
         {/* Action Button */}
-        {isLoggedIn ? (
+        {user ? (
           <div className="relative" ref={dropdownRef}>
             {/* user icon */}
             <div
               onClick={toggleDropdown}
-              className=" size-[40px] flex items-center justify-center bg-[#47b9b7bd] rounded-full text-white cursor-pointer"
+              className=" size-[40px] flex items-center justify-center bg-[#47b9b7bd] rounded-full overflow-hidden text-white cursor-pointer"
             >
-              <User />
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="size-full object-cover object-top"
+                />
+              ) : (
+                <User />
+              )}
             </div>
 
             {/* dropdown menu */}

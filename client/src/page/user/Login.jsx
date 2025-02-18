@@ -3,16 +3,21 @@ import UserInp from "../../components/user/UserInp";
 import { Link, useNavigate } from "react-router-dom";
 import { LuUser, LuLock } from "react-icons/lu";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { useUser } from "../../context/UserContext";
 import { loginUser } from "../../utils/func/authService";
 import { Toaster, toast } from "react-hot-toast";
+import { getUser } from "../../utils/func/userService";
 
 function Login() {
+  const { setUser } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   // ฟังก์ชันเข้าสู่ระบบ
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
     if (!username || !password) {
       toast.error("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
       return;
@@ -23,6 +28,12 @@ function Login() {
     if (response.error) {
       toast.error(response.error); // แสดง Error ถ้า Login ไม่สำเร็จ
       return;
+    }
+
+    // โหลดข้อมูล `user` ใหม่หลังจาก Login สำเร็จ
+    const userData = await getUser();
+    if (!userData.error) {
+      setUser(userData); // อัปเดต Context ทันที
     }
 
     toast.success("เข้าสู่ระบบสำเร็จ!");
