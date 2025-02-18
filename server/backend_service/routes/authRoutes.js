@@ -5,6 +5,7 @@ const {
   getUserProfile,
   logoutUser,
   updateUser,
+  checkUsername,
 } = require("../controllers/authController");
 
 const upload = require("../middlewares/upload"); // นำเข้า Middleware
@@ -26,5 +27,7 @@ router.post("/logout", logoutUser);
 
 // อัปเดตข้อมูลผู้ใช้ (ชื่อ, รหัสผ่าน, รูปโปรไฟล์)
 router.put("/update", upload.single("profileImage"), updateUser);
+
+router.post("/check-username", checkUsername);
 
 module.exports = router;

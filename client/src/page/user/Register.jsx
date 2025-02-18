@@ -3,7 +3,7 @@ import UserInp from "../../components/user/UserInp";
 import { Link, useNavigate } from "react-router-dom";
 import { LuUser, LuLock } from "react-icons/lu";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { registerUser } from "../../utils/func/apiService";
+import { registerUser, checkUsername } from "../../utils/func/apiService";
 import { Toaster, toast } from "react-hot-toast";
 
 function Register() {
@@ -76,6 +76,13 @@ function Register() {
       toast.error(
         "รหัสผ่านต้องความยาวอย่างน้อย 8 ตัว และประกอบด้วยตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ"
       );
+      return;
+    }
+
+    // ตรวจสอบว่าชื่อซ้ำหรือไม่ก่อนสมัคร
+    const check = await checkUsername(username);
+    if (check.error) {
+      toast.error(check.error);
       return;
     }
 

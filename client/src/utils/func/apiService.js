@@ -4,6 +4,7 @@ import {
   loginUserAPI,
   getUserAPI,
   updateUserAPI,
+  checkUsernameAPI,
 } from "../ApiRoute";
 
 // ฟังก์ชันสมัครสมาชิก
@@ -67,5 +68,16 @@ export const updateUser = async (formData) => {
         error.response?.data?.message ||
         "เกิดข้อผิดพลาดในการอัปเดตข้อมูลผู้ใช้",
     };
+  }
+};
+
+// ฟังก์ชันเช็คว่าชื่อผู้ใช้ซ้ำหรือไม่
+export const checkUsername = async (username) => {
+  try {
+    const response = await axios.post(checkUsernameAPI, { username });
+    return response.data;
+  } catch (error) {
+    console.error("Check Username Error:", error);
+    return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
   }
 };
