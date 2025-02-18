@@ -3,7 +3,7 @@ import UserInp from "../../components/user/UserInp";
 import { Link, useNavigate } from "react-router-dom";
 import { LuUser, LuLock } from "react-icons/lu";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { loginUser } from "../../utils/func/apiService";
+import { loginUser } from "../../utils/func/authService";
 import { Toaster, toast } from "react-hot-toast";
 
 function Login() {

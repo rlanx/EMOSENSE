@@ -5,7 +5,7 @@ import { LuUser, LuLock } from "react-icons/lu";
 import { User, Pencil } from "lucide-react";
 import Footer from "../../components/user/Footer";
 import { Toaster, toast } from "react-hot-toast";
-import { getUser, updateUser } from "../../utils/func/apiService";
+import { getUser, updateUser } from "../../utils/func/authService";
 import { host } from "../../utils/ApiRoute";
 import Swal from "sweetalert2";
 
