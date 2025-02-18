@@ -20,9 +20,11 @@ app.use(
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 
-// ในำเข้า Routes หลังจากสร้าง `app`
+// นำเข้า Routes หลังจากสร้าง `app`
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 
 // เชื่อมต่อ MongoDB
 const PORT = process.env.PORT || 3000;
