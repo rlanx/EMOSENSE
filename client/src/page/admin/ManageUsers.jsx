@@ -5,7 +5,7 @@ import Pagination from "../../components/user/Pagination";
 import { History, UserPen, UserX, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { getUsers } from "../../utils/func/apiService";
+import { getUsers } from "../../utils/func/authService";
 
 //data
 import usersData from "../../utils/json/mock_users";
