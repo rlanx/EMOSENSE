@@ -13,10 +13,31 @@ export default function AddUser() {
   const [password, setPassword] = useState("");
   const [selectedRole, setSelectedRole] = useState("user");
 
+  // ฟังก์ชันตรวจสอบรหัสผ่านให้อยู่ในระดับกลาง
+  const validatePassword = (password) => {
+    const minLength = password.length >= 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*_]/.test(password);
+
+    return (
+      minLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar
+    );
+  };
+
   // ฟังก์ชันเรียก API เพื่อเพิ่มผู้ใช้
   const handleAddUser = async () => {
     if (!username || !password) {
       toast.error("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      toast.error(
+        "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัว และต้องมีตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ",
+        { duration: 4000, position: "top-center" } // สามารถกำหนดตำแหน่งและเวลาแสดงได้
+      );
       return;
     }
 
@@ -67,6 +88,10 @@ export default function AddUser() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <p className="opacity-80 text-sm">
+                รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัว และต้องมีตัวพิมพ์ใหญ่,
+                ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ
+              </p>
             </div>
 
             {/* role */}

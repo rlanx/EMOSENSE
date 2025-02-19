@@ -5,14 +5,19 @@ import Pagination from "../../components/user/Pagination";
 import { History, UserPen, UserX, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { getUsers } from "../../utils/func/userService";
+import { getUsers, deleteUserByAdmin } from "../../utils/func/adminService";
+import { useSearchParams } from "react-router-dom";
 
 //data
 import usersData from "../../utils/json/mock_users";
+import NotFoundCard from "../../components/user/NotFoundCard";
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPage = parseInt(searchParams.get("page")) || 1;
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
   const itemsPerPage = 10; // จำนวนบทความต่อหน้า
   const totalPages = Math.ceil(users.length / itemsPerPage);
@@ -27,6 +32,11 @@ export default function ManageUsers() {
       }
     });
   }, []);
+
+  // อัปเดต URL เมื่อเปลี่ยนหน้า
+  useEffect(() => {
+    setSearchParams({ page: currentPage });
+  }, [currentPage]);
 
   // คำนวณช่วงของข้อมูลที่ต้องแสดงในหน้านี้
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -43,10 +53,15 @@ export default function ManageUsers() {
       cancelButtonColor: "#5BC0BE",
       confirmButtonText: "ยืนยัน",
       cancelButtonText: "ยกเลิก",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        console.log(`Deleted user with ID: ${userId}`);
-        Swal.fire("ลบสำเร็จ!", "ผู้ใช้ถูกลบเรียบร้อยแล้ว", "success");
+        const response = await deleteUserByAdmin(userId);
+        if (response.error) {
+          Swal.fire("เกิดข้อผิดพลาด!", response.error, "error");
+        } else {
+          Swal.fire("ลบสำเร็จ!", "ผู้ใช้ถูกลบเรียบร้อยแล้ว", "success");
+          setUsers(users.filter((user) => user.user_id !== userId)); // ✅ ลบผู้ใช้จาก UI
+        }
       }
     });
   };
@@ -63,7 +78,7 @@ export default function ManageUsers() {
       icon: <UserPen size={22} />,
       action: "editUser",
       tooltip: "แก้ไขผู้ใช้",
-      path: "/users/edit",
+      path: "",
       color: "bg-accent",
     },
     {
@@ -131,12 +146,15 @@ export default function ManageUsers() {
                             <button
                               key={index}
                               className={`${btn.color} p-2 rounded-md text-white`}
-                              onClick={() => handleDeleteUser(user.id)}
+                              onClick={() => handleDeleteUser(user.user_id)}
                             >
                               {btn.icon}
                             </button>
                           ) : (
-                            <Link to={btn.path} key={index}>
+                            <Link
+                              to={`/users/edit/${user.user_id}?page=${currentPage}`}
+                              key={index}
+                            >
                               <button
                                 className={`${btn.color} p-2 rounded-md text-white`}
                               >
@@ -150,7 +168,7 @@ export default function ManageUsers() {
                   ))}
                 </div>
               ) : (
-                <div className="w-full text-center">ไม่มีรายการ</div>
+                <NotFoundCard />
               )}
             </div>
 
@@ -158,7 +176,10 @@ export default function ManageUsers() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              setCurrentPage={setCurrentPage}
+              setCurrentPage={(page) => {
+                setCurrentPage(page);
+                setSearchParams({ page });
+              }}
             />
           </div>
         </div>

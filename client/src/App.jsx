@@ -50,7 +50,7 @@ function App() {
             <Route path="/users" element={<ManageUsers />} />
             <Route path="/users/history" element={<UserHistory />} />
             <Route path="/users/add" element={<AddUser />} />
-            <Route path="/users/edit" element={<EditUser />} />
+            <Route path="/users/edit/:id" element={<EditUser />} />
 
             <Route path="/manage-news" element={<ManageNews />} />
             <Route path="/manage-news/add" element={<AddNews />} />

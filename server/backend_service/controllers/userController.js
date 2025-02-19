@@ -16,7 +16,7 @@ module.exports.getUserProfile = async (req, res) => {
     res.json({
       username: user.username,
       role: user.role,
-      profileImage: user.profileImage || null, // ✅ ส่ง `profileImage` กลับไป
+      profileImage: user.profileImage || null, // ส่ง `profileImage` กลับไป
     });
   } catch (error) {
     console.error("Token Verification Error:", error);
@@ -141,5 +141,89 @@ module.exports.addUser = async (req, res) => {
   } catch (error) {
     console.error("Add User Error:", error);
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการเพิ่มผู้ใช้" });
+  }
+};
+
+// ฟังก์ชันสำหรับแก้ไขข้อมูลผู้ใช้ (เฉพาะ Admin)
+module.exports.updateUserByAdmin = async (req, res) => {
+  try {
+    const { username, newPassword, role } = req.body;
+    const userId = req.params.id;
+
+    // ตรวจสอบสิทธิ์ Admin
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "คุณไม่มีสิทธิ์แก้ไขผู้ใช้" });
+    }
+
+    const user = await User.findOne({ user_id: userId });
+    if (!user) {
+      return res.status(404).json({ message: "ไม่พบผู้ใช้" });
+    }
+
+    // ตรวจสอบชื่อผู้ใช้ซ้ำ
+    if (username && username !== user.username) {
+      const existingUser = await User.findOne({ username });
+      if (existingUser) {
+        return res.status(400).json({ message: "ชื่อผู้ใช้ถูกใช้ไปแล้ว" });
+      }
+      user.username = username;
+    }
+
+    // อัปเดตรหัสผ่าน (ถ้ามี)
+    if (newPassword) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    // อัปเดตบทบาท
+    if (role) user.role = role;
+
+    await user.save();
+
+    res.json({ message: "อัปเดตข้อมูลผู้ใช้สำเร็จ!" });
+  } catch (error) {
+    console.error("Update User by Admin Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการอัปเดตข้อมูลผู้ใช้" });
+  }
+};
+
+// ดึงข้อมูลผู้ใช้ตาม ID
+module.exports.getUserById = async (req, res) => {
+  try {
+    const user = await User.findOne({ user_id: req.params.id }).select(
+      "-password"
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "ไม่พบข้อมูลผู้ใช้" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Get User By ID Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้" });
+  }
+};
+
+// ฟังก์ชันสำหรับลบผู้ใช้ (เฉพาะ Admin)
+module.exports.deleteUserByAdmin = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // ตรวจสอบสิทธิ์ Admin
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "คุณไม่มีสิทธิ์ลบผู้ใช้" });
+    }
+
+    const user = await User.findOneAndDelete({ user_id: userId });
+
+    if (!user) {
+      return res.status(404).json({ message: "ไม่พบผู้ใช้ที่ต้องการลบ" });
+    }
+
+    res.json({ message: "ลบผู้ใช้สำเร็จ!" });
+  } catch (error) {
+    console.error("Delete User by Admin Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการลบผู้ใช้" });
   }
 };
