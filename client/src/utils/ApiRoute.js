@@ -7,4 +7,7 @@ export const getUserAPI = `${host}/api/user/me`;
 export const logoutUserAPI = `${host}/api/auth/logout`;
 export const updateUserAPI = `${host}/api/user/update`;
 export const checkUsernameAPI = `${host}/api/auth/check-username`;
+
+// ADMIN API
 export const getAllUsersAPI = `${host}/api/user/users`;
+export const addUserAPI = `${host}/api/user/add-user`; // เพิ่มผู้ใช้

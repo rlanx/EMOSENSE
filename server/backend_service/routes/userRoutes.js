@@ -3,6 +3,7 @@ const {
   getUserProfile,
   updateUser,
   getAllUsers,
+  addUser,
 } = require("../controllers/userController");
 const verifyToken = require("../middlewares/verifyToken");
 const upload = require("../middlewares/upload");
@@ -13,5 +14,6 @@ const router = express.Router();
 router.get("/me", verifyToken, getUserProfile);
 router.put("/update", verifyToken, upload.single("profileImage"), updateUser);
 router.get("/users", verifyToken, getAllUsers); // Admin เท่านั้น
+router.post("/add-user", verifyToken, addUser); // Admin เท่านั้น
 
 module.exports = router;
