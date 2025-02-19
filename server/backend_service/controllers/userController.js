@@ -107,3 +107,39 @@ module.exports.getAllUsers = async (req, res) => {
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้" });
   }
 };
+
+// ฟังก์ชันเพิ่มผู้ใช้ใหม่ (เฉพาะ Admin)
+module.exports.addUser = async (req, res) => {
+  try {
+    const { username, password, role } = req.body;
+
+    // ตรวจสอบสิทธิ์ Admin
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "คุณไม่มีสิทธิ์เพิ่มผู้ใช้" });
+    }
+
+    // ตรวจสอบชื่อผู้ใช้ซ้ำ
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ message: "ชื่อผู้ใช้ถูกใช้ไปแล้ว" });
+    }
+
+    // เข้ารหัสรหัสผ่าน
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // เพิ่มผู้ใช้ใหม่
+    const newUser = new User({
+      username,
+      password: hashedPassword,
+      role: role || "user", // กำหนดค่าเริ่มต้นเป็น user
+    });
+
+    await newUser.save();
+
+    res.status(201).json({ message: "เพิ่มผู้ใช้สำเร็จ!" });
+  } catch (error) {
+    console.error("Add User Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการเพิ่มผู้ใช้" });
+  }
+};
