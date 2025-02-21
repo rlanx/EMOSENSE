@@ -17,6 +17,7 @@ module.exports.getUserProfile = async (req, res) => {
       username: user.username,
       role: user.role,
       profileImage: user.profileImage || null, // ส่ง `profileImage` กลับไป
+      maskedPassword: "********",
     });
   } catch (error) {
     console.error("Token Verification Error:", error);
@@ -40,7 +41,7 @@ const validatePassword = (password) => {
 // API อัปเดตรหัสผ่าน, ชื่อผู้ใช้ และรูปโปรไฟล์
 module.exports.updateUser = async (req, res) => {
   try {
-    const { newUsername, newPassword, confirmPassword } = req.body;
+    const { oldPassword, newUsername, newPassword, confirmPassword } = req.body;
     const token = req.cookies.token;
 
     if (!token) {
@@ -65,17 +66,28 @@ module.exports.updateUser = async (req, res) => {
     }
 
     // อัปเดตรหัสผ่าน (ถ้าผู้ใช้ต้องการเปลี่ยน)
-    if (newPassword && confirmPassword) {
+    if (newPassword || confirmPassword) {
+      if (!oldPassword) {
+        return res.status(400).json({ message: "กรุณากรอกรหัสผ่านเดิม" });
+      }
+
+      // ตรวจสอบรหัสผ่านเดิม
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: "รหัสผ่านเดิมไม่ถูกต้อง" });
+      }
+
+      // ตรวจสอบรหัสผ่านใหม่
       if (!validatePassword(newPassword)) {
         return res.status(400).json({
           message:
-            "รหัสผ่านต้องมีความยาว 8 ตัวขึ้นไป และต้องมีตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ",
+            "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัว และต้องมีตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ",
         });
       }
       if (newPassword !== confirmPassword) {
         return res
           .status(400)
-          .json({ message: "รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน" });
+          .json({ message: "รหัสผ่านใหม่และยืนยันไม่ตรงกัน" });
       }
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(newPassword, salt);

@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 export default function Account() {
   const [username, setUsername] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+  const [oldPassword, setOldPassword] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -53,6 +54,11 @@ export default function Account() {
 
   // บันทึกการเปลี่ยนแปลง
   const handleSave = async () => {
+    if ((newPassword || confirmPassword) && !oldPassword) {
+      toast.error("กรุณากรอกรหัสผ่านเดิมเพื่อยืนยันการเปลี่ยนรหัสผ่าน");
+      return;
+    }
+
     if (newPassword && !validatePassword(newPassword)) {
       toast.error(
         "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัว และต้องมีตัวพิมพ์ใหญ่, ตัวพิมพ์เล็ก, ตัวเลข และอักขระพิเศษ"
@@ -78,24 +84,34 @@ export default function Account() {
       if (result.isConfirmed) {
         const formData = new FormData();
         formData.append("newUsername", username);
-        formData.append("newPassword", newPassword);
-        formData.append("confirmPassword", confirmPassword);
+
+        // พิ่มรหัสผ่านเดิมเฉพาะเมื่อมีการเปลี่ยนรหัสผ่าน
+        if (newPassword) {
+          formData.append("oldPassword", oldPassword);
+          formData.append("newPassword", newPassword);
+          formData.append("confirmPassword", confirmPassword);
+        }
+
         if (profileImage) {
           formData.append("profileImage", profileImage);
         }
 
-        toast.promise(updateUser(formData), {
-          loading: "กำลังบันทึกข้อมูล...",
-          success: (response) => {
+        try {
+          const response = await updateUser(formData);
+          if (response.error) {
+            toast.error(`${response.error}`); // ✅ แสดง toast เมื่อเกิด error
+          } else {
+            toast.success("อัปเดตข้อมูลสำเร็จ!");
             setPreviewImage(
               response.profileImage ? `${host}${response.profileImage}` : ""
-            ); // รีเฟรชรูปภาพหลังอัปเดต
+            );
             setNewPassword("");
             setConfirmPassword("");
-            return "อัปเดตข้อมูลสำเร็จ!";
-          },
-          error: (err) => `${err.message || "เกิดข้อผิดพลาด"}`,
-        });
+            setOldPassword("");
+          }
+        } catch (err) {
+          toast.error("เกิดข้อผิดพลาดในการอัปเดตข้อมูล");
+        }
       }
     });
   };
@@ -111,7 +127,7 @@ export default function Account() {
           ตั้งค่าบัญชี
         </p>
         {/* form */}
-        <div className="lg:max-w-[620px] flex gap-10 p-10 border-[1px] shadow-md rounded-3xl">
+        <div className="lg:min-w-[680px] flex justify-around gap-10 p-10 border-[1px] shadow-md rounded-3xl">
           {/* info container */}
           <div className="flex flex-col items-center  gap-5">
             <p className="text-xl text-center font-semibold">แก้ไขรูปโปรไฟล์</p>
@@ -160,15 +176,27 @@ export default function Account() {
             </div>
 
             {/* password */}
-            {/* <div className="w-full space-y-1">
+            <div className="w-full space-y-1">
               <label>รหัสผ่าน</label>
               <UserInp
                 Icon={LuLock}
                 type="password"
                 placeholder="รหัสผ่าน"
-                value={password}
+                value={"********"}
+                disabled
               />
-            </div> */}
+            </div>
+
+            <div className="w-full space-y-1">
+              <label>ยืนยันรหัสผ่านเดิม</label>
+              <UserInp
+                Icon={LuLock}
+                type="password"
+                placeholder="ยืนยันรหัสผ่านเดิม"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+              />
+            </div>
 
             {/* new password */}
             <div className="w-full space-y-1">

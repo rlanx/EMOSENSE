@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 
-function TextInp({ Icon, type, placeholder, value, onChange }) {
+function TextInp({
+  Icon,
+  type,
+  placeholder,
+  value,
+  onChange,
+  readOnly,
+  disabled,
+}) {
   const [showPassword, setShowPassword] = useState(false);
 
   // สลับสถานะแสดง/ซ่อนรหัสผ่าน
@@ -17,9 +25,11 @@ function TextInp({ Icon, type, placeholder, value, onChange }) {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        readOnly={readOnly}
+        disabled={disabled}
         className="w-full outline-none bg-[#f5f5f5]"
       />
-      {type === "password" && (
+      {type === "password" && !readOnly && !disabled && (
         <button
           type="button"
           onClick={togglePasswordVisibility}
