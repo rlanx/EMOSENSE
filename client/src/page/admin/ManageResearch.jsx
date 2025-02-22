@@ -68,7 +68,7 @@ export default function ManageResearch() {
           <p className="text-3xl text-grey font-semibold">จัดการงานวิจัย</p>
 
           {/* add research */}
-          <Link to={"/manage-research/add"}>
+          <Link to={"/manage-research/add"} className="w-fit">
             <button className="lg:w-[145px] bg-primary text-white flex py-3 px-3 rounded-lg">
               <Plus className="basis-1/4" />
               <p className="basis-3/4">เพิ่มงานวิจัย</p>

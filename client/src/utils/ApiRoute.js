@@ -14,3 +14,7 @@ export const addUserAPI = `${host}/api/user/add-user`; // เพิ่มผู�
 export const editUserByAdminAPI = `${host}/api/user/edit-user`; // สำหรับแก้ไขผู้ใช้ (สำหรับ admin)
 export const getUserByIdAPI = `${host}/api/user/get-user`; // ดึงข้อมูลผู้ใช้ตาม ID
 export const deleteUserByAdminAPI = `${host}/api/user/delete-user`; // ลบผู้ใช้
+
+// CONTENT API
+export const addNewsAPI = `${host}/api/content/add/news`; // สำหรับเพิ่มข่าวสาร
+export const uploadEditorImageAPI = `${host}/api/content/upload-editor`; // สำหรับ ReactQuill

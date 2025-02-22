@@ -3,10 +3,18 @@ import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import ContentForm from "../../components/admin/ContentForm";
 
+import { addNews } from "../../utils/func/adminService";
+import { toast } from "react-hot-toast";
+
 export default function AddNews() {
-  const handleNewsSubmit = (data) => {
-    console.log("เพิ่มข่าวสาร:", data);
-    // TODO: ส่งข้อมูลไปยัง API
+  const handleNewsSubmit = async (data) => {
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => formData.append(key, value));
+
+    const response = await addNews(formData);
+
+    if (response.error) toast.error(response.error);
+    else toast.success("เพิ่มข่าวสารสำเร็จ!");
   };
 
   return (

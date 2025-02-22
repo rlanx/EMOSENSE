@@ -8,8 +8,6 @@ import Swal from "sweetalert2";
 import { getUsers, deleteUserByAdmin } from "../../utils/func/adminService";
 import { useSearchParams } from "react-router-dom";
 
-//data
-import usersData from "../../utils/json/mock_users";
 import NotFoundCard from "../../components/user/NotFoundCard";
 
 export default function ManageUsers() {
@@ -99,7 +97,7 @@ export default function ManageUsers() {
           <p className="text-3xl text-grey font-semibold">จัดการผู้ใช้</p>
 
           {/* add user */}
-          <Link to={"/users/add"}>
+          <Link to={"/users/add"} className="w-fit">
             <button className="lg:w-[145px] bg-primary text-white flex py-3 px-3 rounded-lg">
               <Plus className="basis-1/4" />
               <p className="basis-3/4">เพิ่มผู้ใช้</p>

@@ -9,13 +9,18 @@ const {
   deleteUserByAdmin,
 } = require("../controllers/userController");
 const verifyToken = require("../middlewares/verifyToken");
-const upload = require("../middlewares/upload");
+const { uploadProfile } = require("../middlewares/upload");
 
 const router = express.Router();
 
 // ใช้ `verifyToken` เพื่อป้องกัน API
 router.get("/me", verifyToken, getUserProfile);
-router.put("/update", verifyToken, upload.single("profileImage"), updateUser);
+router.put(
+  "/update",
+  verifyToken,
+  uploadProfile.single("profileImage"),
+  updateUser
+);
 
 // admin เท่านั้น
 router.get("/users", verifyToken, getAllUsers);
