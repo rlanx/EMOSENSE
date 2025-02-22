@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Save } from "lucide-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // ใช้ theme snow
+
+import { uploadEditorImage } from "../../utils/func/adminService";
+import { toast } from "react-hot-toast";
 
 export default function ContentForm({
   type,
@@ -14,18 +17,50 @@ export default function ContentForm({
   const [author, setAuthor] = useState(initialData.author || ""); // ผู้เขียน
   const [content, setContent] = useState(initialData.content || "");
 
+  const quillRef = useRef(null); // เข้าถึง Quill instance
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({ title, desc, author, content, type });
   };
 
+  // ฟังก์ชันจัดการอัปโหลดรูปภาพใน ReactQuill
+  const imageHandler = useCallback(async () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (file) {
+        const result = await uploadEditorImage(file);
+        if (result.url) {
+          const editor = quillRef.current.getEditor();
+          const range = editor.getSelection(true);
+          if (range) {
+            editor.insertEmbed(range.index, "image", result.url); // แทรกภาพในตำแหน่งที่ถูกต้อง
+            editor.setSelection(range.index + 1); // คง focus ไว้หลังเพิ่มรูป
+          } else {
+            toast.error("กรุณาวางเคอร์เซอร์ในเนื้อหาก่อนเพิ่มรูปภาพ");
+          }
+        } else {
+          toast.error(result.error || "เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ");
+        }
+      }
+    };
+  }, []);
+
   const modules = {
-    toolbar: [
-      [{ header: [2, false] }],
-      ["bold", "italic", "underline"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"], // เพิ่มปุ่มแทรกรูปภาพ
-    ],
+    toolbar: {
+      container: [
+        [{ header: [2, false] }],
+        ["bold", "italic", "underline"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link", "image"],
+      ],
+      handlers: { image: imageHandler },
+    },
   };
 
   return (
@@ -83,6 +118,7 @@ export default function ContentForm({
           </label>
           <div className="flex-grow">
             <ReactQuill
+              ref={quillRef}
               value={content}
               onChange={setContent}
               modules={modules}

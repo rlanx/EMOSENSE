@@ -70,7 +70,7 @@ export default function ManageKnowledge() {
           </p>
 
           {/* add news */}
-          <Link to={"/manage-news/add"}>
+          <Link to={"/manage-news/add"} className="w-fit">
             <button className="lg:w-[145px] bg-primary text-white flex py-3 px-3 rounded-lg">
               <Plus className="basis-1/4" />
               <p className="basis-3/4">เพิ่มข่าวสาร</p>

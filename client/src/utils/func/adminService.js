@@ -5,6 +5,8 @@ import {
   editUserByAdminAPI,
   getUserByIdAPI,
   deleteUserByAdminAPI,
+  addNewsAPI,
+  uploadEditorImageAPI,
 } from "../ApiRoute";
 
 //ดึงข้อมูลผู้ใช้ทั้งหมด
@@ -70,6 +72,36 @@ export const deleteUserByAdmin = async (id) => {
     return response.data;
   } catch (error) {
     console.error("Delete User by Admin Error:", error);
+    return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
+  }
+};
+
+// ฟังก์ชันเพิ่มข่าวสาร
+export const addNews = async (formData) => {
+  try {
+    const response = await axios.post(addNewsAPI, formData, {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Add News Error:", error);
+    return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
+  }
+};
+
+// ฟังก์ชันอัปโหลดภาพจาก ReactQuill
+export const uploadEditorImage = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
+    const response = await axios.post(uploadEditorImageAPI, formData, {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Upload Editor Image Error:", error);
     return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
   }
 };
