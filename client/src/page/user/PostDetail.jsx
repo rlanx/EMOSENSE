@@ -34,8 +34,8 @@ export default function KnowledgeDetail() {
           <div className="text-grey">
             {/* title & desc */}
             <div>
-              <p className="text-4xl font-bold mb-1">{data.title}</p>
-              <p className="text-xl text-light-grey">{data.desc}</p>
+              <p className="text-4xl font-bold">{data.title}</p>
+              <p className="text-xl text-light-grey my-5">{data.desc}</p>
             </div>
 
             <div className="mt-2 flex flex-col gap-1">
