@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Save } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Save, ImageUp } from "lucide-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // ใช้ theme snow
 
-import { uploadEditorImage } from "../../utils/func/adminService";
 import { toast } from "react-hot-toast";
+import Swal from "sweetalert2";
 
 export default function ContentForm({
+  mode,
   type,
   pageName,
   onSubmit,
@@ -16,51 +17,98 @@ export default function ContentForm({
   const [desc, setDesc] = useState(initialData.desc || ""); // คำอธิบาย
   const [author, setAuthor] = useState(initialData.author || ""); // ผู้เขียน
   const [content, setContent] = useState(initialData.content || "");
+  const [thumbnail, setThumbnail] = useState(null);
+  const [preview, setPreview] = useState(null);
 
-  const quillRef = useRef(null); // เข้าถึง Quill instance
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (thumbnail) {
+      const imageUrl = URL.createObjectURL(thumbnail);
+      setPreview(imageUrl);
+
+      return () => URL.revokeObjectURL(imageUrl); // ✅ ล้าง URL เมื่อ thumbnail เปลี่ยน
+    } else {
+      setPreview(null);
+    }
+  }, [thumbnail]);
+
+  const resetForm = () => {
+    setTitle("");
+    setDesc("");
+    setAuthor("");
+    setContent("");
+    setThumbnail(null);
+    if (preview) {
+      URL.revokeObjectURL(preview);
+      setPreview(null);
+    }
+  };
+
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (preview) URL.revokeObjectURL(preview);
+      setThumbnail(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleDivClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const modules = {
+    toolbar: [
+      [{ header: [2, false] }],
+      ["bold", "italic", "underline"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link"],
+    ],
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ title, desc, author, content, type });
-  };
+    if (!title.trim()) return toast.error("กรุณากรอกหัวข้อข่าวสาร");
+    if (!author.trim()) return toast.error("กรุณาระบุชื่อผู้เขียน");
+    if (!desc.trim()) return toast.error("กรุณากรอกคำอธิบาย");
+    if (!content.trim()) return toast.error("กรุณากรอกเนื้อหาข่าวสาร");
+    if (!thumbnail && mode === "add")
+      return toast.error("กรุณาเลือกรูปภาพ Thumbnail");
 
-  // ฟังก์ชันจัดการอัปโหลดรูปภาพใน ReactQuill
-  const imageHandler = useCallback(async () => {
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
+    const confirmMessage =
+      mode === "add"
+        ? type === "news"
+          ? "ยืนยันการเพิ่มข่าวสาร?"
+          : "ยืนยันการเพิ่มงานวิจัย?"
+        : type === "news"
+        ? "ยืนยันการแก้ไขข่าวสาร?"
+        : "ยืนยันการแก้ไขงานวิจัย?";
 
-    input.onchange = async () => {
-      const file = input.files[0];
-      if (file) {
-        const result = await uploadEditorImage(file);
-        if (result.url) {
-          const editor = quillRef.current.getEditor();
-          const range = editor.getSelection(true);
-          if (range) {
-            editor.insertEmbed(range.index, "image", result.url); // แทรกภาพในตำแหน่งที่ถูกต้อง
-            editor.setSelection(range.index + 1); // คง focus ไว้หลังเพิ่มรูป
-          } else {
-            toast.error("กรุณาวางเคอร์เซอร์ในเนื้อหาก่อนเพิ่มรูปภาพ");
-          }
-        } else {
-          toast.error(result.error || "เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ");
+    Swal.fire({
+      title: confirmMessage,
+      text: "คุณต้องการดำเนินการต่อหรือไม่?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#FF6F61",
+      cancelButtonColor: "#5BC0BE",
+      confirmButtonText: mode === "add" ? "เพิ่ม" : "แก้ไข",
+      cancelButtonText: "ยกเลิก",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const loadingToast = toast.loading("กำลังดำเนินการ...");
+        try {
+          await onSubmit({ title, desc, author, content, type, thumbnail });
+          toast.dismiss(loadingToast);
+          toast.success(
+            mode === "add" ? "เพิ่มข้อมูลสำเร็จ!" : "แก้ไขข้อมูลสำเร็จ!"
+          );
+          resetForm(); // รีเซ็ตค่าเมื่อเพิ่มข้อมูลสำเร็จ
+        } catch (error) {
+          toast.dismiss(loadingToast);
         }
       }
-    };
-  }, []);
-
-  const modules = {
-    toolbar: {
-      container: [
-        [{ header: [2, false] }],
-        ["bold", "italic", "underline"],
-        [{ list: "ordered" }, { list: "bullet" }],
-        ["link", "image"],
-      ],
-      handlers: { image: imageHandler },
-    },
+    });
   };
 
   return (
@@ -100,16 +148,55 @@ export default function ContentForm({
           />
         </div>
 
-        {/* author */}
-        <div className="space-y-2">
-          <label>ผู้เขียน (Author)</label>
-          <input
-            type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            className="bg-[#f5f5f5] w-full h-12 px-4 rounded-lg focus-within:ring-2 focus-within:ring-sea-blue outline-none"
-          />
+        <div className="grid grid-cols-2 gap-4">
+          {/* author */}
+          <div className="space-y-2">
+            <label>ผู้เขียน (Author)</label>
+            <input
+              type="text"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              className="bg-[#f5f5f5] w-full h-12 px-4 rounded-lg focus-within:ring-2 focus-within:ring-sea-blue outline-none"
+            />
+          </div>
+          {/* thumnail */}
+          <div className="space-y-2">
+            <label>อัปโหลดรูป Thumbnail ( ขนาดต้องไม่เกิน 2MB )</label>
+            <div
+              onClick={handleDivClick}
+              className="bg-[#f5f5f5] w-full h-12 pl-4 pr-1 rounded-lg flex items-center justify-between text-light-grey cursor-pointer"
+            >
+              <p className="w-[90%] truncate">
+                {thumbnail ? thumbnail.name : "ยังไม่ได้เลือกรูปภาพ"}
+              </p>
+              {/* ปุ่มเลือกไฟล์ (เชื่อมกับ input ที่ซ่อน) */}
+              <label
+                htmlFor="thumbnailInput"
+                className="size-10 bg-primary text-white rounded-lg flex items-center justify-center "
+              >
+                <ImageUp />
+              </label>
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                onChange={handleThumbnailChange}
+                className="hidden"
+              />
+            </div>
+          </div>
         </div>
+
+        {preview && (
+          <div className="space-y-2">
+            <label>ตัวอย่างรูป Thumbnail</label>
+            <img
+              src={preview}
+              alt="Thumbnail Preview"
+              className="w-full h-80 object-cover rounded-lg"
+            />
+          </div>
+        )}
 
         {/* details */}
         <div className="space-y-2 flex-grow flex flex-col">
@@ -118,7 +205,6 @@ export default function ContentForm({
           </label>
           <div className="flex-grow">
             <ReactQuill
-              ref={quillRef}
               value={content}
               onChange={setContent}
               modules={modules}
@@ -139,7 +225,7 @@ export default function ContentForm({
             className="bg-primary flex items-center gap-2 h-12 px-5 rounded-lg text-white"
           >
             <Save size={20} />
-            {initialData.title ? "อัปเดต" : "บันทึก"}
+            {mode === "add" ? "เพิ่ม" : "แก้ไข"}
           </button>
         </div>
       </div>

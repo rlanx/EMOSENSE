@@ -38,7 +38,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/news" element={<News />} />
-          <Route path="/news/ex" element={<PostDetail />} />
+          <Route path="/:type/:id" element={<PostDetail />} />
           <Route path="/research" element={<Research />} />
           <Route path="/my-account" element={<Account />} />
           <Route path="/history" element={<History />} />
@@ -48,7 +48,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
 
             <Route path="/users" element={<ManageUsers />} />
-            <Route path="/users/history" element={<UserHistory />} />
+            <Route path="/users/history/:id" element={<UserHistory />} />
             <Route path="/users/add" element={<AddUser />} />
             <Route path="/users/edit/:id" element={<EditUser />} />
 

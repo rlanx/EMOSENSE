@@ -16,7 +16,7 @@ const getStorage = (folderName) =>
     },
   });
 
-// ตรวจสอบประเภทไฟล์ (เฉพาะ .jpg, .jpeg, .png เท่านั้น)
+// ตรวจสอบประเภทไฟล์
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
   if (allowedTypes.includes(file.mimetype)) cb(null, true);
@@ -30,11 +30,11 @@ const uploadProfile = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// สำหรับอัปโหลด **รูปภาพในเนื้อหา (ข่าวสาร/งานวิจัย)**
+// สำหรับอัปโหลดรูปภาพเนื้อหา
 const uploadContent = multer({
   storage: getStorage("content"),
   fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 }, // อาจอนุญาตให้ไฟล์ใหญ่ขึ้นสำหรับเนื้อหา
+  limits: { fileSize: 2 * 1024 * 1024 }, // ✅ จำกัดขนาด 2MB
 });
 
 module.exports = { uploadProfile, uploadContent };

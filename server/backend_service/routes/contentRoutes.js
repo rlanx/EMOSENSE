@@ -4,7 +4,8 @@ const upload = require("../middlewares/upload");
 const verifyToken = require("../middlewares/verifyToken");
 const {
   addContent,
-  uploadImageFromEditor,
+  getAllNews,
+  getContentById,
 } = require("../controllers/contentController");
 
 const { uploadContent } = require("../middlewares/upload");
@@ -13,15 +14,11 @@ const { uploadContent } = require("../middlewares/upload");
 router.post(
   "/add/:type",
   verifyToken,
-  uploadContent.array("images", 10),
+  uploadContent.single("thumbnail"),
   addContent
 );
 
-// อัปโหลดภาพจาก ReactQuill
-router.post(
-  "/upload-editor",
-  uploadContent.single("image"),
-  uploadImageFromEditor
-);
+router.get("/news", verifyToken, getAllNews); // ดึงข้อมูลข่าวสารทั้งหมด
+router.get("/:type/:id", getContentById); // ดึงข้อมูลตามประเภทและ ID
 
 module.exports = router;

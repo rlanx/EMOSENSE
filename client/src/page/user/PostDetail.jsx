@@ -4,15 +4,27 @@ import axios from "axios";
 import { UserPen, Calendar } from "lucide-react";
 import knowledgeData from "../../utils/json/mock_data";
 import Footer from "../../components/user/Footer";
+import { host } from "../../utils/ApiRoute";
+
+import { useParams } from "react-router-dom";
+import { getContentById } from "../../utils/func/adminService";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function KnowledgeDetail() {
+  const { type, id } = useParams();
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    // ตัวอย่างการค้นหาข้อมูลตาม ID (เช่น ID = 3)
-    const articleData = knowledgeData.find((item) => item.id === 3);
-    setData(articleData);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const contentData = await getContentById(type, id);
+        setData(contentData);
+      } catch (error) {
+        toast.error(`${error.message}`);
+      }
+    };
+    fetchData();
+  }, [type, id]);
 
   return (
     <div>
@@ -36,21 +48,21 @@ export default function KnowledgeDetail() {
               {/* date */}
               <div className="flex items-center gap-2">
                 <Calendar size={22} />
-                <p>{data.date}</p>
+                <p>{new Date(data.createdAt).toLocaleDateString()}</p>
               </div>
             </div>
 
             {/* image */}
             <div className="my-7 w-full h-[350px] rounded-lg overflow-hidden">
               <img
-                src="/src/assets/default-image.png"
-                alt=""
+                src={data.thumbnail}
+                alt="ภาพปก"
                 className="w-full h-full object-cover object-center"
               />
             </div>
 
             {/* detail */}
-            <div>{data.details}</div>
+            <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
           </div>
         ) : (
           <p>ไม่พบข้อมูล</p>

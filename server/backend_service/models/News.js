@@ -8,7 +8,7 @@ const NewsSchema = new mongoose.Schema({
   },
   title: { type: String, required: true },
   desc: { type: String },
-  thumbnail: { type: String, default: "/src/assets/default-image.png" }, // HTML จาก ReactQuill
+  thumbnail: { type: String, default: "/src/assets/default-image.png" },
   content: { type: String, required: true },
   author: { type: String },
   createdAt: { type: Date, default: Date.now },

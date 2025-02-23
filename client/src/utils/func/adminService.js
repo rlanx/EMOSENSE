@@ -6,7 +6,8 @@ import {
   getUserByIdAPI,
   deleteUserByAdminAPI,
   addNewsAPI,
-  uploadEditorImageAPI,
+  getAllNewsAPI,
+  getContentByIdAPI,
 } from "../ApiRoute";
 
 //ดึงข้อมูลผู้ใช้ทั้งหมด
@@ -82,26 +83,40 @@ export const addNews = async (formData) => {
     const response = await axios.post(addNewsAPI, formData, {
       withCredentials: true,
       headers: { "Content-Type": "multipart/form-data" },
+      validateStatus: (status) => status < 500,
     });
+    if (response.status !== 201) throw new Error(response.data.message);
     return response.data;
   } catch (error) {
     console.error("Add News Error:", error);
-    return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
+    throw new Error(
+      error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มข่าวสาร"
+    );
   }
 };
 
-// ฟังก์ชันอัปโหลดภาพจาก ReactQuill
-export const uploadEditorImage = async (file) => {
+// ฟังก์ชันสำหรับดึงข้อมูลข่าวสารทั้งหมด
+export const getAllNews = async () => {
   try {
-    const formData = new FormData();
-    formData.append("image", file);
-    const response = await axios.post(uploadEditorImageAPI, formData, {
+    const response = await axios.get(getAllNewsAPI, { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    console.error("Get All News Error:", error);
+    throw new Error(
+      error.response?.data?.message || "ไม่สามารถดึงข้อมูลข่าวสารได้"
+    );
+  }
+};
+
+// ดึงข้อมูลข่าวสารหรือวิจัยตามประเภทและ ID
+export const getContentById = async (type, id) => {
+  try {
+    const response = await axios.get(`${getContentByIdAPI(type, id)}`, {
       withCredentials: true,
-      headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
   } catch (error) {
-    console.error("Upload Editor Image Error:", error);
-    return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
+    console.error("Get Content By ID Error:", error);
+    throw new Error(error.response?.data?.message || "ไม่สามารถดึงข้อมูลได้");
   }
 };

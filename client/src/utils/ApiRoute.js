@@ -17,4 +17,6 @@ export const deleteUserByAdminAPI = `${host}/api/user/delete-user`; // ลบผ
 
 // CONTENT API
 export const addNewsAPI = `${host}/api/content/add/news`; // สำหรับเพิ่มข่าวสาร
-export const uploadEditorImageAPI = `${host}/api/content/upload-editor`; // สำหรับ ReactQuill
+export const getAllNewsAPI = `${host}/api/content/news`; // API สำหรับดึงข่าวสาร
+export const getContentByIdAPI = (type, id) =>
+  `${host}/api/content/${type}/${id}`; // API ดึงข้อมูลข่าวสารหรือวิจัยตามประเภทและ ID

@@ -20,7 +20,7 @@ export default function ManageUsers() {
   const itemsPerPage = 10; // จำนวนบทความต่อหน้า
   const totalPages = Math.ceil(users.length / itemsPerPage);
 
-  // ดึงข้อมูลผู้ใช้เ
+  // ดึงข้อมูลผู้ใช้
   useEffect(() => {
     getUsers().then((data) => {
       if (data.error) {
@@ -76,7 +76,7 @@ export default function ManageUsers() {
       icon: <UserPen size={22} />,
       action: "editUser",
       tooltip: "แก้ไขผู้ใช้",
-      path: "",
+      path: "/users/edit",
       color: "bg-accent",
     },
     {
@@ -134,7 +134,7 @@ export default function ManageUsers() {
                         {user.role}
                       </div>
                       <div className="basis-3/12 py-3 px-4 whitespace-nowrap truncate">
-                        {user.createdAt}
+                        {new Date(user.createdAt).toLocaleDateString()}
                       </div>
 
                       {/* action button */}
@@ -150,7 +150,7 @@ export default function ManageUsers() {
                             </button>
                           ) : (
                             <Link
-                              to={`/users/edit/${user.user_id}?page=${currentPage}`}
+                              to={`${btn.path}/${user.user_id}?page=${currentPage}`}
                               key={index}
                             >
                               <button
