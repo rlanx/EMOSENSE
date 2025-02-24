@@ -89,3 +89,48 @@ exports.getContentById = async (req, res) => {
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูล" });
   }
 };
+
+exports.updateContent = async (req, res) => {
+  try {
+    const { type, id } = req.params;
+    const { title, desc, content, author } = req.body;
+
+    if (!title || !content || !author) {
+      return res.status(400).json({ message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
+    }
+
+    const ContentModel = getModelByType(type);
+    const contentItem = await ContentModel.findOne({ [`${type}_id`]: id });
+
+    if (!contentItem) {
+      return res.status(404).json({ message: "ไม่พบข้อมูลที่ต้องการแก้ไข" });
+    }
+
+    // ถ้ามีการอัปโหลด thumbnail ใหม่
+    if (req.file) {
+      const newThumbnailPath = `/uploads/content/${req.file.filename}`;
+
+      // ลบรูปเดิมหากไม่ใช่ default
+      if (
+        contentItem.thumbnail &&
+        contentItem.thumbnail !== "/src/assets/default-image.png"
+      ) {
+        const oldPath = path.join(__dirname, "..", contentItem.thumbnail);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      }
+      contentItem.thumbnail = newThumbnailPath;
+    }
+
+    // อัปเดตฟิลด์อื่น ๆ
+    contentItem.title = title;
+    contentItem.desc = desc;
+    contentItem.content = content;
+    contentItem.author = author;
+
+    await contentItem.save();
+    res.status(200).json({ message: `${type} ถูกแก้ไขเรียบร้อยแล้ว!` });
+  } catch (error) {
+    console.error("Update Content Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการแก้ไขข้อมูล" });
+  }
+};

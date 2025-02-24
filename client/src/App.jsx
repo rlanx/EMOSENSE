@@ -54,7 +54,7 @@ function App() {
 
             <Route path="/manage-news" element={<ManageNews />} />
             <Route path="/manage-news/add" element={<AddNews />} />
-            <Route path="/manage-news/edit" element={<EditNews />} />
+            <Route path="/manage-news/edit/:id" element={<EditNews />} />
 
             <Route path="/manage-research" element={<ManageResearch />} />
             <Route path="/manage-research/add" element={<AddResearch />} />

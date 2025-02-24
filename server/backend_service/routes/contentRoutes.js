@@ -6,6 +6,7 @@ const {
   addContent,
   getAllNews,
   getContentById,
+  updateContent,
 } = require("../controllers/contentController");
 
 const { uploadContent } = require("../middlewares/upload");
@@ -20,5 +21,11 @@ router.post(
 
 router.get("/news", verifyToken, getAllNews); // ดึงข้อมูลข่าวสารทั้งหมด
 router.get("/:type/:id", getContentById); // ดึงข้อมูลตามประเภทและ ID
+router.put(
+  "/edit/:type/:id",
+  verifyToken,
+  uploadContent.single("thumbnail"),
+  updateContent
+); // เส้นทางสำหรับแก้ไขเนื้อหา
 
 module.exports = router;
