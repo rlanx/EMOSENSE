@@ -13,10 +13,10 @@ export default function ContentForm({
   onSubmit,
   initialData = {},
 }) {
-  const [title, setTitle] = useState(initialData.title || "");
-  const [desc, setDesc] = useState(initialData.desc || ""); // คำอธิบาย
-  const [author, setAuthor] = useState(initialData.author || ""); // ผู้เขียน
-  const [content, setContent] = useState(initialData.content || "");
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [desc, setDesc] = useState(initialData?.desc || ""); // คำอธิบาย
+  const [author, setAuthor] = useState(initialData?.author || ""); // ผู้เขียน
+  const [content, setContent] = useState(initialData?.content || "");
   const [thumbnail, setThumbnail] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -27,11 +27,23 @@ export default function ContentForm({
       const imageUrl = URL.createObjectURL(thumbnail);
       setPreview(imageUrl);
 
-      return () => URL.revokeObjectURL(imageUrl); // ✅ ล้าง URL เมื่อ thumbnail เปลี่ยน
+      return () => URL.revokeObjectURL(imageUrl); // ล้าง URL เมื่อ thumbnail เปลี่ยน
     } else {
       setPreview(null);
     }
   }, [thumbnail]);
+
+  useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      setTitle(initialData?.title || "");
+      setDesc(initialData?.desc || "");
+      setAuthor(initialData?.author || "");
+      setContent(initialData?.content || "");
+      if (initialData?.thumbnail) {
+        setPreview(`${initialData.thumbnail}`);
+      }
+    }
+  }, [initialData]);
 
   const resetForm = () => {
     setTitle("");
@@ -69,46 +81,17 @@ export default function ContentForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title.trim()) return toast.error("กรุณากรอกหัวข้อข่าวสาร");
-    if (!author.trim()) return toast.error("กรุณาระบุชื่อผู้เขียน");
-    if (!desc.trim()) return toast.error("กรุณากรอกคำอธิบาย");
-    if (!content.trim()) return toast.error("กรุณากรอกเนื้อหาข่าวสาร");
-    if (!thumbnail && mode === "add")
-      return toast.error("กรุณาเลือกรูปภาพ Thumbnail");
+    if (!title.trim() || !author.trim() || !desc.trim() || !content.trim()) {
+      onSubmit(null, "กรุณากรอกข้อมูลให้ครบถ้วน");
+      return;
+    }
+    if (!thumbnail && mode === "add") {
+      onSubmit(null, "กรุณาเลือกรูปภาพ Thumbnail");
+      return;
+    }
 
-    const confirmMessage =
-      mode === "add"
-        ? type === "news"
-          ? "ยืนยันการเพิ่มข่าวสาร?"
-          : "ยืนยันการเพิ่มงานวิจัย?"
-        : type === "news"
-        ? "ยืนยันการแก้ไขข่าวสาร?"
-        : "ยืนยันการแก้ไขงานวิจัย?";
-
-    Swal.fire({
-      title: confirmMessage,
-      text: "คุณต้องการดำเนินการต่อหรือไม่?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#FF6F61",
-      cancelButtonColor: "#5BC0BE",
-      confirmButtonText: mode === "add" ? "เพิ่ม" : "แก้ไข",
-      cancelButtonText: "ยกเลิก",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const loadingToast = toast.loading("กำลังดำเนินการ...");
-        try {
-          await onSubmit({ title, desc, author, content, type, thumbnail });
-          toast.dismiss(loadingToast);
-          toast.success(
-            mode === "add" ? "เพิ่มข้อมูลสำเร็จ!" : "แก้ไขข้อมูลสำเร็จ!"
-          );
-          resetForm(); // รีเซ็ตค่าเมื่อเพิ่มข้อมูลสำเร็จ
-        } catch (error) {
-          toast.dismiss(loadingToast);
-        }
-      }
-    });
+    // ส่งข้อมูลไปยังฟังก์ชัน submit ของหน้าต่างๆ
+    onSubmit({ title, desc, author, content, type, thumbnail });
   };
 
   return (

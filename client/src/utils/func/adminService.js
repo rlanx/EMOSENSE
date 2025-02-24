@@ -8,6 +8,7 @@ import {
   addNewsAPI,
   getAllNewsAPI,
   getContentByIdAPI,
+  editContentByIdAPI,
 } from "../ApiRoute";
 
 //ดึงข้อมูลผู้ใช้ทั้งหมด
@@ -118,5 +119,21 @@ export const getContentById = async (type, id) => {
   } catch (error) {
     console.error("Get Content By ID Error:", error);
     throw new Error(error.response?.data?.message || "ไม่สามารถดึงข้อมูลได้");
+  }
+};
+
+// ฟังก์ชันสำหรับแก้ไขข้อมูลข่าวสารหรือวิจัย
+export const updateContentById = async (type, id, formData) => {
+  try {
+    const response = await axios.put(editContentByIdAPI(type, id), formData, {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Update Content by ID Error:", error);
+    throw new Error(
+      error.response?.data?.message || "เกิดข้อผิดพลาดในการแก้ไขข้อมูล"
+    );
   }
 };
