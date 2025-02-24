@@ -99,7 +99,7 @@
   }
 
   .ql-editor h2 {
-    @apply text-2xl font-semibold; /* Tailwind สำหรับ H2 */
+    @apply text-xl font-semibold; /* Tailwind สำหรับ H2 */
   }
 
   .ql-editor p {

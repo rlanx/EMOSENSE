@@ -9,6 +9,7 @@ import {
   getAllNewsAPI,
   getContentByIdAPI,
   editContentByIdAPI,
+  deleteContentByIdAPI,
 } from "../ApiRoute";
 
 //ดึงข้อมูลผู้ใช้ทั้งหมด
@@ -135,5 +136,20 @@ export const updateContentById = async (type, id, formData) => {
     throw new Error(
       error.response?.data?.message || "เกิดข้อผิดพลาดในการแก้ไขข้อมูล"
     );
+  }
+};
+
+// ฟังก์ชันลบข่าวสาร/งานวิจัย
+export const deleteContentById = async (type, id) => {
+  try {
+    const response = await axios.delete(deleteContentByIdAPI(type, id), {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Delete Content By ID Error:", error);
+    return {
+      error: error.response?.data?.message || "เกิดข้อผิดพลาดในการลบข้อมูล",
+    };
   }
 };

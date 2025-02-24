@@ -5,6 +5,7 @@ import { UserPen, Calendar } from "lucide-react";
 import knowledgeData from "../../utils/json/mock_data";
 import Footer from "../../components/user/Footer";
 import { host } from "../../utils/ApiRoute";
+import "react-quill/dist/quill.snow.css";
 
 import { useParams } from "react-router-dom";
 import { getContentById } from "../../utils/func/adminService";
@@ -62,7 +63,11 @@ export default function KnowledgeDetail() {
             </div>
 
             {/* detail */}
-            <div dangerouslySetInnerHTML={{ __html: data.content }}></div>
+            <div
+              className="ql-editor"
+              style={{ padding: "0" }}
+              dangerouslySetInnerHTML={{ __html: data.content }}
+            ></div>
           </div>
         ) : (
           <p>ไม่พบข้อมูล</p>

@@ -5,6 +5,8 @@ import Pagination from "../../components/user/Pagination";
 import { History, UserPen, UserX, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Toaster, toast } from "react-hot-toast";
+
 import { getUsers, deleteUserByAdmin } from "../../utils/func/adminService";
 import { useSearchParams } from "react-router-dom";
 
@@ -55,10 +57,12 @@ export default function ManageUsers() {
       if (result.isConfirmed) {
         const response = await deleteUserByAdmin(userId);
         if (response.error) {
+          // toast.error(response.error);
           Swal.fire("เกิดข้อผิดพลาด!", response.error, "error");
         } else {
+          // toast.success("ลบผู้ใช้สำเร็จ!");
           Swal.fire("ลบสำเร็จ!", "ผู้ใช้ถูกลบเรียบร้อยแล้ว", "success");
-          setUsers(users.filter((user) => user.user_id !== userId)); // ✅ ลบผู้ใช้จาก UI
+          setUsers(users.filter((user) => user.user_id !== userId)); // ลบผู้ใช้จาก UI
         }
       }
     });
@@ -90,6 +94,8 @@ export default function ManageUsers() {
   return (
     <div>
       <Navbar />
+      <Toaster position="top-center" reverseOrder={false} />
+
       <div className="flex flex-1">
         <Sidebar />
         {/* content container */}

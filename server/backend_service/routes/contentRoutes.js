@@ -7,6 +7,7 @@ const {
   getAllNews,
   getContentById,
   updateContent,
+  deleteContent,
 } = require("../controllers/contentController");
 
 const { uploadContent } = require("../middlewares/upload");
@@ -27,5 +28,7 @@ router.put(
   uploadContent.single("thumbnail"),
   updateContent
 ); // เส้นทางสำหรับแก้ไขเนื้อหา
+
+router.delete("/delete/:type/:id", verifyToken, deleteContent); // สำหรับลบเนื้อหาข่าวสาร/งานวิจัย
 
 module.exports = router;
