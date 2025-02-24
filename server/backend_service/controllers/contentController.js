@@ -134,3 +134,32 @@ exports.updateContent = async (req, res) => {
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการแก้ไขข้อมูล" });
   }
 };
+
+// ลบเนื้อหา (ข่าวสาร/วิจัย)
+exports.deleteContent = async (req, res) => {
+  try {
+    const { type, id } = req.params;
+    const ContentModel = getModelByType(type);
+
+    const contentItem = await ContentModel.findOne({ [`${type}_id`]: id });
+
+    if (!contentItem) {
+      return res.status(404).json({ message: "ไม่พบข้อมูลที่ต้องการลบ" });
+    }
+
+    // ลบไฟล์ thumbnail หากไม่ใช่ default
+    if (
+      contentItem.thumbnail &&
+      contentItem.thumbnail !== "/src/assets/default-image.png"
+    ) {
+      const filePath = path.join(__dirname, "..", contentItem.thumbnail);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
+
+    await ContentModel.deleteOne({ [`${type}_id`]: id });
+    res.status(200).json({ message: `${type} ถูกลบเรียบร้อยแล้ว!` });
+  } catch (error) {
+    console.error("Delete Content Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการลบข้อมูล" });
+  }
+};

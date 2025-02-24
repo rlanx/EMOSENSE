@@ -5,12 +5,8 @@ import Pagination from "../../components/user/Pagination";
 import { Pencil, Trash2, Plus, Eye } from "lucide-react";
 import Swal from "sweetalert2";
 import { Link, useSearchParams } from "react-router-dom";
-
-//data
-import knowledgeData from "../../utils/json/mock_data";
 import NotFoundCard from "../../components/user/NotFoundCard";
-
-import { getAllNews } from "../../utils/func/adminService";
+import { getAllNews, deleteContentById } from "../../utils/func/adminService";
 import { Toaster, toast } from "react-hot-toast";
 
 export default function ManageKnowledge() {
@@ -38,23 +34,26 @@ export default function ManageKnowledge() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentRecord = newsList.slice(startIndex, startIndex + itemsPerPage);
 
+  // ฟังก์ชันลบข่าวสาร
   const handleDeleteNews = (newsId) => {
     Swal.fire({
       title: "คุณแน่ใจหรือไม่?",
-      text: "การลบข่าวสารจะไม่สามารถย้อนกลับได้!",
+      text: "คุณต้องการลบข่าวสารนี้หรือไม่?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#FF6F61",
       cancelButtonColor: "#5BC0BE",
-      confirmButtonText: "ยืนยัน",
+      confirmButtonText: "ลบ",
       cancelButtonText: "ยกเลิก",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const response = await deleteNewsByAdmin(newsId);
+        const response = await deleteContentById("news", newsId);
         if (response.error) {
-          toast.error(`${response.error}`);
+          Swal.fire("เกิดข้อผิดพลาด!", response.error, "error");
+          // toast.error(response.error);
         } else {
-          toast.success("ลบข่าวสารสำเร็จ!");
+          Swal.fire("ลบสำเร็จ!", "ลบข่าวสารเรียบร้อยแล้ว", "success");
+          // toast.success("ลบข่าวสารสำเร็จ!");
           setNewsList(newsList.filter((news) => news.news_id !== newsId));
         }
       }
@@ -76,7 +75,7 @@ export default function ManageKnowledge() {
     },
     {
       icon: <Trash2 size={22} />,
-      action: "deletePost",
+      action: "deleteNews",
       color: "bg-error",
     },
   ];
@@ -84,6 +83,7 @@ export default function ManageKnowledge() {
   return (
     <div>
       <Navbar />
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="flex flex-1">
         <Sidebar />
         {/* content container */}

@@ -24,3 +24,6 @@ export const getContentByIdAPI = (type, id) =>
 
 export const editContentByIdAPI = (type, id) =>
   `${host}/api/content/edit/${type}/${id}`; // API แก้ไขข้อมูลข่าวสาร / วิจัย;
+
+export const deleteContentByIdAPI = (type, id) =>
+  `${host}/api/content/delete/${type}/${id}`; // API ลบข้อมูลตามประเภทและ ID
