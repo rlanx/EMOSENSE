@@ -11,8 +11,10 @@ import { Toaster, toast } from "react-hot-toast";
 
 export default function ManageKnowledge() {
   const [newsList, setNewsList] = useState([]);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const initialPage = parseInt(searchParams.get("page")) || 1;
+
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   const itemsPerPage = 10;

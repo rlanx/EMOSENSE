@@ -44,7 +44,7 @@ exports.addContent = async (req, res) => {
 exports.getAllNews = async (req, res) => {
   try {
     const newsList = await News.find({}).select(
-      "news_id title author createdAt thumbnail"
+      "news_id title desc author createdAt thumbnail"
     );
 
     if (newsList.length === 0) {
@@ -55,6 +55,24 @@ exports.getAllNews = async (req, res) => {
   } catch (error) {
     console.error("Get All News Error:", error);
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูลข่าวสาร" });
+  }
+};
+
+// ดึงรายการงานวิจัยทั้งหมด
+exports.getAllResearch = async (req, res) => {
+  try {
+    const researchList = await Research.find({}).select(
+      "research_id title desc author createdAt thumbnail"
+    );
+
+    if (researchList.length === 0) {
+      return res.status(404).json({ message: "ยังไม่มีงานวิจัยในระบบ" });
+    }
+
+    res.status(200).json(researchList);
+  } catch (error) {
+    console.error("Get All Research Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูลงานวิจัย" });
   }
 };
 

@@ -58,7 +58,10 @@ function App() {
 
             <Route path="/manage-research" element={<ManageResearch />} />
             <Route path="/manage-research/add" element={<AddResearch />} />
-            <Route path="/manage-research/edit" element={<EditResearch />} />
+            <Route
+              path="/manage-research/edit/:id"
+              element={<EditResearch />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
