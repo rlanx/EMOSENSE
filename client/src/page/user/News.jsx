@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/Navbar";
 import { LuSearch } from "react-icons/lu";
 import knowledgeData from "../../utils/json/mock_data";
@@ -6,14 +6,34 @@ import HCard from "../../components/user/HCard";
 import Footer from "../../components/user/Footer";
 import Pagination from "../../components/user/Pagination";
 import NotFoundCard from "../../components/user/NotFoundCard";
+import { Link, useSearchParams } from "react-router-dom";
+import { getAllNews } from "../../utils/func/adminService";
 
 function Knowledge() {
+  const [newsList, setNewsList] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [query, setQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 10; // จำนวนบทความต่อหน้า
-  const totalPages = Math.ceil(knowledgeData.length / itemsPerPage);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPage = parseInt(searchParams.get("page")) || 1;
+
+  const [currentPage, setCurrentPage] = useState(initialPage);
+
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(newsList.length / itemsPerPage);
+
+  // ดึงข้อมูลข่าวสาร
+  useEffect(() => {
+    getAllNews()
+      .then((data) => setNewsList(data))
+      .catch((error) => toast.error(`${error.message}`));
+  }, []);
+
+  // อัปเดต URL เมื่อเปลี่ยนหน้า
+  useEffect(() => {
+    setSearchParams({ page: currentPage });
+  }, [currentPage]);
 
   // ฟังก์ชันจัดการการค้นหา
   const handleSearch = () => {
@@ -29,16 +49,15 @@ function Knowledge() {
     }
   };
 
-  // คำนวณช่วงของข้อมูลที่ต้องแสดงในหน้านี้
+  // คำนวณช่วงข้อมูล
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentPost = knowledgeData.slice(startIndex, endIndex);
+  const currentPost = newsList.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div>
       <Navbar />
       {/* main container */}
-      <div className="lg:w-[1280px] mx-auto flex gap-10">
+      <div className="min-h-[55vh] lg:w-[1280px] mx-auto flex gap-10">
         {/* sub-container */}
         <div className="w-[70%] mt-5 mb-20">
           {/* search */}
@@ -72,12 +91,17 @@ function Knowledge() {
             </div>
           )}
 
-          {/* knowledge container */}
+          {/* news container */}
           <div className="">
             {currentPost.length > 0 ? (
               <div className="flex flex-col">
                 {currentPost.map((post) => (
-                  <HCard key={post.id} data={post} />
+                  <Link
+                    to={`${post.news_id}?page=${currentPage}`}
+                    key={post.news_id}
+                  >
+                    <HCard data={post} type="news" id={post.news_id} />
+                  </Link>
                 ))}
               </div>
             ) : (
@@ -89,7 +113,10 @@ function Knowledge() {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            setCurrentPage={setCurrentPage}
+            setCurrentPage={(page) => {
+              setCurrentPage(page);
+              setSearchParams({ page });
+            }}
           />
         </div>
 

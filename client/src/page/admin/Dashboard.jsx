@@ -43,6 +43,7 @@ export default function Dashboard() {
           <div className="grid grid-cols-4 gap-3">
             {summaryData.map((data, index) => (
               <div
+                key={index}
                 className={`flex flex-col items-center gap-2 text-grey p-10 rounded-xl ${data.color} shadow-md`}
               >
                 {/* title */}

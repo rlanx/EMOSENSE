@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getUser } from "../utils/func/userService"; // ✅ ดึง API `getUser()`
+import { getUser } from "../utils/func/userService"; // ดึง API `getUser()`
 
 const UserContext = createContext();
 

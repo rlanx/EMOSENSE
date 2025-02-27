@@ -22,10 +22,10 @@ router.post(
 );
 
 // ดึงข้อมูลข่าวสารทั้งหมด
-router.get("/news", verifyToken, getAllNews);
+router.get("/news", getAllNews);
 
 // ดึงข้อมูลงานวิจัยทั้งหมด
-router.get("/research", verifyToken, getAllResearch);
+router.get("/research", getAllResearch);
 
 // ดึงข้อมูลตามประเภทและ ID
 router.get("/:type/:id", getContentById);

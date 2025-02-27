@@ -99,7 +99,7 @@ export default function Account() {
         try {
           const response = await updateUser(formData);
           if (response.error) {
-            toast.error(`${response.error}`); // ✅ แสดง toast เมื่อเกิด error
+            toast.error(`${response.error}`); // แสดง toast เมื่อเกิด error
           } else {
             toast.success("อัปเดตข้อมูลสำเร็จ!");
             setPreviewImage(

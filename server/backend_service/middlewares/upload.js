@@ -23,7 +23,7 @@ const fileFilter = (req, file, cb) => {
   else cb(new Error("ไฟล์ต้องเป็น .jpg, .jpeg หรือ .png เท่านั้น"), false);
 };
 
-// สำหรับอัปโหลด **รูปโปรไฟล์ผู้ใช้**
+// สำหรับอัปโหลดรูปโปรไฟล์ผู้ใช้
 const uploadProfile = multer({
   storage: getStorage("users_image"),
   fileFilter,

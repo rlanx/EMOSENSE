@@ -1,13 +1,11 @@
 import React from "react";
 import { UserPen, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
+import { host } from "../../utils/ApiRoute";
 
-function HCard({ data }) {
+function HCard({ data, type, id }) {
   return (
-    <Link
-      to={`/news/ex`}
-      className="w-full min-h-[160px] flex items-center justify-between py-8 border-b-[1px] "
-    >
+    <div className="w-full min-h-[160px] flex items-center justify-between py-8 border-b-[1px] ">
       {/* info container */}
       <div className="w-[70%] text-light-grey flex flex-col gap-4">
         {/* Author info */}
@@ -25,18 +23,18 @@ function HCard({ data }) {
         {/* date */}
         <div className="flex items-center gap-2">
           <Calendar size={22} />
-          <p>{data.date}</p>
+          <p>{new Date(data.createdAt).toLocaleDateString()}</p>
         </div>
       </div>
       {/* image container */}
       <div className="lg:w-[180px] lg:h-[140px] overflow-hidden rounded-lg ">
         <img
-          src="/src/assets/default-image.png"
+          src={`${host}${data.thumbnail}`}
           alt=""
           className="w-full h-full object-cover object-center"
         />
       </div>
-    </Link>
+    </div>
   );
 }
 
