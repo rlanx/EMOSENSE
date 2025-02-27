@@ -12,9 +12,6 @@ import {
 } from "../../utils/func/adminService";
 import { Toaster, toast } from "react-hot-toast";
 
-//data
-import knowledgeData from "../../utils/json/mock_data";
-
 export default function ManageResearch() {
   const [researchList, setResearchList] = useState([]);
 
@@ -26,7 +23,7 @@ export default function ManageResearch() {
   const itemsPerPage = 10; // จำนวนบทความต่อหน้า
   const totalPages = Math.ceil(researchList.length / itemsPerPage);
 
-  // ดึงข้อมูลข่าวสารเมื่อโหลดหน้า
+  // ดึงข้อมูลงานวิจัย
   useEffect(() => {
     getAllResearch()
       .then((data) => setResearchList(data))

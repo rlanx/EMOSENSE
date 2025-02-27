@@ -1,16 +1,20 @@
 import React from "react";
 import { LuUserPen, LuCalendar } from "react-icons/lu";
 import { Link } from "react-router-dom";
+import { host } from "../../utils/ApiRoute";
 
-function Card({ data }) {
+function Card({ data, type, id }) {
   return (
-    <Link to={`/news/ex`} className="rounded-xl overflow-hidden shadow-md">
+    <Link
+      to={`/${type}/${id}`}
+      className="rounded-xl overflow-hidden shadow-md"
+    >
       {/* image */}
       <div className="h-[250px]">
         <img
-          src="/src/assets/default-image.png"
+          src={`${host}${data.thumbnail}`}
           alt=""
-          className="object-cover h-full"
+          className="object-cover object-center h-full"
         />
       </div>
       <div className="flex flex-col justify-between h-[170px] bg-white text-grey px-5 py-3">
@@ -29,7 +33,7 @@ function Card({ data }) {
           {/* date */}
           <div className="flex items-center gap-2">
             <LuCalendar size={20} />
-            <p>{data.date}</p>
+            {new Date(data.createdAt).toLocaleDateString()}
           </div>
         </div>
       </div>

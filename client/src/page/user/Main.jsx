@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/Navbar";
 import knowledgeData from "../../utils/json/mock_data";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { LuUserPen } from "react-icons/lu";
 import Card from "../../components/user/Card";
 import Footer from "../../components/user/Footer";
 import { Link } from "react-router-dom";
+import { getAllNews, getAllResearch } from "../../utils/func/adminService";
 
 function Main() {
-  const limitedPost = knowledgeData.slice(0, 4);
+  const [newsList, setNewsList] = useState([]);
+  const [researchList, setResearchList] = useState([]);
+
+  const limitedNews = newsList.slice(0, 4);
+  const limitedResearch = researchList.slice(0, 4);
+
+  // ดึงข้อมูลงานวิจัย
+  useEffect(() => {
+    getAllResearch()
+      .then((data) => setResearchList(data))
+      .catch((error) => toast.error(`${error.message}`));
+  }, []);
+
+  // ดึงข้อมูลข่าวสาร
+  useEffect(() => {
+    getAllNews()
+      .then((data) => setNewsList(data))
+      .catch((error) => toast.error(`${error.message}`));
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -44,7 +63,7 @@ function Main() {
           </h1>
           <div className="w-full flex items-center justify-end border-b-[2px] lg:mt-[-10px] lg:pb-[5px]">
             <Link
-              to={"/knowledge"}
+              to={"/news"}
               className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-white hover:text-sea-blue"
             >
               <p>ดูความรู้และข่าวสารทั้งหมด</p> <FaArrowRightLong />
@@ -52,8 +71,13 @@ function Main() {
           </div>
           {/* card container */}
           <div className="grid grid-cols-4 mt-[20px] gap-5">
-            {limitedPost.map((post) => (
-              <Card key={post.id} data={post} />
+            {limitedNews.map((post) => (
+              <Card
+                key={post.news_id}
+                data={post}
+                type="news"
+                id={post.news_id}
+              />
             ))}
           </div>
         </div>
@@ -74,8 +98,13 @@ function Main() {
           </div>
           {/* card container */}
           <div className="grid grid-cols-4 mt-[20px] gap-5">
-            {limitedPost.map((post) => (
-              <Card key={post.id} data={post} />
+            {limitedResearch.map((post) => (
+              <Card
+                key={post.research_id}
+                data={post}
+                type="research"
+                id={post.research_id}
+              />
             ))}
           </div>
         </div>
