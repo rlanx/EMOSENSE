@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const fs = require("fs");
+const path = require("path");
 
 // ดึงข้อมูล User จาก Cookie
 module.exports.getUserProfile = async (req, res) => {
@@ -95,7 +97,18 @@ module.exports.updateUser = async (req, res) => {
 
     // อัปเดตรูปโปรไฟล์ (ถ้ามีการอัปโหลด)
     if (req.file) {
-      user.profileImage = `/uploads/users_image/${req.file.filename}`;
+      const newProfilePath = `/uploads/users_image/${req.file.filename}`;
+
+      // ลบรูปโปรไฟล์เก่า (ยกเว้นเป็น default)
+      if (
+        user.profileImage &&
+        user.profileImage !== "/src/assets/default-profile.png"
+      ) {
+        const oldPath = path.join(__dirname, "..", user.profileImage);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      }
+
+      user.profileImage = newProfilePath;
     }
 
     await user.save();
