@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 export default function EditNews() {
   const { id } = useParams(); // ดึง ID จาก URL
   const navigate = useNavigate();
-  const [initialData, setInitialData] = useState(null); // 💡 State สำหรับข้อมูลเดิม
+  const [initialData, setInitialData] = useState(null); // State สำหรับข้อมูลเดิม
   const [loading, setLoading] = useState(true); // สำหรับโหลดข้อมูล
 
   const [searchParams] = useSearchParams();

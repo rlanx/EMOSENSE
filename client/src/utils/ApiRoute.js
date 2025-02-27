@@ -17,7 +17,10 @@ export const deleteUserByAdminAPI = `${host}/api/user/delete-user`; // ลบผ
 
 // CONTENT API
 export const addNewsAPI = `${host}/api/content/add/news`; // สำหรับเพิ่มข่าวสาร
-export const getAllNewsAPI = `${host}/api/content/news`; // API สำหรับดึงข่าวสาร
+export const getAllNewsAPI = `${host}/api/content/news`; // สำหรับดึงข่าวสาร
+
+export const addResearchAPI = `${host}/api/content/add/research`; // สำหรับเพิ่มงานวิจัย
+export const getAllResearchAPI = `${host}/api/content/research`; // สำหรับดึงงานวิจัย
 
 export const getContentByIdAPI = (type, id) =>
   `${host}/api/content/${type}/${id}`; // API ดึงข้อมูลข่าวสารหรือวิจัยตามประเภทและ ID

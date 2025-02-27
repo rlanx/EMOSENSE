@@ -1,39 +1,75 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import Pagination from "../../components/user/Pagination";
 import { Pencil, Trash2, Plus, Eye } from "lucide-react";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
+import NotFoundCard from "../../components/user/NotFoundCard";
+import { Link, useSearchParams } from "react-router-dom";
+import {
+  getAllResearch,
+  deleteContentById,
+} from "../../utils/func/adminService";
+import { Toaster, toast } from "react-hot-toast";
 
 //data
 import knowledgeData from "../../utils/json/mock_data";
 
 export default function ManageResearch() {
+  const [researchList, setResearchList] = useState([]);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialPage = parseInt(searchParams.get("page")) || 1;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 10; // จำนวนบทความต่อหน้า
-  const totalPages = Math.ceil(knowledgeData.length / itemsPerPage);
+  const totalPages = Math.ceil(researchList.length / itemsPerPage);
 
-  // คำนวณช่วงของข้อมูลที่ต้องแสดงในหน้านี้
+  // ดึงข้อมูลข่าวสารเมื่อโหลดหน้า
+  useEffect(() => {
+    getAllResearch()
+      .then((data) => setResearchList(data))
+      .catch((error) => toast.error(`${error.message}`));
+  }, []);
+
+  // อัปเดต URL เมื่อเปลี่ยนหน้า
+  useEffect(() => {
+    setSearchParams({ page: currentPage });
+  }, [currentPage]);
+
+  // คำนวณช่วงข้อมูล
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentRecord = knowledgeData.slice(startIndex, endIndex);
+  const currentRecord = researchList.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
-  const handleDeletePost = (researchId) => {
+  const handleDeleteResearch = (researchId) => {
     Swal.fire({
       title: "คุณแน่ใจหรือไม่?",
-      text: "การลบโพสต์จะไม่สามารถย้อนกลับได้!",
+      text: "คุณต้องการลบงานวิจัยนี้หรือไม่?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#FF6F61",
       cancelButtonColor: "#5BC0BE",
       confirmButtonText: "ยืนยัน",
       cancelButtonText: "ยกเลิก",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        console.log(`Deleted post with ID: ${researchId}`);
-        Swal.fire("ลบสำเร็จ!", "โพสต์ถูกลบเรียบร้อยแล้ว", "success");
+        const response = await deleteContentById("research", researchId);
+        if (response.error) {
+          Swal.fire("เกิดข้อผิดพลาด!", response.error, "error");
+          // toast.error(response.error);
+        } else {
+          Swal.fire("ลบสำเร็จ!", "ลบงานวิจัยเรียบร้อยแล้ว", "success");
+          // toast.success("ลบข่าวสารสำเร็จ!");
+          setResearchList(
+            researchList.filter(
+              (research) => research.research_id !== researchId
+            )
+          );
+        }
       }
     });
   };
@@ -42,7 +78,7 @@ export default function ManageResearch() {
     {
       icon: <Eye size={22} />,
       action: "previewPost",
-      path: "/news/ex",
+      path: "/research",
       color: "bg-gray-400",
     },
     {
@@ -53,7 +89,7 @@ export default function ManageResearch() {
     },
     {
       icon: <Trash2 size={22} />,
-      action: "deletePost",
+      action: "deleteResearch",
       color: "bg-error",
     },
   ];
@@ -61,6 +97,7 @@ export default function ManageResearch() {
   return (
     <div>
       <Navbar />
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="flex flex-1">
         <Sidebar />
         {/* content container */}
@@ -97,7 +134,9 @@ export default function ManageResearch() {
                         index % 2 === 0 ? "bg-white" : "bg-gray-100"
                       }`}
                     >
-                      <div className="basis-1/12 py-3 px-4">{post.id}</div>
+                      <div className="basis-1/12 py-3 px-4">
+                        {post.research_id}
+                      </div>
                       <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
                         {post.title}
                       </div>
@@ -105,22 +144,27 @@ export default function ManageResearch() {
                         {post.author}
                       </div>
                       <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
-                        {post.date}
+                        {new Date(post.createdAt).toLocaleDateString()}
                       </div>
 
                       {/* action button */}
                       <div className="basis-2/12 py-3 px-4 flex gap-2">
-                        {actionButtons.map((btn, index) =>
-                          btn.action === "deletePost" ? (
+                        {actionButtons.map((btn, idx) =>
+                          btn.action === "deleteResearch" ? (
                             <button
-                              key={index}
+                              key={idx}
                               className={`${btn.color} p-2 rounded-md text-white`}
-                              onClick={() => handleDeletePost(post.id)}
+                              onClick={() =>
+                                handleDeleteResearch(post.research_id)
+                              }
                             >
                               {btn.icon}
                             </button>
                           ) : (
-                            <Link to={btn.path} key={index}>
+                            <Link
+                              to={`${btn.path}/${post.research_id}?page=${currentPage}`}
+                              key={idx}
+                            >
                               <button
                                 className={`${btn.color} p-2 rounded-md text-white`}
                               >
@@ -134,7 +178,7 @@ export default function ManageResearch() {
                   ))}
                 </div>
               ) : (
-                <div className="w-full text-center">ไม่มีรายการ</div>
+                <NotFoundCard />
               )}
             </div>
 
@@ -142,7 +186,10 @@ export default function ManageResearch() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              setCurrentPage={setCurrentPage}
+              setCurrentPage={(page) => {
+                setCurrentPage(page);
+                setSearchParams({ page });
+              }}
             />
           </div>
         </div>

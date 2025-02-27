@@ -5,6 +5,7 @@ const verifyToken = require("../middlewares/verifyToken");
 const {
   addContent,
   getAllNews,
+  getAllResearch,
   getContentById,
   updateContent,
   deleteContent,
@@ -20,15 +21,24 @@ router.post(
   addContent
 );
 
-router.get("/news", verifyToken, getAllNews); // ดึงข้อมูลข่าวสารทั้งหมด
-router.get("/:type/:id", getContentById); // ดึงข้อมูลตามประเภทและ ID
+// ดึงข้อมูลข่าวสารทั้งหมด
+router.get("/news", verifyToken, getAllNews);
+
+// ดึงข้อมูลงานวิจัยทั้งหมด
+router.get("/research", verifyToken, getAllResearch);
+
+// ดึงข้อมูลตามประเภทและ ID
+router.get("/:type/:id", getContentById);
+
+// เส้นทางสำหรับแก้ไขเนื้อหา
 router.put(
   "/edit/:type/:id",
   verifyToken,
   uploadContent.single("thumbnail"),
   updateContent
-); // เส้นทางสำหรับแก้ไขเนื้อหา
+);
 
-router.delete("/delete/:type/:id", verifyToken, deleteContent); // สำหรับลบเนื้อหาข่าวสาร/งานวิจัย
+// สำหรับลบเนื้อหาข่าวสาร/งานวิจัย
+router.delete("/delete/:type/:id", verifyToken, deleteContent);
 
 module.exports = router;

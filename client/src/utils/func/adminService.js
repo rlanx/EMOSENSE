@@ -10,6 +10,8 @@ import {
   getContentByIdAPI,
   editContentByIdAPI,
   deleteContentByIdAPI,
+  addResearchAPI,
+  getAllResearchAPI,
 } from "../ApiRoute";
 
 //ดึงข้อมูลผู้ใช้ทั้งหมด
@@ -97,6 +99,24 @@ export const addNews = async (formData) => {
   }
 };
 
+// ฟังก์ชันเพิ่มงานวิจัย
+export const addResearch = async (formData) => {
+  try {
+    const response = await axios.post(addResearchAPI, formData, {
+      withCredentials: true,
+      headers: { "Content-Type": "multipart/form-data" },
+      validateStatus: (status) => status < 500,
+    });
+    if (response.status !== 201) throw new Error(response.data.message);
+    return response.data;
+  } catch (error) {
+    console.error("Add Research Error:", error);
+    throw new Error(
+      error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มงานวิจัย"
+    );
+  }
+};
+
 // ฟังก์ชันสำหรับดึงข้อมูลข่าวสารทั้งหมด
 export const getAllNews = async () => {
   try {
@@ -106,6 +126,21 @@ export const getAllNews = async () => {
     console.error("Get All News Error:", error);
     throw new Error(
       error.response?.data?.message || "ไม่สามารถดึงข้อมูลข่าวสารได้"
+    );
+  }
+};
+
+// ฟังก์ชันสำหรับดึงข้อมูลงานวิจัยทั้งหมด
+export const getAllResearch = async () => {
+  try {
+    const response = await axios.get(getAllResearchAPI, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Get All News Error:", error);
+    throw new Error(
+      error.response?.data?.message || "ไม่สามารถดึงข้อมูลงานวิจัยได้"
     );
   }
 };
