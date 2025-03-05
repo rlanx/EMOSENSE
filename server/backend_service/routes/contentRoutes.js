@@ -6,9 +6,11 @@ const {
   addContent,
   getAllNews,
   getAllResearch,
+  searchNews,
   getContentById,
   updateContent,
   deleteContent,
+  searchResearch,
 } = require("../controllers/contentController");
 
 const { uploadContent } = require("../middlewares/upload");
@@ -26,6 +28,12 @@ router.get("/news", getAllNews);
 
 // ดึงข้อมูลงานวิจัยทั้งหมด
 router.get("/research", getAllResearch);
+
+// เส้นทางสำหรับการค้นหาข่าวสาร
+router.get("/search/news", searchNews);
+
+// เส้นทางสำหรับการค้นหาข่าวสาร
+router.get("/search/research", searchResearch);
 
 // ดึงข้อมูลตามประเภทและ ID
 router.get("/:type/:id", getContentById);

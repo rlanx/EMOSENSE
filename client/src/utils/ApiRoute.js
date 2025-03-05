@@ -30,3 +30,6 @@ export const editContentByIdAPI = (type, id) =>
 
 export const deleteContentByIdAPI = (type, id) =>
   `${host}/api/content/delete/${type}/${id}`; // API ลบข้อมูลตามประเภทและ ID
+
+export const searchNewsAPI = `${host}/api/content/search/news`;
+export const searchResearchAPI = `${host}/api/content/search/research`;

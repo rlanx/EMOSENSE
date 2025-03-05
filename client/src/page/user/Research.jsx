@@ -8,8 +8,10 @@ import Pagination from "../../components/user/Pagination";
 import NotFoundCard from "../../components/user/NotFoundCard";
 import { Link, useSearchParams } from "react-router-dom";
 import { getAllResearch } from "../../utils/func/adminService";
+import { searchResearch } from "../../utils/func/userService";
 
 function Research() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [researchList, setResearchList] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,10 +27,21 @@ function Research() {
 
   // ดึงข้อมูลงานวิจัย
   useEffect(() => {
-    getAllResearch()
-      .then((data) => setResearchList(data))
-      .catch((error) => toast.error(`${error.message}`));
-  }, []);
+    if (searchQuery) {
+      fetchResearch();
+    } else {
+      getAllResearch(searchQuery)
+        .then((data) => setResearchList(data))
+        .catch((error) => toast.error(`${error.message}`));
+    }
+  }, [searchQuery]);
+
+  const fetchResearch = async () => {
+    const results = await searchResearch(""); // ค้นหาทั้งหมดโดยไม่ระบุ query
+    if (!results.error) {
+      setResearchList(results);
+    }
+  };
 
   // อัปเดต URL เมื่อเปลี่ยนหน้า
   useEffect(() => {
@@ -36,10 +49,18 @@ function Research() {
   }, [currentPage]);
 
   // ฟังก์ชันจัดการการค้นหา
-  const handleSearch = () => {
-    if (searchTerm.trim()) {
-      setQuery(searchTerm.trim());
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      fetchResearch(); // โหลดข่าวทั้งหมดถ้าไม่ได้ใส่คำค้นหา
+      return;
     }
+
+    const results = await searchResearch(searchQuery);
+    if (!results.error) {
+      setResearchList(results);
+    }
+
+    setQuery(searchQuery);
   };
 
   // ฟังก์ชันจัดการการกดปุ่ม Enter
@@ -67,8 +88,8 @@ function Research() {
               type="text"
               name=""
               id=""
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyPress}
               className="w-full bg-[#f6f6f6] outline-none mx-[10px]"
             />
