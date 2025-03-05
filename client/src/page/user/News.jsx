@@ -8,11 +8,12 @@ import Pagination from "../../components/user/Pagination";
 import NotFoundCard from "../../components/user/NotFoundCard";
 import { Link, useSearchParams } from "react-router-dom";
 import { getAllNews } from "../../utils/func/adminService";
+import { searchNews } from "../../utils/func/userService";
 
 function Knowledge() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [newsList, setNewsList] = useState([]);
 
-  const [searchTerm, setSearchTerm] = useState("");
   const [query, setQuery] = useState("");
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,12 +24,22 @@ function Knowledge() {
   const itemsPerPage = 10;
   const totalPages = Math.ceil(newsList.length / itemsPerPage);
 
-  // ดึงข้อมูลข่าวสาร
   useEffect(() => {
-    getAllNews()
-      .then((data) => setNewsList(data))
-      .catch((error) => toast.error(`${error.message}`));
-  }, []);
+    if (searchQuery) {
+      fetchNews();
+    } else {
+      getAllNews()
+        .then((data) => setNewsList(data))
+        .catch((error) => toast.error(`${error.message}`));
+    }
+  }, [searchQuery]);
+
+  const fetchNews = async () => {
+    const results = await searchNews(""); // ค้นหาทั้งหมดโดยไม่ระบุ query
+    if (!results.error) {
+      setNewsList(results);
+    }
+  };
 
   // อัปเดต URL เมื่อเปลี่ยนหน้า
   useEffect(() => {
@@ -36,10 +47,18 @@ function Knowledge() {
   }, [currentPage]);
 
   // ฟังก์ชันจัดการการค้นหา
-  const handleSearch = () => {
-    if (searchTerm.trim()) {
-      setQuery(searchTerm.trim());
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      fetchNews(); // โหลดข่าวทั้งหมดถ้าไม่ได้ใส่คำค้นหา
+      return;
     }
+
+    const results = await searchNews(searchQuery);
+    if (!results.error) {
+      setNewsList(results);
+    }
+
+    setQuery(searchQuery);
   };
 
   // ฟังก์ชันจัดการการกดปุ่ม Enter
@@ -67,8 +86,8 @@ function Knowledge() {
               type="text"
               name=""
               id=""
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyPress}
               className="w-full bg-[#f6f6f6] outline-none mx-[10px]"
             />

@@ -2,14 +2,16 @@ const News = require("../models/News");
 const Research = require("../models/Research");
 const fs = require("fs");
 const path = require("path");
+const mongoose = require("mongoose");
 
 // เลือก Model ตาม type
 const getModelByType = (type) => (type === "research" ? Research : News);
 
 // เพิ่มข่าวสารหรืองานวิจัย
 exports.addContent = async (req, res) => {
+  const { title, desc, content, author, type } = req.body;
+
   try {
-    const { title, desc, content, author, type } = req.body;
     if (!title || !content || !author) {
       return res.status(400).json({ message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
     }
@@ -60,7 +62,23 @@ exports.getAllNews = async (req, res) => {
 
 // ดึงรายการงานวิจัยทั้งหมด
 exports.getAllResearch = async (req, res) => {
+  // const { query } = req.query;
+
+  // console.log(query);
+
   try {
+    // if (query) {
+    //   // ใช้ regex เพื่อให้สามารถค้นหาคำที่มีใน title หรือ author ได้โดยไม่ต้องตรงกันทั้งหมด
+    //   const searchResults = await Research.find({
+    //     $or: [
+    //       { title: { $regex: query, $options: "i" } },
+    //       { author: { $regex: query, $options: "i" } },
+    //     ],
+    //   });
+
+    //   return res.json(searchResults);
+    // }
+
     const researchList = await Research.find({}).select(
       "research_id title desc author createdAt thumbnail"
     );
@@ -179,5 +197,53 @@ exports.deleteContent = async (req, res) => {
   } catch (error) {
     console.error("Delete Content Error:", error);
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการลบข้อมูล" });
+  }
+};
+
+// ค้นหาข่าวสารตาม title หรือ author
+exports.searchNews = async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    if (!query) {
+      return res.status(400).json({ message: "โปรดระบุคำค้นหา" });
+    }
+
+    // ใช้ regex เพื่อให้สามารถค้นหาคำที่มีใน title หรือ author ได้โดยไม่ต้องตรงกันทั้งหมด
+    const searchResults = await News.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { author: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    res.json(searchResults);
+  } catch (error) {
+    console.error("Search News Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการค้นหาข่าวสาร" });
+  }
+};
+
+// ค้นหางานวิจัยตาม title หรือ author
+exports.searchResearch = async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    if (!query) {
+      return res.status(400).json({ message: "โปรดระบุคำค้นหา" });
+    }
+
+    // ใช้ regex เพื่อให้สามารถค้นหาคำที่มีใน title หรือ author ได้โดยไม่ต้องตรงกันทั้งหมด
+    const searchResults = await Research.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { author: { $regex: query, $options: "i" } },
+      ],
+    });
+
+    res.json(searchResults);
+  } catch (error) {
+    console.error("Search Research Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการค้นหางานวิจัย" });
   }
 };
