@@ -33,3 +33,6 @@ export const deleteContentByIdAPI = (type, id) =>
 
 export const searchNewsAPI = `${host}/api/content/search/news`;
 export const searchResearchAPI = `${host}/api/content/search/research`;
+
+// PREDICT API
+export const predictAPI = `${host}/api/predict`;
