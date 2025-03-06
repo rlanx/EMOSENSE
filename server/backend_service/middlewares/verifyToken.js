@@ -2,22 +2,23 @@ const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    const token = req.cookies.token || req.headers.authorization;
 
     if (!token) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized: No token provided" });
+      req.user = null; // ถ้าไม่มี token ให้ทำงานต่อไปเลย (ไม่หยุด request)
+      return next();
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(
+      token.replace("Bearer ", ""),
+      process.env.JWT_SECRET
+    );
     req.user = decoded;
 
     // console.log("Decoded User:", req.user);
 
     next();
   } catch (error) {
-    console.error("Token Verification Error:", error);
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };

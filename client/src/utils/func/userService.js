@@ -4,6 +4,7 @@ import {
   updateUserAPI,
   searchNewsAPI,
   searchResearchAPI,
+  predictAPI,
 } from "../ApiRoute";
 
 // ฟังก์ชันดึงข้อมูลผู้ใช้
@@ -72,5 +73,20 @@ export const searchResearch = async (query) => {
       error:
         error.response?.data?.message || "เกิดข้อผิดพลาดในการค้นหางานวิจัย",
     };
+  }
+};
+
+// ฟังก์ชันเรียก API วิเคราะห์ข้อความ
+export const analyzeText = async (input_text) => {
+  try {
+    const response = await axios.post(
+      predictAPI,
+      { input_text },
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Prediction Error:", error);
+    return { error: error.response?.data?.error || "เกิดข้อผิดพลาด" };
   }
 };

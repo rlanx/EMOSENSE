@@ -6,13 +6,40 @@ import Card from "../../components/user/Card";
 import Footer from "../../components/user/Footer";
 import { Link } from "react-router-dom";
 import { getAllNews, getAllResearch } from "../../utils/func/adminService";
+import { analyzeText } from "../../utils/func/userService";
+import { Toaster, toast } from "react-hot-toast";
+import { motion } from "framer-motion";
 
 function Main() {
   const [newsList, setNewsList] = useState([]);
   const [researchList, setResearchList] = useState([]);
 
+  const [inputText, setInputText] = useState("");
+  const [result, setResult] = useState(null);
+  const [inputDisplay, setInputDisplay] = useState("");
+
   const limitedNews = newsList.slice(0, 4);
   const limitedResearch = researchList.slice(0, 4);
+
+  const handleAnalyze = async () => {
+    if (!inputText.trim()) {
+      toast.error("กรุณากรอกข้อความเพื่อวิเคราะห์");
+      return;
+    }
+
+    toast.promise(analyzeText(inputText), {
+      loading: "กำลังวิเคราะห์...",
+      success: (response) => {
+        if (response.error) {
+          throw new Error(response.error);
+        }
+        setResult(response.data);
+        setInputDisplay(inputText);
+        return "วิเคราะห์สำเร็จ!";
+      },
+      error: (err) => `${err.message || "เกิดข้อผิดพลาด"}`,
+    });
+  };
 
   // ดึงข้อมูลงานวิจัย
   useEffect(() => {
@@ -28,9 +55,20 @@ function Main() {
       .catch((error) => toast.error(`${error.message}`));
   }, []);
 
+  // เพิ่ม animation variants
+  const resultVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.3 },
+    },
+  };
+
   return (
     <div>
       <Navbar />
+      <Toaster position="top-center" />
       {/* Main Container */}
       <div className="h-[75vh] w-full flex flex-col gap-4 items-center justify-center">
         <p className="text-center text-sea-blue lg:text-[30px] font-semibold">
@@ -49,11 +87,41 @@ function Main() {
           ในการประมวลผลและแสดงผลลัพธ์
         </p>
         <div className="flex h-[60px] items-center justify-between pl-[20px] pr-[3px] border-[2px] border-sea-blue rounded-full mt-[10px] lg:w-[620px]">
-          <input type="text" className="outline-none w-[80%] text-grey" />
-          <button className="bg-sea-blue text-white h-[50px] rounded-full px-[15px]">
+          <input
+            type="text"
+            className="outline-none w-[80%] text-grey "
+            placeholder="กรอกข้อความทีนี่ ( เป็นภาษาอังกฤษ )"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+          />
+          <button
+            className="bg-sea-blue text-white h-[50px] rounded-full px-[15px]"
+            onClick={handleAnalyze}
+          >
             เริ่มวิเคราะห์
           </button>
         </div>
+        {result && (
+          <motion.div
+            className="mt-[10px] text-center"
+            initial="hidden"
+            animate="visible"
+            variants={resultVariants}
+          >
+            <p className="text-lg font-semibold">
+              ผลการวิเคราะห์ :&nbsp;
+              <span className="text-primary">"{inputDisplay}"</span>
+            </p>
+            <div className="flex gap-3 mt-[10px]">
+              <p className="py-2 px-4 rounded-lg text-white bg-accent">
+                แนวโน้มไม่เป็นโรคซึมเศร้า: {result.non_depression}%
+              </p>
+              <p className="py-2 px-4 rounded-lg text-white bg-error">
+                แนวโน้มเป็นโรคซึมเศร้า: {result.depression}%
+              </p>
+            </div>
+          </motion.div>
+        )}
       </div>
       {/* ข้อมูล ข่าวสาร */}
       <div className="bg-sea-blue w-full lg:h-[600px] text-white lg:py-[35px]">
