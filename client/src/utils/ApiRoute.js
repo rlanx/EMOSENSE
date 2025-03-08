@@ -34,5 +34,8 @@ export const deleteContentByIdAPI = (type, id) =>
 export const searchNewsAPI = `${host}/api/content/search/news`;
 export const searchResearchAPI = `${host}/api/content/search/research`;
 
+export const getUserHistoryAPI = `${host}/api/user/history`; // สำหรับผู้ใช้ที่เข้าสู่ระบบ
+export const getUserHistoryByAdminAPI = `${host}/api/user/history`; // สำหรับ admin
+
 // PREDICT API
 export const predictAPI = `${host}/api/predict`;

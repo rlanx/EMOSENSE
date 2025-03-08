@@ -12,6 +12,7 @@ import {
   deleteContentByIdAPI,
   addResearchAPI,
   getAllResearchAPI,
+  getUserHistoryByAdminAPI,
 } from "../ApiRoute";
 
 //ดึงข้อมูลผู้ใช้ทั้งหมด
@@ -186,5 +187,18 @@ export const deleteContentById = async (type, id) => {
     return {
       error: error.response?.data?.message || "เกิดข้อผิดพลาดในการลบข้อมูล",
     };
+  }
+};
+
+// ✅ ดึงประวัติการวิเคราะห์ของผู้ใช้ที่กำหนด (สำหรับ admin)
+export const getUserHistoryByAdmin = async (userId) => {
+  try {
+    const response = await axios.get(`${getUserHistoryByAdminAPI}/${userId}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Get User History By Admin Error:", error);
+    return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
   }
 };

@@ -34,7 +34,7 @@ const uploadProfile = multer({
 const uploadContent = multer({
   storage: getStorage("content"),
   fileFilter,
-  limits: { fileSize: 2 * 1024 * 1024 }, // ✅ จำกัดขนาด 2MB
+  limits: { fileSize: 5 * 1024 * 1024 }, // จำกัดขนาด 5MB
 });
 
 module.exports = { uploadProfile, uploadContent };

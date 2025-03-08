@@ -5,6 +5,7 @@ import {
   searchNewsAPI,
   searchResearchAPI,
   predictAPI,
+  getUserHistoryAPI,
 } from "../ApiRoute";
 
 // ฟังก์ชันดึงข้อมูลผู้ใช้
@@ -88,5 +89,18 @@ export const analyzeText = async (input_text) => {
   } catch (error) {
     console.error("Prediction Error:", error);
     return { error: error.response?.data?.error || "เกิดข้อผิดพลาด" };
+  }
+};
+
+// ✅ ดึงประวัติการวิเคราะห์ของผู้ใช้ที่เข้าสู่ระบบ
+export const getUserHistory = async () => {
+  try {
+    const response = await axios.get(getUserHistoryAPI, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Get User History Error:", error);
+    return { error: error.response?.data?.message || "เกิดข้อผิดพลาด" };
   }
 };

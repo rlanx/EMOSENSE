@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const AnalysisHistory = require("../models/AnalysisHistory");
 const fs = require("fs");
 const path = require("path");
 
@@ -250,5 +251,45 @@ module.exports.deleteUserByAdmin = async (req, res) => {
   } catch (error) {
     console.error("Delete User by Admin Error:", error);
     res.status(500).json({ message: "เกิดข้อผิดพลาดในการลบผู้ใช้" });
+  }
+};
+
+// ดึงประวัติการวิเคราะห์ของผู้ใช้ที่เข้าสู่ระบบ
+module.exports.getUserAnalysisHistory = async (req, res) => {
+  try {
+    const userId = req.user.user_id; // รับ user_id จาก token ที่เข้าสู่ระบบ
+    const history = await AnalysisHistory.find({ user_id: userId }).sort({
+      analysis_date: -1,
+    });
+
+    res.json(history);
+  } catch (error) {
+    console.error("Get User Analysis History Error:", error);
+    res
+      .status(500)
+      .json({ message: "เกิดข้อผิดพลาดในการดึงประวัติการวิเคราะห์" });
+  }
+};
+
+// ดึงประวัติการวิเคราะห์ของผู้ใช้ที่กำหนด (สำหรับ admin)
+module.exports.getUserHistoryByAdmin = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "คุณไม่มีสิทธิ์เข้าถึงข้อมูลนี้" });
+    }
+
+    const userId = req.params.id; // รับ user_id จาก params
+    const history = await AnalysisHistory.find({ user_id: userId }).sort({
+      analysis_date: -1,
+    });
+
+    res.json(history);
+  } catch (error) {
+    console.error("Get User Analysis History By Admin Error:", error);
+    res
+      .status(500)
+      .json({ message: "เกิดข้อผิดพลาดในการดึงประวัติการวิเคราะห์" });
   }
 };

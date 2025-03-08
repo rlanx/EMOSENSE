@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/Navbar";
+import { getUserHistory } from "../../utils/func/userService";
 
 // mock-data
 import AnalysisReport from "../../utils/json/mock_analysis_report";
@@ -8,14 +9,23 @@ import Footer from "../../components/user/Footer";
 
 export default function History() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [history, setHistory] = useState([]);
 
   const itemsPerPage = 10; // จำนวนบทความต่อหน้า
-  const totalPages = Math.ceil(AnalysisReport.length / itemsPerPage);
+  const totalPages = Math.ceil(history.length / itemsPerPage);
 
   // คำนวณช่วงของข้อมูลที่ต้องแสดงในหน้านี้
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentRecord = AnalysisReport.slice(startIndex, endIndex);
+  const currentRecord = history.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    getUserHistory().then((data) => {
+      if (!data.error) {
+        setHistory(data);
+      }
+    });
+  }, []);
 
   return (
     <div>
@@ -60,16 +70,18 @@ export default function History() {
                       index % 2 === 0 ? "bg-white" : "bg-gray-100"
                     }`}
                   >
-                    <div className="basis-2/12 py-3 px-4">{post.date}</div>
+                    <div className="basis-2/12 py-3 px-4">
+                      {new Date(post.analysis_date).toLocaleString()}
+                    </div>
                     <div className="basis-7/12 py-3 px-4 whitespace-nowrap truncate">
-                      {post.text}
+                      {post.input_text}
                     </div>
                     <div className="basis-3/12 py-3 px-4 flex gap-4">
                       <div className="basis-1/2 text-center rounded-md py-1 bg-accent text-white">
-                        {post.depression_percentage}%
+                        {post.result.non_depression}%
                       </div>
                       <div className="basis-1/2 text-center rounded-md py-1 bg-error text-white">
-                        {post.non_depression_percentage}%
+                        {post.result.depression}%
                       </div>
                     </div>
                   </div>
