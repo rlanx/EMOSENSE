@@ -73,7 +73,7 @@ export default function ManageUsers() {
       icon: <History size={22} />,
       action: "viewHistory",
       tooltip: "ดูประวัติ",
-      path: "/users/history",
+      path: `/users/history`,
       color: "bg-gray-400",
     },
     {

@@ -1,20 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import Pagination from "../../components/user/Pagination";
-
-import AnalysisReport from "../../utils/json/mock_analysis_report";
+import { useParams } from "react-router-dom";
+import {
+  getUserHistoryByAdmin,
+  getUserById,
+} from "../../utils/func/adminService";
+import { Toaster, toast } from "react-hot-toast";
+import NotFoundCard from "../../components/user/NotFoundCard";
 
 export default function UserHistory() {
+  const { id } = useParams();
+  const [history, setHistory] = useState([]);
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    getUserHistoryByAdmin(id).then((data) => {
+      if (!data.error) {
+        setHistory(data);
+      }
+    });
+  }, [id]);
+
+  // ดึงข้อมูลผู้ใช้เมื่อโหลดหน้า
+  useEffect(() => {
+    getUserById(id).then((data) => {
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        setUsername(data.username);
+      }
+    });
+  }, [id]);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 10; // จำนวนบทความต่อหน้า
-  const totalPages = Math.ceil(AnalysisReport.length / itemsPerPage);
+  const totalPages = Math.ceil(history.length / itemsPerPage);
 
   // คำนวณช่วงของข้อมูลที่ต้องแสดงในหน้านี้
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentRecord = AnalysisReport.slice(startIndex, endIndex);
+  const currentRecord = history.slice(startIndex, endIndex);
+
   return (
     <div>
       <Navbar />
@@ -24,7 +53,7 @@ export default function UserHistory() {
         <div className="ml-[250px] flex flex-1 flex-col gap-4 p-6 ">
           {/* title */}
           <p className="w-fit pr-3 text-center text-2xl font-semibold border-b-[3px] border-primary pb-1">
-            ประวัติการวิเคราะห์ของ user1234
+            ประวัติการวิเคราะห์ของ {username}
           </p>
 
           {/* des */}
@@ -60,23 +89,25 @@ export default function UserHistory() {
                         index % 2 === 0 ? "bg-white" : "bg-gray-100"
                       }`}
                     >
-                      <div className="basis-2/12 py-3 px-4">{post.date}</div>
+                      <div className="basis-2/12 py-3 px-4">
+                        {new Date(post.analysis_date).toLocaleString()}
+                      </div>
                       <div className="basis-7/12 py-3 px-4 whitespace-nowrap truncate">
-                        {post.text}
+                        {post.input_text}
                       </div>
                       <div className="basis-3/12 py-3 px-4 flex gap-4">
                         <div className="basis-1/2 text-center rounded-md py-1 bg-accent text-white">
-                          {post.depression_percentage}%
+                          {post.result.non_depression}%
                         </div>
                         <div className="basis-1/2 text-center rounded-md py-1 bg-error text-white">
-                          {post.non_depression_percentage}%
+                          {post.result.depression}%
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="w-full text-center">ไม่มีรายการ</div>
+                <NotFoundCard />
               )}
             </div>
 
