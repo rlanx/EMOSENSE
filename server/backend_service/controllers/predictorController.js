@@ -5,13 +5,13 @@ const stopwords = require("stopword");
 
 // ฟังก์ชันสำหรับการ Preprocess ข้อความ
 const preprocessText = (inputText) => {
-  inputText = inputText.toLowerCase(); // ✅ แปลงเป็นตัวพิมพ์เล็กทั้งหมด
-  inputText = inputText.replace(/[^\w\s]+/g, ""); // ✅ ลบเครื่องหมายวรรคตอน
-  let words = inputText.split(/\s+/); // ✅ แยกคำออกจากกัน (Tokenization)
-  words = stopwords.removeStopwords(words); // ✅ ลบคำหยุด (Stopwords)
-  const stemmer = natural.PorterStemmer; // ✅ ใช้ Stemming เพื่อลดคำลงรากศัพท์
-  words = words.map((word) => stemmer.stem(word)); // ✅ ทำการ Stemming คำทั้งหมด
-  return words.join(" "); // ✅ รวมคำกลับเป็นข้อความเดียว
+  inputText = inputText.toLowerCase(); // แปลงเป็นตัวพิมพ์เล็กทั้งหมด
+  inputText = inputText.replace(/[^\w\s]+/g, ""); // ลบเครื่องหมายวรรคตอน
+  let words = inputText.split(/\s+/); // แยกคำออกจากกัน (Tokenization)
+  words = stopwords.removeStopwords(words); // ลบคำหยุด (Stopwords)
+  const stemmer = natural.PorterStemmer; // ใช้ Stemming เพื่อลดคำลงรากศัพท์
+  words = words.map((word) => stemmer.stem(word)); // ทำการ Stemming คำทั้งหมด
+  return words.join(" "); // รวมคำกลับเป็นข้อความเดียว
 };
 
 // ฟังก์ชันสำหรับวิเคราะห์ข้อความ
