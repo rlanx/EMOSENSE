@@ -92,7 +92,7 @@ export const analyzeText = async (input_text) => {
   }
 };
 
-// ✅ ดึงประวัติการวิเคราะห์ของผู้ใช้ที่เข้าสู่ระบบ
+// ดึงประวัติการวิเคราะห์ของผู้ใช้ที่เข้าสู่ระบบ
 export const getUserHistory = async () => {
   try {
     const response = await axios.get(getUserHistoryAPI, {
