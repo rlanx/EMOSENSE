@@ -6,6 +6,7 @@ import { getUserHistory } from "../../utils/func/userService";
 import AnalysisReport from "../../utils/json/mock_analysis_report";
 import Pagination from "../../components/user/Pagination";
 import Footer from "../../components/user/Footer";
+import NotFoundCard from "../../components/user/NotFoundCard";
 
 export default function History() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -88,7 +89,9 @@ export default function History() {
                 ))}
               </div>
             ) : (
-              <div className="w-full text-center">ไม่มีรายการ</div>
+              <div className="w-full text-center">
+                <NotFoundCard />
+              </div>
             )}
           </div>
 
