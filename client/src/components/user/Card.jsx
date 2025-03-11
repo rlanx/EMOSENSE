@@ -14,7 +14,7 @@ function Card({ data, type, id }) {
         <img
           src={`${host}${data.thumbnail}`}
           alt=""
-          className="object-cover object-center h-full"
+          className="object-cover object-center h-full w-full"
         />
       </div>
       <div className="flex flex-col justify-between h-[170px] bg-white text-grey px-5 py-3">
