@@ -11,6 +11,7 @@ const preprocessText = (inputText) => {
   words = stopwords.removeStopwords(words); // ลบคำหยุด (Stopwords)
   const stemmer = natural.PorterStemmer; // ใช้ Stemming เพื่อลดคำลงรากศัพท์
   words = words.map((word) => stemmer.stem(word)); // ทำการ Stemming คำทั้งหมด
+
   return words.join(" "); // รวมคำกลับเป็นข้อความเดียว
 };
 
@@ -28,7 +29,7 @@ exports.analyzeText = async (req, res) => {
     const processedText = preprocessText(input_text);
 
     // ส่งข้อมูลไปยัง Flask API
-    const flaskResponse = await axios.post("http://localhost:5000/predict", {
+    const flaskResponse = await axios.post("http://127.0.0.1:5000/predict", {
       input_text: processedText,
     });
 
