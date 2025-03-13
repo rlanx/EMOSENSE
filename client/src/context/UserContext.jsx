@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
     });
   }, []);
 
-  console.log("UserContext Loaded:", user);
+  // console.log("UserContext Loaded:", user);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
