@@ -10,8 +10,8 @@ function Footer() {
   const limitedNews = newsList.slice(0, 4);
   const limitedResearch = researchList.slice(0, 4);
 
-  console.log(limitedNews);
-  console.log(limitedResearch);
+  // console.log(limitedNews);
+  // console.log(limitedResearch);
 
   // ดึงข้อมูลงานวิจัย
   useEffect(() => {

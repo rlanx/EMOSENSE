@@ -1,18 +1,21 @@
 const mongoose = require("mongoose");
 
-const NewsSchema = new mongoose.Schema({
-  news_id: { type: Number, unique: true },
-  user_id: {
-    type: Number,
-    required: true,
-  },
-  title: { type: String, required: true },
-  desc: { type: String },
-  thumbnail: { type: String, default: "/src/assets/default-image.png" },
-  content: { type: String, required: true },
-  author: { type: String },
-  createdAt: { type: Date, default: Date.now },
-});
+const NewsSchema = new mongoose.Schema(
+  {
+    news_id: { type: Number, unique: true },
+    user_id: {
+      type: Number,
+      required: true,
+    },
+    title: { type: String, required: true },
+    desc: { type: String },
+    thumbnail: { type: String, default: "/src/assets/default-image.png" },
+    content: { type: String, required: true },
+    author: { type: String },
+    createdAt: { type: Date, default: Date.now },
+  }
+  // ,{ collection: "news_tbl" }
+);
 
 NewsSchema.pre("save", async function (next) {
   if (!this.news_id) {
