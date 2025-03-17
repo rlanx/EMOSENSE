@@ -103,12 +103,12 @@ function Main() {
         </div>
         {result && (
           <motion.div
-            className="mt-[10px] text-center"
+            className="mt-[10px] text-center flex flex-col items-center"
             initial="hidden"
             animate="visible"
             variants={resultVariants}
           >
-            <p className="text-lg font-semibold">
+            <p className="text-lg font-semibold max-w-[1280px] truncate-2-lines">
               ผลการวิเคราะห์ :&nbsp;
               <span className="text-primary">"{inputDisplay}"</span>
             </p>
