@@ -115,9 +115,9 @@ export default function ManageUsers() {
             {/* table head */}
             <div className="w-full flex bg-primary rounded-t-lg text-white ">
               <div className="basis-1/12 py-3 px-4">ID</div>
-              <div className="basis-3/12 py-3 px-4">ชื่อผู้ใช้</div>
-              <div className="basis-3/12 py-3 px-4">role</div>
-              <div className="basis-3/12 py-3 px-4">สมัครสมาชิกเมื่อ</div>
+              <div className="basis-4/12 py-3 px-4">ชื่อผู้ใช้</div>
+              <div className="basis-4/12 py-3 px-4">role</div>
+              <div className="basis-4/12 py-3 px-4">สมัครสมาชิกเมื่อ</div>
               <div className="basis-2/12 py-3 px-4">ตัวเลือก</div>
             </div>
 
@@ -133,13 +133,13 @@ export default function ManageUsers() {
                       }`}
                     >
                       <div className="basis-1/12 py-3 px-4">{user.user_id}</div>
-                      <div className="basis-3/12 py-3 px-4 whitespace-nowrap truncate">
+                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
                         {user.username}
                       </div>
-                      <div className="basis-3/12 py-3 px-4 whitespace-nowrap truncate">
+                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
                         {user.role}
                       </div>
-                      <div className="basis-3/12 py-3 px-4 whitespace-nowrap truncate">
+                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
                         {new Date(user.createdAt).toLocaleDateString()}
                       </div>
 
