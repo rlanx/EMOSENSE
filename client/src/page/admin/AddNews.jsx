@@ -36,7 +36,7 @@ export default function AddNews() {
           );
           await addNews(formData);
           toast.dismiss(loadingToast);
-          toast.success("เพิ่มข่าวสารสำเร็จ!");
+          toast.success("เพิ่มความรู้ทั่วไป / ข่าวสารสำเร็จ!");
           setTimeout(() => navigate(`/manage-news?page=${page}`), 1500);
         } catch (error) {
           toast.dismiss(loadingToast);
