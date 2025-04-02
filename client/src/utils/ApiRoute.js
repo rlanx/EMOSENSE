@@ -9,6 +9,7 @@ export const updateUserAPI = `${host}/api/user/update`;
 export const checkUsernameAPI = `${host}/api/auth/check-username`;
 
 // ADMIN API
+export const getDashboardStatsAPI = `${host}/api/user/dashboard-stats`;
 export const getAllUsersAPI = `${host}/api/user/users`; // ดึงรายการผู้ใช้ทั้งหมด
 export const addUserAPI = `${host}/api/user/add-user`; // เพิ่มผู้ใช้
 export const editUserByAdminAPI = `${host}/api/user/edit-user`; // สำหรับแก้ไขผู้ใช้ (สำหรับ admin)

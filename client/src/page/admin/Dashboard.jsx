@@ -1,36 +1,85 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import CountUp from "react-countup";
 import { Users, Newspaper, BookOpen, MessageCircle } from "lucide-react";
 
+import { getDashboardStatsAPI } from "../../utils/ApiRoute";
+import axios from "axios";
+
 export default function Dashboard() {
-  const summaryData = [
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get(getDashboardStatsAPI, {
+          withCredentials: true,
+        });
+
+        const { userCount, newsCount, researchCount, analysisCount } =
+          response.data;
+
+        setSummaryData([
+          {
+            title: "ผู้ใช้ทั้งหมด",
+            value: userCount,
+            icon: <Users size={32} />,
+            color: "bg-blue-300",
+          },
+          {
+            title: "ความรู้ / ข่าวสารทั้งหมด",
+            value: newsCount,
+            icon: <Newspaper size={32} />,
+            color: "bg-green-300",
+          },
+          {
+            title: "งานวิจัยทั้งหมด",
+            value: researchCount,
+            icon: <BookOpen size={32} />,
+            color: "bg-yellow-200",
+          },
+          {
+            title: "การวิเคราะห์ทั้งหมด",
+            value: analysisCount,
+            icon: <MessageCircle size={32} />,
+            color: "bg-red-300",
+          },
+        ]);
+      } catch (error) {
+        console.error("Dashboard Stats Error:", error);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const [summaryData, setSummaryData] = useState([
     {
-      title: "Total Users",
-      value: 1245,
+      title: "ผู้ใช้ทั้งหมด",
+      value: 0,
       icon: <Users size={32} />,
       color: "bg-blue-300",
     },
     {
-      title: "News Articles",
-      value: 132,
+      title: "ความรู้ / ข่าวสารทั้งหมด",
+      value: 0,
       icon: <Newspaper size={32} />,
       color: "bg-green-300",
     },
     {
-      title: "Research Papers",
-      value: 27,
+      title: "งานวิจัยทั้งหมด",
+      value: 0,
       icon: <BookOpen size={32} />,
       color: "bg-yellow-200",
     },
     {
-      title: "Analyzed Messages",
-      value: 5421,
+      title: "การวิเคราะห์ทั้งหมด",
+      value: 0,
       icon: <MessageCircle size={32} />,
       color: "bg-red-300",
     },
-  ];
+  ]);
 
   return (
     <div>

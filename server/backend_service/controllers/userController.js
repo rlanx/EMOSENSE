@@ -1,9 +1,12 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const News = require("../models/News");
+const Research = require("../models/Research");
 const AnalysisHistory = require("../models/AnalysisHistory");
 const fs = require("fs");
 const path = require("path");
+const { log } = require("console");
 
 // ดึงข้อมูล User จาก Cookie
 module.exports.getUserProfile = async (req, res) => {
@@ -291,5 +294,30 @@ module.exports.getUserHistoryByAdmin = async (req, res) => {
     res
       .status(500)
       .json({ message: "เกิดข้อผิดพลาดในการดึงประวัติการวิเคราะห์" });
+  }
+};
+
+module.exports.getDashboardStats = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "คุณไม่มีสิทธิ์เข้าถึงข้อมูลนี้" });
+    }
+
+    const userCount = await User.countDocuments();
+    const newsCount = await News.countDocuments();
+    const researchCount = await Research.countDocuments();
+    const analysisCount = await AnalysisHistory.countDocuments();
+
+    res.json({
+      userCount,
+      newsCount,
+      researchCount,
+      analysisCount,
+    });
+  } catch (error) {
+    console.error("Get Dashboard Stats Error:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูล Dashboard" });
   }
 };
