@@ -9,6 +9,8 @@ import NotFoundCard from "../../components/user/NotFoundCard";
 import { Link, useSearchParams } from "react-router-dom";
 import { getAllResearch } from "../../utils/func/adminService";
 import { searchResearch } from "../../utils/func/userService";
+import { UserPen, Calendar } from "lucide-react";
+import { host } from "../../utils/ApiRoute";
 
 function Research() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,6 +26,8 @@ function Research() {
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(researchList.length / itemsPerPage);
+
+  const recommendResearch = researchList.slice(0, 4);
 
   // ดึงข้อมูลงานวิจัย
   useEffect(() => {
@@ -147,6 +151,39 @@ function Research() {
             <div className="text-lg font-semibold border-b-[1px] lg:pt-7 lg:pb-1 ">
               งานวิจัยที่แนะนำ
             </div>
+            {recommendResearch.map((data, idx) => (
+              <div
+                key={idx}
+                className="border-b-[1px] flex justify-between items-center"
+              >
+                <div className="w-[70%] text-light-grey py-4  space-y-2">
+                  {/* Author info */}
+                  <div className="flex items-center gap-2">
+                    <UserPen size={22} />
+                    <p className="truncate">{data.author}</p>
+                  </div>
+                  {/* title & desc */}
+                  <div className="space-y-1">
+                    <p className="text-grey font-semibold truncate">
+                      {data.title}
+                    </p>
+                  </div>
+                  {/* date */}
+                  <div className="flex items-center gap-2">
+                    <Calendar size={22} />
+                    <p>{new Date(data.createdAt).toLocaleDateString()}</p>
+                  </div>
+                </div>
+                {/* image container */}
+                <div className="lg:size-20 overflow-hidden rounded-lg">
+                  <img
+                    src={`${host}${data.thumbnail}`}
+                    alt=""
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
