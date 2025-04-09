@@ -244,12 +244,19 @@ module.exports.deleteUserByAdmin = async (req, res) => {
       return res.status(403).json({ message: "คุณไม่มีสิทธิ์ลบผู้ใช้" });
     }
 
-    const user = await User.findOneAndDelete({ user_id: userId });
+    const user = await User.findOne({ user_id: userId });
+
+    // ลบรูปภาพเมื่อลบ user
+    if (user.profileImage && user.profileImage !== "") {
+      const filePath = path.join(__dirname, "..", user.profileImage);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    }
 
     if (!user) {
       return res.status(404).json({ message: "ไม่พบผู้ใช้ที่ต้องการลบ" });
     }
 
+    await User.deleteOne({ user_id: userId });
     res.json({ message: "ลบผู้ใช้สำเร็จ!" });
   } catch (error) {
     console.error("Delete User by Admin Error:", error);
