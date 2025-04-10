@@ -98,7 +98,7 @@ export default function Dashboard() {
                 {/* title */}
                 <div className="flex items-center gap-2">
                   {data.icon}
-                  <p className="text-xl">{data.title}</p>
+                  <p className="text-xl whitespace-nowrap">{data.title}</p>
                 </div>
 
                 {/* counter */}
