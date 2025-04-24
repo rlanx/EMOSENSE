@@ -15,6 +15,7 @@ import { host } from "../../utils/ApiRoute";
 function Knowledge() {
   const [searchQuery, setSearchQuery] = useState("");
   const [newsList, setNewsList] = useState([]);
+  const [recNews, setRecNews] = useState([]);
 
   const [query, setQuery] = useState("");
 
@@ -26,14 +27,17 @@ function Knowledge() {
   const itemsPerPage = 10;
   const totalPages = Math.ceil(newsList.length / itemsPerPage);
 
-  const recommendNews = newsList.slice(0, 4);
+  const recommendNews = recNews.slice(0, 4);
 
   useEffect(() => {
     if (searchQuery) {
       fetchNews();
     } else {
       getAllNews()
-        .then((data) => setNewsList(data))
+        .then((data) => {
+          setNewsList(data);
+          setRecNews(data);
+        })
         .catch((error) => toast.error(`${error.message}`));
     }
   }, [searchQuery]);
