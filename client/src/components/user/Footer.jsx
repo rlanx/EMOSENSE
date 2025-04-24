@@ -76,8 +76,8 @@ function Footer() {
           <ul className="space-y-2">
             {limitedNews.map((link, ind) => (
               <li key={ind}>
-                <Link to={`/news/${link.news_id}`} className="truncate">
-                  {link.title}
+                <Link to={`/news/${link.news_id}`}>
+                  <p className="truncate">{link.title}</p>
                 </Link>
               </li>
             ))}
@@ -89,8 +89,8 @@ function Footer() {
           <ul className="space-y-2">
             {limitedResearch.map((link, ind) => (
               <li key={ind}>
-                <Link to={`/research/${link.research_id}`} className="truncate">
-                  {link.title}
+                <Link to={`/research/${link.research_id}`}>
+                  <p className="truncate">{link.title}</p>
                 </Link>
               </li>
             ))}
