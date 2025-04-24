@@ -76,7 +76,7 @@ export default function EditResearch() {
         <div className="ml-[250px] flex flex-1 flex-col gap-5 p-6 items-center">
           <ContentForm
             type="research"
-            pageName="แก้ไขงานวิจัย"
+            pageName="แก้ไขบทความงานวิจัย"
             onSubmit={handleUpdateResearch}
             initialData={initialData}
           />

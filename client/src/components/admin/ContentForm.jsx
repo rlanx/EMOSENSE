@@ -144,7 +144,7 @@ export default function ContentForm({
           </div>
           {/* thumnail */}
           <div className="space-y-2">
-            <label>อัปโหลดรูป Thumbnail ( ขนาดต้องไม่เกิน 2MB )</label>
+            <label>อัปโหลดรูป Thumbnail ( ขนาดต้องไม่เกิน 5MB )</label>
             <div
               onClick={handleDivClick}
               className="bg-[#f5f5f5] w-full h-12 pl-4 pr-1 rounded-lg flex items-center justify-between text-light-grey cursor-pointer"
@@ -191,7 +191,7 @@ export default function ContentForm({
               value={content}
               onChange={setContent}
               modules={modules}
-              className="h-80 bg-[#f5f5f5] rounded-lg focus-within:ring-2 focus-within:ring-primary custom-quill "
+              className="h-80 bg-[#f5f5f5] rounded-lg focus-within:ring-2 focus-within:ring-primary custom-quill lg:pb-[50px]"
               style={{
                 minHeight: "400px",
                 maxHeight: "500px",

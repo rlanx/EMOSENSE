@@ -57,7 +57,7 @@ export default function AddResearch() {
           <ContentForm
             mode="add"
             type="research"
-            pageName="เพิ่มงานวิจัย"
+            pageName="เพิ่มบทความงานวิจัย"
             onSubmit={handleResearchSubmit}
           />
         </div>

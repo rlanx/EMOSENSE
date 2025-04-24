@@ -51,7 +51,7 @@ export default function ManageUsers() {
       showCancelButton: true,
       confirmButtonColor: "#FF6F61",
       cancelButtonColor: "#5BC0BE",
-      confirmButtonText: "ยืนยัน",
+      confirmButtonText: "ลบ",
       cancelButtonText: "ยกเลิก",
     }).then(async (result) => {
       if (result.isConfirmed) {
