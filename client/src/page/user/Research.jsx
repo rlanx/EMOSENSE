@@ -15,6 +15,7 @@ import { host } from "../../utils/ApiRoute";
 function Research() {
   const [searchQuery, setSearchQuery] = useState("");
   const [researchList, setResearchList] = useState([]);
+  const [recResearch, setRecResearch] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [query, setQuery] = useState("");
@@ -27,7 +28,7 @@ function Research() {
   const itemsPerPage = 10;
   const totalPages = Math.ceil(researchList.length / itemsPerPage);
 
-  const recommendResearch = researchList.slice(0, 4);
+  const recommendResearch = recResearch.slice(0, 4);
 
   // ดึงข้อมูลงานวิจัย
   useEffect(() => {
@@ -35,7 +36,10 @@ function Research() {
       fetchResearch();
     } else {
       getAllResearch(searchQuery)
-        .then((data) => setResearchList(data))
+        .then((data) => {
+          setResearchList(data);
+          setRecResearch(data);
+        })
         .catch((error) => toast.error(`${error.message}`));
     }
   }, [searchQuery]);
