@@ -134,10 +134,10 @@ export default function ManageResearch() {
                       <div className="basis-1/12 py-3 px-4">
                         {post.research_id}
                       </div>
-                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
+                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate xl:max-2xl:max-w-[300px]">
                         {post.title}
                       </div>
-                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
+                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate xl:max-2xl:max-w-[300px]">
                         {post.author}
                       </div>
                       <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
