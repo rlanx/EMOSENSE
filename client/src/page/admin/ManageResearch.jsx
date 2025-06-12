@@ -110,7 +110,7 @@ export default function ManageResearch() {
           </Link>
 
           {/* table */}
-          <div className="w-full ">
+          <div className="w-full">
             {/* table head */}
             <div className="w-full flex bg-primary rounded-t-lg text-white ">
               <div className="basis-1/12 py-3 px-4">ID</div>
@@ -134,11 +134,15 @@ export default function ManageResearch() {
                       <div className="basis-1/12 py-3 px-4">
                         {post.research_id}
                       </div>
-                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate xl:max-2xl:max-w-[300px]">
-                        {post.title}
+                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
+                        <p className="xl:max-w-[300px] 2xl:max-w-full truncate">
+                          {post.title}
+                        </p>
                       </div>
                       <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate xl:max-2xl:max-w-[300px]">
-                        {post.author}
+                        <p className="xl:max-w-[300px] 2xl:max-w-full truncate">
+                          {post.author}
+                        </p>
                       </div>
                       <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
                         {new Date(post.createdAt).toLocaleDateString()}

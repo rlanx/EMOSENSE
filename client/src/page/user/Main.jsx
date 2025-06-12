@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/user/Navbar";
-import knowledgeData from "../../utils/json/mock_data";
 import { FaArrowRightLong } from "react-icons/fa6";
 import Card from "../../components/user/Card";
 import Footer from "../../components/user/Footer";

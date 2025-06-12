@@ -125,11 +125,15 @@ export default function ManageKnowledge() {
                       }`}
                     >
                       <div className="basis-1/12 py-3 px-4">{post.news_id}</div>
-                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate xl:max-2xl:max-w-[300px]">
-                        {post.title}
+                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
+                        <p className="xl:max-w-[300px] 2xl:max-w-full truncate">
+                          {post.title}
+                        </p>
                       </div>
-                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate xl:max-2xl:max-w-[300px]">
-                        {post.author}
+                      <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
+                        <p className="xl:max-w-[300px] 2xl:max-w-full truncate">
+                          {post.author}
+                        </p>
                       </div>
                       <div className="basis-4/12 py-3 px-4 whitespace-nowrap truncate">
                         {new Date(post.createdAt).toLocaleDateString()}

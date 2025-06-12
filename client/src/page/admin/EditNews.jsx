@@ -45,7 +45,7 @@ export default function EditNews() {
       showCancelButton: true,
       confirmButtonColor: "#FF6F61",
       cancelButtonColor: "#5BC0BE",
-      confirmButtonText: "แก้ไข",
+      confirmButtonText: "บันทึก",
       cancelButtonText: "ยกเลิก",
     }).then(async (result) => {
       if (result.isConfirmed) {

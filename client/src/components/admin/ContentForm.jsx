@@ -208,7 +208,7 @@ export default function ContentForm({
             className="bg-primary flex items-center gap-2 h-12 px-5 rounded-lg text-white"
           >
             <Save size={20} />
-            {mode === "add" ? "เพิ่ม" : "แก้ไข"}
+            {mode === "add" ? "เพิ่ม" : "บันทึก"}
           </button>
         </div>
       </div>
