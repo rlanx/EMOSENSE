@@ -2,7 +2,7 @@ const menuList = [
   {
     menu_id: 1,
     menu_name: "หน้าหลัก",
-    menu_path: "/",
+    menu_path: "/EMOSENSE",
   },
   {
     menu_id: 2,

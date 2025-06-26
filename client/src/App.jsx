@@ -34,7 +34,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* user */}
-          <Route path="/" element={<Main />} />
+          <Route path="/EMOSENSE" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/news" element={<News />} />
