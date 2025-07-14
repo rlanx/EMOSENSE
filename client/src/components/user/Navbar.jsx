@@ -66,7 +66,7 @@ function Navbar() {
             icon: "success",
             confirmButtonColor: "#5BC0BE",
           }).then(() => {
-            navigate("/EMOSENSE"); // กลับไปหน้าแรกหลังจากออกจากระบบ
+            navigate("/"); // กลับไปหน้าแรกหลังจากออกจากระบบ
           });
         } catch (error) {
           console.error("Logout Error:", error);
