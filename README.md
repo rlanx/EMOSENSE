@@ -45,7 +45,7 @@ Follow these steps to set up and run the EMOSENSE application locally.
 
 2.  **Install Client Dependencies:**
     ```bash
-    cd ../../client
+    cd client
     npm install
     ```
 
@@ -57,7 +57,7 @@ Follow these steps to set up and run the EMOSENSE application locally.
 
 4.  **Install ML Service Dependencies:**
     ```bash
-    cd ../ml_service
+    cd server/ml_service
     pip install -r requirements.txt
     ```
 
