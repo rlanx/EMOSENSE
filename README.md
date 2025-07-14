@@ -2,15 +2,15 @@
 
 EMOSENSE is a web-based application that analyzes text to predict the likelihood of depression using natural language processing (NLP) techniques. The goal is to provide users with an easy-to-use tool for self-assessment and awareness.
 
-## 🌐 Features
+## Features
 
-- 🧠 Analyze user-submitted text for depressive tendencies
-- 📊 Real-time result feedback
-- ⚡ Built with modern frontend tools (React + Vite + TailwindCSS)
-- 🔌 Backend API integration for ML-based prediction
-- 🔒 Secure and modular code structure
+- Analyze user-submitted text for depressive tendencies
+- Real-time result feedback
+- Built with modern frontend tools (React + Vite + TailwindCSS)
+- Backend API integration for ML-based prediction
+- Secure and modular code structure
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 - [React](https://reactjs.org/)
@@ -19,13 +19,12 @@ EMOSENSE is a web-based application that analyzes text to predict the likelihood
 
 ### Backend
 - [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/)  
-  *(or Python + Flask — depending on your setup)*
 
 ### NLP & ML
 - Python + Flask (assumed for model prediction)
 - Pretrained NLP models (e.g., Scikit-learn, NLTK, or Transformers)
 
-## 🚀 Getting Started
+## Getting Started
 
 Follow these steps to set up and run the EMOSENSE application locally.
 
@@ -108,3 +107,12 @@ EMOSENSE allows users to submit text for emotion analysis.
 4. **Submit Text:** Enter your desired text and submit it for analysis.
 
 5. **View Results:** The application will display the predicted emotion(s) and potentially a confidence score.
+
+## License
+
+This project is licensed under the **MIT License**.
+
+You are free to use, modify, and distribute this code for personal or commercial purposes.  
+Please include proper attribution to the original author.
+
+See the full license in the [LICENSE](./LICENSE) file.
