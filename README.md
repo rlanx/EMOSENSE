@@ -39,7 +39,7 @@ Follow these steps to set up and run the EMOSENSE application locally.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/rlanx/EMOSENSE.git](https://github.com/rlanx/EMOSENSE.git
+    git clone https://github.com/rlanx/EMOSENSE.git
     cd EMOSENSE
     ```
 
@@ -76,8 +76,8 @@ You'll need to run each part of the application (ML Service, Backend Service, an
 
 1.  **Start the Client (Frontend):**
     ```bash
-    git clone https://github.com/rlanx/EMOSENSE.git](https://github.com/rlanx/EMOSENSE.git
-    cd EMOSENSE
+    cd client
+    npm run dev
     ```
 
 2.  **Start the Backend Service:**
